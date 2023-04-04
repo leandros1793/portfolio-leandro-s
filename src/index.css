@@ -118,6 +118,12 @@ transition: var(--transition);
 
 }
 
+.btn-primary{
+
+    background: var(--color-primary);
+    color: var(--color-bg);
+}
+
 img {
 display: block;
 width:100% ;
