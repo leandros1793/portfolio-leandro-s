@@ -25,13 +25,7 @@ const data = [
     demo: "https://control-presupuesto-react-sh94.vercel.app/",
   },
 
-  {
-    id: 3,
-    image: IMG3,
-    titulo: "Convertidor de divisas Java",
-    github: "https://github.com/leandros1793/ConvertidorDeDivisas.git",
-    demo: "https://dribbble.com/shots/22728335-Conversor-de-monedas?new_shot_upload=true&utm_source=Clipboard_Shot&utm_campaign=lesantiago17&utm_content=Conversor%20de%20monedas&utm_medium=Social_Share&utm_source=Clipboard_Shot&utm_campaign=lesantiago17&utm_content=Conversor%20de%20monedas&utm_medium=Social_Share",
-  },
+
   {
     id: 4,
     image: IMG4,
