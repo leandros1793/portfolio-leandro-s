@@ -3,9 +3,9 @@ import "./portfolio.css";
 import IMG1 from "../../assets/portfolio1.png";
 import IMG2 from "../../assets/portfolio2.png";
 import IMG3 from "../../assets/portfolio3.png";
-import IMG4 from "../../assets/portfolio4.jpg";
-import IMG5 from "../../assets/portfolio5.png";
-import IMG6 from "../../assets/portfolio6.jpg";
+import IMG4 from "../../assets/portfolio4.png";
+import IMG5 from "../../assets/IMG5.png";
+import IMG6 from "../../assets/Captura de pantalla (75).png";
 
 const data = [
   { 
@@ -14,7 +14,7 @@ const data = [
     
     titulo: "Seguimiento de pacientes ",
     github: "https://github.com/leandros1793/citas-react.git",
-    demo: "https://dribbble.com/shots/22726698-Seguimiento-de-pacientes-Veterinaria?added_first_shot=true&new_shot_upload=true&utm_source=Clipboard_Shot&utm_campaign=lesantiago17&utm_content=Seguimiento%20de%20pacientes%20Veterinaria&utm_medium=Social_Share&utm_source=Clipboard_Shot&utm_campaign=lesantiago17&utm_content=Seguimiento%20de%20pacientes%20Veterinaria&utm_medium=Social_Share",
+    demo: "https://citas-react-sooty.vercel.app/",
   },
 
   {
@@ -22,7 +22,7 @@ const data = [
     image: IMG2,
     titulo: "Control de gastos presupuesto",
     github: "https://github.com/leandros1793/Control-Gastos.git",
-    demo: "https://dribbble.com/shots/22728143-Planificador-de-gastos?new_shot_upload=true&utm_source=Clipboard_Shot&utm_campaign=lesantiago17&utm_content=Planificador%20de%20gastos&utm_medium=Social_Share&utm_source=Clipboard_Shot&utm_campaign=lesantiago17&utm_content=Planificador%20de%20gastos&utm_medium=Social_Share",
+    demo: "https://control-presupuesto-react-sh94.vercel.app/",
   },
 
   {
@@ -31,6 +31,37 @@ const data = [
     titulo: "Convertidor de divisas Java",
     github: "https://github.com/leandros1793/ConvertidorDeDivisas.git",
     demo: "https://dribbble.com/shots/22728335-Conversor-de-monedas?new_shot_upload=true&utm_source=Clipboard_Shot&utm_campaign=lesantiago17&utm_content=Conversor%20de%20monedas&utm_medium=Social_Share&utm_source=Clipboard_Shot&utm_campaign=lesantiago17&utm_content=Conversor%20de%20monedas&utm_medium=Social_Share",
+  },
+  {
+    id: 4,
+    image: IMG4,
+    titulo: "Cotiza Criptomonedas al Instante",
+    github: "https://github.com/leandros1793/03-criptos-react-FIN",
+    demo: "https://criptos-react-17.vercel.app/",
+  },
+  { 
+    id: 5,
+    image: IMG5,
+    
+    titulo: "CRM-REACT BACKEND UTILIZANDO API ",
+    github: "https://github.com/leandros1793/crm-react",
+    demo: "https://crm-react-iota.vercel.app/",
+  },
+  { 
+    id: 6,
+    image: IMG6,
+    
+    titulo: "App de quiosco next js, prisma, tailwind",
+    github: "https://github.com/leandros1793/quiosco_app_deploy.git",
+    demo: "https://quioscoappleandro-production.up.railway.app/",
+  },
+  { 
+    id: 6,
+    image: IMG6,
+    
+    titulo: "App de quiosco next js, prisma, tailwind",
+    github: "https://github.com/leandros1793/quiosco_app_deploy.git",
+    demo: "https://quioscoappleandro-production.up.railway.app/",
   },
 
 

@@ -1,6 +1,6 @@
 import React from "react";
 import "./about.css";
-import ME from "../../assets/me.png";
+import Yo from "../../assets/Yo.jpg"
 import { BiAward } from "react-icons/bi";
 import { BiUserCheck } from "react-icons/bi";
 import { VscFolder } from "react-icons/vsc";
@@ -12,7 +12,24 @@ const About = () => {
       <div className="container about__container">
         <div className="about__me">
           <div className="about__me-image">
-            <img src={ME} alt="About Image" />
+            <img src={Yo} alt="About Image" className="rounded-full" />
+            <div className="hover-indicator">
+        <span>¿Me acomodas la imagen?</span>
+        <svg
+          className="arrow"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M5 10l7-7m0 0l7 7m-7-7v18"
+          ></path>
+        </svg>
+      </div>
           </div>
         </div>
         <div className="about__content">
