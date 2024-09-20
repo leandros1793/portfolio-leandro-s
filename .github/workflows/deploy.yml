@@ -19,6 +19,6 @@ jobs:
           server: ftp://149.100.155.98  # Tu servidor FTP
           username: ${{ secrets.FTP_USERNAME }}  # Credenciales de GitHub Secrets
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./ # Carpeta local del proyecto (cámbialo si es necesario)
-          server-dir: /public_html  # Carpeta en el servidor donde se subirán los archivos
+          local-dir: ./ 
+          server-dir: /public_html/
 
