@@ -1,1 +1,24 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches:
+      - master  # Cambia "master" por "maestro" si esa es tu rama
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Upload files to Hostinger
+        uses: SamKirkland/FTP-Deploy-Action@4.1.0
+        with:
+          server: ftp://149.100.155.98  # Tu servidor FTP
+          username: ${{ secrets.FTP_USERNAME }}  # Credenciales de GitHub Secrets
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./public  # Carpeta local del proyecto (cámbialo si es necesario)
+          server-dir: /public_html  # Carpeta en el servidor donde se subirán los archivos
 
