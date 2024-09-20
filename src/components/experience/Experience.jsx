@@ -109,6 +109,55 @@ const Experience = () => {
             
 
           </div>
+
+
+          
+      </div>
+
+      <div className='experience__backend'>
+        <h3>Aplicaciones Moviles</h3>
+        <div className='experience__content'>
+            <article className='experience__details'>
+              <BsFillPatchCheckFill classname="experience__details-icon"/>
+              <div>
+              <h4>Android Studio</h4>
+            
+              </div>
+            </article>
+            <article className='experience__details'>
+              <BsFillPatchCheckFill classname="experience__details-icon"/>
+              <div>
+              <h4>Java POO</h4>
+              
+              </div>
+            </article>
+            <article className='experience__details'>
+              <BsFillPatchCheckFill classname="experience__details-icon"/>
+              <div>
+              <h4>Kotlin</h4>
+              
+              </div>
+            </article>
+            <article className='experience__details'>
+              <BsFillPatchCheckFill classname="experience__details-icon"/>
+              <div>
+              <h4>XML</h4>
+              
+              </div>
+            </article>
+            <article className='experience__details'>
+              <BsFillPatchCheckFill classname="experience__details-icon"/>
+              <div>
+              <h4>Gradle</h4>
+              
+              </div>
+            </article>
+            
+
+          </div>
+
+
+          
       </div>
      
 
