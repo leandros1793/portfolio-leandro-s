@@ -16,7 +16,7 @@ jobs:
       - name: Upload files to Hostinger
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
         with:
-          server: ftp://149.100.155.98  # Tu servidor FTP
+          server: 149.100.155.98  
           username: ${{ secrets.FTP_USERNAME }}  # Credenciales de GitHub Secrets
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./ 
