@@ -37,7 +37,7 @@ const About = () => {
             <article className="about__card">
               <BiAward className="about__icon" />
               <h5>Experiencia</h5>
-              <small>1+ de Experiencia </small>
+              <small>3+ de Experiencia </small>
             </article>
             <article className="about__card">
               <BiUserCheck className="about__icon" />
@@ -47,7 +47,7 @@ const About = () => {
             <article className="about__card">
               <VscFolder className="about__icon" />
               <h5>Proyectos</h5>
-              <small>+ de 10 Proyectos </small>
+              <small>+ de 15 Proyectos </small>
             </article>
           </div>
           <p>
