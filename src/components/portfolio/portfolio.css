@@ -1,78 +1,273 @@
-.portfolio__container{
-
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2.5rem;
-
+.portfolio__container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  padding: 2rem 0;
+  /* Animación de entrada para el contenedor */
+  animation: fadeInUp 0.8s ease-out;
 }
 
-.portfolio__item{
-    background: var(--color-bg-variant);
-    padding:1.2rem;
-    border-radius: 2rem;
-    border: 1px solid transparent;
-    transition: var(--transition)
-    ;
-
+.portfolio__item {
+  background: var(--color-bg-variant);
+  padding: 1.5rem;
+  border-radius: 2rem;
+  border: 1px solid transparent;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  /* Sombra sutil inicial */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  /* Transformación inicial para animación de scroll */
+  transform: translateY(30px);
+  opacity: 0;
+  animation: slideInUp 0.6s ease-out forwards;
 }
 
-.portfolio__item:hover{
+/* Animación escalonada para cada item */
+.portfolio__item:nth-child(1) { animation-delay: 0.1s; }
+.portfolio__item:nth-child(2) { animation-delay: 0.2s; }
+.portfolio__item:nth-child(3) { animation-delay: 0.3s; }
+.portfolio__item:nth-child(4) { animation-delay: 0.4s; }
+.portfolio__item:nth-child(5) { animation-delay: 0.5s; }
+.portfolio__item:nth-child(6) { animation-delay: 0.6s; }
 
-    border-color: var(--color-primary-variant);
-    background: transparent;
+/* Efecto hover mejorado */
+.portfolio__item:hover {
+  border-color: var(--color-primary-variant);
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Efecto de brillo en hover */
+.portfolio__item::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: rotate(45deg);
+  transition: all 0.6s;
+  opacity: 0;
+}
+
+.portfolio__item:hover::before {
+  opacity: 1;
+  animation: shine 0.8s ease-in-out;
 }
 
 .portfolio__item-image {
-    border-radius: 2rem; /* O el valor que desees */
-    overflow: hidden;
-    width: 100%;
-    height: 200px; /* Ajusta la altura según tus necesidades */
-    display: flex;
-    justify-content: center; /* Centrar horizontalmente */
-    align-items: center; /* Centrar verticalmente */
-  }
-  
-  .portfolio__item-image img {
-    max-width: 100%;
-    max-height: 100%;
-  }
-  
+  border-radius: 1.5rem;
+  overflow: hidden;
+  width: 100%;
+  height: 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 1rem;
+  /* Gradiente sutil de overlay */
+  background: linear-gradient(135deg, 
+    var(--color-primary-variant) 0%, 
+    var(--color-primary) 100%);
+}
+
+.portfolio__item-image::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.portfolio__item:hover .portfolio__item-image::after {
+  opacity: 1;
+}
+
+.portfolio__item-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border-radius: 1rem;
+}
+
+.portfolio__item:hover .portfolio__item-image img {
+  transform: scale(1.1);
+  filter: brightness(1.1) contrast(1.1);
+}
 
 .portfolio__item h3 {
-
-margin: 1.2 rem 0 2rem;
-
-
+  margin: 1.2rem 0 2rem;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
-.portfolio__item-cta{
-display: flex;
-gap: 1rem;
-margin-bottom: 1rem;
-
-
-
-
+.portfolio__item:hover h3 {
+  color: var(--color-primary);
+  transform: translateX(5px);
 }
-@media screen and (max-width: 1024px)
-{
-.portfolio__container{
-    grid-template-columns: repeat(1fr, 1fr);
-    gap: 1.2rem;
-}}
 
+/* Línea animada bajo el título */
+.portfolio__item h3::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--color-primary),
+    var(--color-primary-variant)
+  );
+  transition: width 0.4s ease;
+}
 
+.portfolio__item:hover h3::after {
+  width: 60px;
+}
 
+.portfolio__item-cta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
 
-   
+.portfolio__item:hover .portfolio__item-cta {
+  opacity: 1;
+  transform: translateY(0);
+}
 
-@media screen and (max-width: 600px){
+/* Animaciones adicionales para botones */
+.portfolio__item-cta .btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
 
-.portfolio__container {
+.portfolio__item-cta .btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.5s ease;
+}
+
+.portfolio__item-cta .btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Keyframes para animaciones */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+/* Efecto de pulsación para elementos interactivos */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Hover para todo el contenedor */
+.portfolio__container:hover .portfolio__item:not(:hover) {
+  opacity: 0.7;
+  transform: scale(0.98);
+}
+
+/* Media queries mejoradas */
+@media screen and (max-width: 1024px) {
+  .portfolio__container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.8rem;
+  }
+  
+  .portfolio__item-image {
+    height: 200px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .portfolio__container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 1rem 0;
+  }
+  
+  .portfolio__item {
+    padding: 1.2rem;
+  }
+  
+  .portfolio__item-image {
+    height: 180px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .portfolio__container {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 1.2rem;
+  }
+  
+  .portfolio__item-image {
+    height: 200px;
+  }
+  
+  /* Reducir animaciones en móviles para mejor rendimiento */
+  .portfolio__item {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .portfolio__item:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
 }
-
-
-}
-

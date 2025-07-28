@@ -1,93 +1,376 @@
-.container.contact__container{
-width: 58%;
-display: grid;
-grid-template-columns: 30% 58%;
-gap: 12%;
-
-
-
+.container.contact__container {
+  width: 58%;
+  display: grid;
+  grid-template-columns: 30% 58%;
+  gap: 12%;
+  padding: 2rem 0;
+  /* Animación de entrada para el contenedor */
+  animation: fadeInUp 0.8s ease-out;
 }
 
-.contact__options{
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
-
+.contact__options {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  /* Animación de entrada desde la izquierda */
+  opacity: 0;
+  animation: slideInLeft 0.6s ease-out 0.2s forwards;
 }
 
-.contact__option{
-
-background: var(--color-bg-variant);
-padding: 1.2rem;
-border-radius: 1.2rem;
-text-align: center;
-border: 1px solid transparent;
-transition: var(--transition);
-
-
-
+.contact__option {
+  background: var(--color-bg-variant);
+  padding: 1.2rem;
+  border-radius: 1.2rem;
+  text-align: center;
+  border: 1px solid transparent;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  /* Sombra sutil inicial - igual al portfolio */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  /* Transformación inicial para animación */
+  transform: translateY(30px);
+  opacity: 0;
+  animation: slideInUp 0.6s ease-out forwards;
 }
 
+/* Animación escalonada para cada opción - igual al portfolio */
+.contact__option:nth-child(1) { animation-delay: 0.1s; }
+.contact__option:nth-child(2) { animation-delay: 0.2s; }
+.contact__option:nth-child(3) { animation-delay: 0.3s; }
+.contact__option:nth-child(4) { animation-delay: 0.4s; }
+
+/* Efecto hover mejorado - igual al portfolio */
 .contact__option:hover {
-
-    background: transparent;
-    border-color: var(--color-primary-variant);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--color-primary-variant);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
-.contact__option-icon{
-font-size: 1.5rem;
-margin-bottom: 0.5rem;
+/* Efecto de brillo en hover - igual al portfolio */
+.contact__option::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: rotate(45deg);
+  transition: all 0.6s;
+  opacity: 0;
+}
 
+.contact__option:hover::before {
+  opacity: 1;
+  animation: shine 0.8s ease-in-out;
+}
 
+.contact__option-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+}
+
+.contact__option:hover .contact__option-icon {
+  transform: scale(1.15) rotateY(360deg);
+  color: var(--color-primary);
+}
+
+/* Títulos con línea animada */
+.contact__option h4 {
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+  margin-bottom: 0.5rem;
+}
+
+.contact__option:hover h4 {
+  color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+/* Línea animada bajo el título - igual al portfolio */
+.contact__option h4::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--color-primary),
+    var(--color-primary-variant)
+  );
+  transform: translateX(-50%);
+  transition: width 0.4s ease;
+}
+
+.contact__option:hover h4::after {
+  width: 50px;
+}
+
+.contact__option h5 {
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+  margin-bottom: 0.7rem;
+}
+
+.contact__option:hover h5 {
+  transform: translateY(-2px);
 }
 
 .contact__option a {
-    margin-top: 0.7rem;
-    display:inline-block ;
-    font-size: 0.8rem;
-
+  margin-top: 0.7rem;
+  display: inline-block;
+  font-size: 0.8rem;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+  padding: 0.3rem 0.8rem;
+  border-radius: 0.5rem;
+  background: rgba(77, 181, 255, 0.1);
 }
 
-form{
-
-    display: flex;
-    flex-direction: column;
-    gap:1.2rem;
-
+.contact__option:hover a {
+  transform: translateY(-2px);
+  background: rgba(77, 181, 255, 0.2);
+  color: var(--color-primary);
 }
 
-
-input, textarea{
-    width: 100%;
-    padding: 1.5rem;
-    border-radius: 0.5rem;
-    background:  transparent;
-    border: 2px solid var(--color-primary-variant);
-    resize: none;
-color: var(--color-white)
-;
-
+/* Formulario con animaciones */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  /* Animación de entrada desde la derecha */
+  opacity: 0;
+  animation: slideInRight 0.6s ease-out 0.4s forwards;
 }
 
-@media screen and (max-width: 1024px)
-{
-    .container.contact__container{
-        grid-template-columns: 1fr;
-        gap: 2rem;
-
-    }
+input, textarea {
+  width: 100%;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  background: transparent;
+  border: 2px solid var(--color-primary-variant);
+  resize: none;
+  color: var(--color-white);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  /* Transformación inicial para animación */
+  transform: translateY(20px);
+  opacity: 0;
+  animation: slideInUp 0.5s ease-out forwards;
 }
 
-
-   
-
-@media screen and (max-width: 600px){
-
-    .container.contact__container{
-
-width: var(--container-widht-sm);
-
-    }
+/* Animación escalonada para campos del formulario */
+input:nth-child(1), textarea:nth-child(1) { 
+  animation-delay: 0.5s; 
+}
+input:nth-child(2), textarea:nth-child(2) { 
+  animation-delay: 0.6s; 
+}
+input:nth-child(3), textarea:nth-child(3) { 
+  animation-delay: 0.7s; 
+}
+textarea { 
+  animation-delay: 0.8s; 
 }
 
+/* Efectos focus mejorados para inputs */
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 8px 25px rgba(77, 181, 255, 0.2);
+}
 
+/* Efecto placeholder animado */
+input::placeholder, textarea::placeholder {
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+input:focus::placeholder, textarea:focus::placeholder {
+  opacity: 0.3;
+  transform: translateY(-2px);
+}
+
+/* Botón submit con animaciones del portfolio */
+form .btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: translateY(20px);
+  opacity: 0;
+  animation: slideInUp 0.5s ease-out 0.9s forwards;
+}
+
+form .btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.5s ease;
+}
+
+form .btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+form .btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Hover para todo el contenedor de opciones - igual al portfolio */
+.contact__options:hover .contact__option:not(:hover) {
+  opacity: 0.7;
+  transform: translateY(5px) scale(0.98);
+}
+
+/* Keyframes para animaciones - iguales al portfolio */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+/* Efecto de pulsación para elementos interactivos */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Media queries mejoradas - igual al portfolio */
+@media screen and (max-width: 1024px) {
+  .container.contact__container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 1rem 0;
+  }
+  
+  .contact__options {
+    animation: slideInUp 0.6s ease-out 0.2s forwards;
+  }
+  
+  form {
+    animation: slideInUp 0.6s ease-out 0.4s forwards;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .container.contact__container {
+    padding: 1rem 0;
+  }
+  
+  .contact__option {
+    padding: 1rem;
+  }
+  
+  input, textarea {
+    padding: 1.2rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .container.contact__container {
+    width: var(--container-widht-sm);
+  }
+  
+  .contact__options {
+    gap: 1rem;
+  }
+  
+  form {
+    gap: 1rem;
+  }
+  
+  /* Reducir animaciones en móviles para mejor rendimiento - igual al portfolio */
+  .contact__option {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .contact__option:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
+  
+  input, textarea {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  form .btn {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

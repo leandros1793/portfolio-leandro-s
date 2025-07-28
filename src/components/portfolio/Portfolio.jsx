@@ -2,7 +2,7 @@ import React from "react";
 import "./portfolio.css";
 import IMG1 from "../../assets/portfolio1.png";
 import IMG2 from "../../assets/portfolio2.png";
-import IMG3 from "../../assets/portfolio3.png";
+import IMG3 from "../../assets/ReservasMedicas.png";
 import IMG4 from "../../assets/portfolio4.png";
 import IMG5 from "../../assets/IMG5.png";
 import IMG6 from "../../assets/Captura de pantalla (75).png";
@@ -50,12 +50,12 @@ const data = [
     demo: "https://quioscoappleandro-production.up.railway.app/",
   },
   { 
-    id: 6,
-    image: IMG6,
+    id: 3,
+    image: IMG3,
     
-    titulo: "App de quiosco next js, prisma, tailwind",
-    github: "https://github.com/leandros1793/quiosco_app_deploy.git",
-    demo: "https://quioscoappleandro-production.up.railway.app/",
+    titulo: "Reservas Medicas con Angular, Django y Mysql ",
+    github: "https://github.com/leandros1793/ReservasMedicasWeb_2025t",
+    demo: "https://reservasmedicasweb2025.vercel.app/inicio",
   },
 
 

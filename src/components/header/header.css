@@ -1,67 +1,428 @@
 header {
-    height: 100%;
-    padding-top: 7rem;
-    overflow: hidden;
+  height: 100%;
+  padding-top: 7rem;
+  overflow: hidden;
+}
+
+.header__container {
+  text-align: center;
+  height: 100%;
+  position: relative;
+  /* Estado inicial visible - CORREGIDO */
+  opacity: 1;
+  transform: translateY(0);
+  /* Animación de entrada del contenedor principal */
+  animation: containerSlideIn 1s ease-out 0.3s;
+}
+
+/* Enlaces del header con animaciones mejoradas */
+.header-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  position: absolute;
+  top: 1rem;
+  width: 100%;
+  /* Estado inicial visible - CORREGIDO */
+  opacity: 1;
+  transform: translateY(0);
+  /* Animación de entrada para los enlaces */
+  animation: linksSlideDown 0.8s ease-out 0.5s;
+}
+
+.header-links a {
+  text-decoration: none;
+  color: var(--color-primary); /* TU COLOR ORIGINAL */
+  font-size: 1.2rem;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+/* Efecto de fondo animado en enlaces */
+.header-links a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(77, 181, 255, 0.1);
+  transition: left 0.4s ease;
+  z-index: -1;
+}
+
+.header-links a:hover::before {
+  left: 0;
+}
+
+.header-links a:hover {
+  color: var(--color-secondary); /* TU COLOR ORIGINAL */
+  transform: translateY(-2px);
+}
+
+/* Línea animada bajo los enlaces */
+.header-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--color-primary);
+  transform: translateX(-50%);
+  transition: width 0.3s ease;
+}
+
+.header-links a:hover::after {
+  width: 80%;
+}
+
+.home {
+  display: flex;
+  justify-content: center;
+  /* Estado inicial visible - CORREGIDO */
+  opacity: 1;
+  transform: scale(1);
+  /* Animación para el contenido principal */
+  animation: homeZoomIn 1s ease-out 0.7s;
+}
+
+/* CTA con animaciones mejoradas */
+.cta {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-top: 2.5rem;
+  /* Estado inicial visible - CORREGIDO */
+  opacity: 1;
+  transform: translateY(0);
+  /* Animación de entrada para los botones CTA */
+  animation: ctaSlideUp 0.8s ease-out 1s;
+}
+
+/* Animación individual para cada botón CTA */
+.cta .btn:nth-child(1) {
+  animation: btnBounceIn 0.6s ease-out 1.2s;
+}
+
+.cta .btn:nth-child(2) {
+  animation: btnBounceIn 0.6s ease-out 1.4s;
+}
+
+/* Efecto hover mejorado para botones CTA */
+.cta .btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.cta .btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.5s ease;
+}
+
+.cta .btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Redes sociales con animaciones */
+.header__socials {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  position: absolute;
+  left: 5rem;
+  bottom: 1rem;
+  /* Estado inicial visible - CORREGIDO */
+  opacity: 1;
+  transform: translateX(0);
+  /* Animación de entrada desde la izquierda */
+  animation: socialsSlideIn 0.8s ease-out 1.5s;
+}
+
+/* Animación individual para cada icono social */
+.header__socials a:nth-child(1) { animation-delay: 1.6s; }
+.header__socials a:nth-child(2) { animation-delay: 1.7s; }
+.header__socials a:nth-child(3) { animation-delay: 1.8s; }
+
+.header__socials a {
+  /* Estado inicial visible - CORREGIDO */
+  opacity: 1;
+  transform: translateX(0);
+  animation: socialIconSlide 0.4s ease-out;
+  transition: all 0.3s ease;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.header__socials a:hover {
+  background: rgba(77, 181, 255, 0.1);
+  transform: translateX(5px) scale(1.2);
+}
+
+/* Línea vertical animada después de las redes */
+.header__socials::after {
+  content: '';
+  width: 1px;
+  height: 2rem; /* Estado final visible - CORREGIDO */
+  background: var(--color-primary); /* TU COLOR ORIGINAL */
+  animation: lineGrow 0.8s ease-out 2s;
+}
+
+/* Scroll down con animación */
+.scroll__down {
+  position: absolute;
+  right: 5rem;
+  bottom: 5rem;
+  transform: rotate(90deg);
+  font-weight: 300;
+  font-size: 0.9rem;
+  /* Estado inicial visible - CORREGIDO */
+  opacity: 1;
+  /* Animación de entrada desde la derecha */
+  animation: scrollDownFade 0.8s ease-out 1.8s;
+  transition: all 0.3s ease;
+}
+
+/* Efecto hover para scroll down */
+.scroll__down:hover {
+  transform: rotate(90deg) translateY(-5px);
+}
+
+/* Animación pulsante para scroll down */
+.scroll__down::after {
+  content: '';
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  transform: translateY(-50%);
+  animation: scrollPulse 2s ease-in-out infinite 3s;
+}
+
+/* Keyframes para todas las animaciones - SIN FORWARDS */
+@keyframes containerSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
-  .header__container {
-    text-align: center;
-    height: 100%;
-    position: relative;
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes linksSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes homeZoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes ctaSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes btnBounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(20px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes socialsSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes socialIconSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes lineGrow {
+  from {
+    height: 0;
+  }
+  to {
+    height: 2rem;
+  }
+}
+
+@keyframes scrollDownFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scrollPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(-50%) scale(1.3);
+  }
+}
+
+/* Partículas decorativas sutiles */
+.header__container::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  width: 3px;
+  height: 3px;
+  background: rgba(77, 181, 255, 0.3);
+  border-radius: 50%;
+  animation: floatAnimation 4s ease-in-out infinite;
+}
+
+.header__container::after {
+  content: '';
+  position: absolute;
+  top: 60%;
+  right: 15%;
+  width: 2px;
+  height: 2px;
+  background: rgba(77, 181, 255, 0.2);
+  border-radius: 50%;
+  animation: floatAnimation 6s ease-in-out infinite reverse;
+}
+
+@keyframes floatAnimation {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Media queries con animaciones optimizadas */
+@media screen and (max-width: 1024px) {
+  header {
+    padding-top: 3rem;
   }
 
-  .home{
-    display: flex;
-    justify-content: center;
+  section {
+    margin-top: 6rem;
+  }
+
+  .header__socials {
+    left: 2rem;
+  }
+
+  .scroll__down {
+    right: 2rem;
+  }
+  
+  /* Simplificar algunas animaciones en tablet */
+  .header__container::before,
+  .header__container::after {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .header-links {
+    gap: 1rem;
+  }
+  
+  .header-links a {
+    font-size: 1rem;
+    padding: 0.3rem 0.8rem;
   }
   
   .cta {
-    display: flex;
-    justify-content: center;
-    gap: 1.2rem;
-    margin-top: 2.5rem;
-  }
-  
-  .header__socials {
-    display: flex;
+    gap: 1rem;
     flex-direction: column;
     align-items: center;
-    gap: 0.8rem;
-    position: absolute;
-    left: 5rem;
-    bottom: 1rem;
   }
-  
-  .header__socials::after {
-    content: '';
-    width: 1px;
-    height: 2rem;
-    background: var(--color-primary);
-  }
-  
+}
+
+@media screen and (max-width: 600px) {
+  .header__socials,
   .scroll__down {
-    position: absolute;
-    right: 5rem;
-    bottom: 5rem;
-    transform: rotate(90deg);
-    font-weight: 300;
-    font-size: 0.9rem;
+    display: none;
   }
   
-  @media screen and (max-width: 1024px){
-    header {
-      padding-top: 3rem;
-    }
-  
-    section {
-      margin-top: 6rem;
-    }
+  .header-links {
+    position: static;
+    margin-bottom: 2rem;
   }
   
-  @media screen and (max-width: 600px){
-  
-    .header__socials,
-    .scroll__down {
-      display: none;
-    }
+  /* Simplificar animaciones en móviles */
+  .header__container {
+    animation: containerSlideIn 0.6s ease-out 0.2s;
   }
+  
+  .home {
+    animation: homeZoomIn 0.6s ease-out 0.4s;
+  }
+  
+  .cta {
+    animation: ctaSlideUp 0.6s ease-out 0.6s;
+  }
+}

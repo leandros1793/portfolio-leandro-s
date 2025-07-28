@@ -11,112 +11,295 @@
 }
 
 :root {
+  /* Tus colores originales - SIN CAMBIOS */
   --color-bg: #1f1f38;
   --color-bg-variant: #2c2c6c;
   --color-primary: #4db5ff;
   --color-primary-variant: rgba(77, 181, 255, 0.4);
   --color-white: #fff;
   --color-light: rgba(255, 255, 255, 0.6);
-
-  --transition: all 400ms ease;
-
+  
+  /* Transiciones mejoradas - NUEVAS */
+  --transition: all 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-fast: all 200ms ease-out;
+  --transition-slow: all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  
+  /* Tus dimensiones originales - SIN CAMBIOS */
   --container-width-lg: 75%;
   --container-width-md: 86%;
   --container-width-sm: 90%;
+  
+  /* Sombras para animaciones - NUEVAS */
+  --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.15);
+  --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 20px rgba(77, 181, 255, 0.3);
 }
 
 html {
   scroll-behavior: smooth;
+  /* Mejora la calidad del renderizado */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Tu scrollbar original pero con animación */
 ::-webkit-scrollbar {
   display: none;
 }
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: var(--color-bg);
-  color: var(--color-white);
+  background-color: var(--color-bg); /* TU COLOR ORIGINAL */
+  color: var(--color-white); /* TU COLOR ORIGINAL */
   line-height: 1.7;
-  background-image: url(../src/assets/bg-texture.png);
+  background-image: url(../src/assets/bg-texture.png); /* TU IMAGEN ORIGINAL */
+  /* Optimización de rendimiento para animaciones */
+  will-change: scroll-position;
+}
+
+/* Animación sutil de partículas en el fondo */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(1px 1px at 20px 30px, rgba(77, 181, 255, 0.1), transparent),
+    radial-gradient(1px 1px at 40px 70px, rgba(77, 181, 255, 0.08), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.05), transparent);
+  background-size: 100px 100px;
+  animation: float 20s linear infinite;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .container {
   width: var(--container-width-lg);
   margin: 0 auto;
+  /* Animación de entrada suave */
+  animation: containerFadeIn 0.8s ease-out;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+/* Tipografía con animaciones pero colores originales */
+h1, h2, h3, h4, h5, h6 {
   font-weight: 500;
   text-align: center;
+  transition: var(--transition);
 }
 
 h1 {
   font-size: 2.5rem;
+  /* Efecto de entrada */
+  animation: titleSlideIn 1s ease-out;
 }
 
 section {
   margin-top: 8rem;
+  /* Animación de entrada para secciones */
+  opacity: 0;
+  transform: translateY(30px);
+  animation: sectionSlideIn 0.8s ease-out forwards;
 }
 
-section > h2,
-section > h5 {
-  color: var(--color-light);
+/* Animación escalonada para secciones */
+section:nth-of-type(1) { animation-delay: 0.1s; }
+section:nth-of-type(2) { animation-delay: 0.2s; }
+section:nth-of-type(3) { animation-delay: 0.3s; }
+section:nth-of-type(4) { animation-delay: 0.4s; }
+
+section > h2, section > h5 {
+  color: var(--color-light); /* TU COLOR ORIGINAL */
   text-align: center;
 }
 
 section > h2 {
-  color: var(--color-primary);
+  color: var(--color-primary); /* TU COLOR ORIGINAL */
   margin-bottom: 3rem;
+  position: relative;
+  transition: var(--transition);
+}
+
+/* Línea animada bajo títulos de sección */
+section > h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--color-primary);
+  transform: translateX(-50%);
+  transition: width 0.5s ease;
+  animation: lineExpand 1s ease-out 0.5s forwards;
 }
 
 .text-light {
-  color: var(--color-primary)
+  color: var(--color-primary); /* TU COLOR ORIGINAL */
 }
 
+/* Enlaces con animaciones mejoradas */
 a {
   transition: var(--transition);
-  color: var(--color-primary)
+  color: var(--color-primary); /* TU COLOR ORIGINAL */
+  position: relative;
+  overflow: hidden;
+}
+
+a::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-primary);
+  transition: width 0.3s ease;
+}
+
+a:hover::before {
+  width: 100%;
 }
 
 a:hover {
-  color: var(--color-white);
+  color: var(--color-white); /* TU COLOR ORIGINAL */
+  transform: translateY(-1px);
 }
 
+/* Botones con animaciones mejoradas pero colores originales */
 .btn {
   width: max-content;
   display: inline-block;
-  color: var(--color-primary);
+  color: var(--color-primary); /* TU COLOR ORIGINAL */
   padding: 0.75rem 1.2rem;
   border-radius: 0.4rem;
   cursor: pointer;
-  border: 1px solid var(--color-primary);
-  transition: var(--transition);
+  border: 1px solid var(--color-primary); /* TU COLOR ORIGINAL */
+  transition: var(--transition-slow);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto de brillo en botones */
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+  left: 100%;
 }
 
 .btn:hover {
-  background-color: var(--color-white);
-  color: var(--color-bg);
+  background-color: var(--color-white); /* TU COLOR ORIGINAL */
+  color: var(--color-bg); /* TU COLOR ORIGINAL */
   border-color: transparent;
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-glow);
 }
 
 .btn-primary {
-  background-color: var(--color-primary);
-  color: var(--color-bg);
+  background-color: var(--color-primary); /* TU COLOR ORIGINAL */
+  color: var(--color-bg); /* TU COLOR ORIGINAL */
 }
 
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: var(--shadow-heavy);
+}
+
+/* Imágenes con animaciones suaves */
 img {
   display: block;
   width: 100%;
   object-fit: cover;
+  transition: var(--transition);
 }
 
-@media screen and (max-width: 1024px){
+img:hover {
+  transform: scale(1.02);
+  filter: brightness(1.05);
+}
+
+/* Keyframes para todas las animaciones */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes containerFadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes sectionSlideIn {
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes titleSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lineExpand {
+  to {
+    width: 60px;
+  }
+}
+
+/* Animaciones específicas para elementos que se cargan */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+/* Media queries originales con animaciones optimizadas */
+@media screen and (max-width: 1024px) {
   .container {
     width: var(--container-width-md);
   }
@@ -124,14 +307,43 @@ img {
   section {
     margin-top: 6rem;
   }
+  
+  /* Reducir animaciones complejas en tablet */
+  body::before {
+    animation-duration: 30s;
+  }
 }
 
-@media screen and (max-width: 600px){
+@media screen and (max-width: 600px) {
   .container {
     width: var(--container-width-sm);
   }
 
   section > h2 {
     margin-bottom: 2rem;
+  }
+  
+  /* Simplificar animaciones en móviles */
+  body::before {
+    display: none;
+  }
+  
+  section {
+    animation: fadeInUp 0.4s ease-out forwards;
+  }
+  
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Respeto por preferencias de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
