@@ -1,97 +1,335 @@
 footer {
     background: var(--color-primary);
-    padding: 0rem 0px;
+    padding: 4rem 0;
     text-align: center;
     font-size: 1.9rem;
     margin-top: 7rem;
+    position: relative;
+    overflow: hidden;
+    /* Animación de entrada */
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* Efecto de fondo animado */
+footer::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 255, 255, 0.05),
+        transparent
+    );
+    transform: rotate(45deg);
+    animation: backgroundShine 8s linear infinite;
+    opacity: 0.3;
 }
 
 footer a {
     color: var(--color-bg);
-
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.footer__logo{
-
-font-size: 2rem;
-font-weight: 500;
-margin-bottom: 2rem;
-display: inline-block;
-
-
-
+.footer__logo {
+    font-size: 2rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+    display: inline-block;
+    position: relative;
+    transition: all 0.4s ease;
+    /* Animación de entrada con retraso */
+    animation: slideInDown 0.6s ease-out 0.2s both;
 }
 
-/* .permalinks {
+.footer__logo:hover {
+    transform: scale(1.1) translateY(-5px);
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
 
-display: flex;
-flex-wrap: wrap;
-justify-content: center;
-gap: 2rem;
-margin: 0 auto 3rem;
+/* Línea animada bajo el logo */
+.footer__logo::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--color-bg),
+        transparent
+    );
+    transition: all 0.4s ease;
+    transform: translateX(-50%);
+}
 
-
-
-} */
-
+.footer__logo:hover::after {
+    width: 100%;
+}
 
 .footer__socials {
-
     display: flex;
     justify-content: center;
-    gap: 1rem
-;
-margin-bottom: 4rem;
-
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+    /* Animación de entrada escalonada */
+    animation: slideInUp 0.6s ease-out 0.4s both;
 }
+
 .footer__socials a {
-background: var(--color-bg);
-color: var(--color-white);
-padding: 0.8 rem ;
-border-radius: 0.7rem;
-display: flex;
-border: 1px solid transparent;
+    background: var(--color-bg);
+    color: var(--color-white);
+    padding: 0.8rem;
+    border-radius: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    /* Animación individual para cada icono */
+    animation: bounceIn 0.6s ease-out both;
+}
 
+/* Animación escalonada para cada icono social */
+.footer__socials a:nth-child(1) { animation-delay: 0.5s; }
+.footer__socials a:nth-child(2) { animation-delay: 0.6s; }
+.footer__socials a:nth-child(3) { animation-delay: 0.7s; }
+.footer__socials a:nth-child(4) { animation-delay: 0.8s; }
+.footer__socials a:nth-child(5) { animation-delay: 0.9s; }
 
+/* Efecto de brillo en hover para iconos sociales */
+.footer__socials a::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.5s ease;
+}
+
+.footer__socials a:hover::before {
+    width: 100px;
+    height: 100px;
 }
 
 .footer__socials a:hover {
-
-background: transparent;
-color: var(--color-bg);
-border-color: var(--color-bg);
-
-
-
-
+    background: transparent;
+    color: var(--color-bg);
+    border-color: var(--color-bg);
+    transform: translateY(-8px) scale(1.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
+/* Efecto de pulsación continua para iconos sociales */
+.footer__socials a:nth-child(even) {
+    animation: pulse 2s infinite 1s;
+}
 
 .footer__copyright {
-margin-bottom: 4rem;
-color: var(--color-bg);
-
-
+    margin-bottom: 4rem;
+    color: var(--color-bg);
+    position: relative;
+    opacity: 0.9;
+    transition: all 0.3s ease;
+    /* Animación de entrada final */
+    animation: fadeIn 0.8s ease-out 1s both;
 }
 
+.footer__copyright:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+}
 
+/* Keyframes para las animaciones */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-   
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-@media screen and (max-width: 600px){
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3) translateY(20px);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.1) translateY(-5px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 0.9;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes backgroundShine {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+}
+
+/* Efecto hover para el footer completo */
+footer:hover .footer__socials a:not(:hover) {
+    opacity: 0.7;
+    transform: scale(0.95);
+}
+
+/* Media queries mejoradas */
+@media screen and (max-width: 768px) {
+    footer {
+        padding: 3rem 0;
+        font-size: 1.6rem;
+    }
+    
+    .footer__logo {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .footer__socials {
+        gap: 1.2rem;
+        margin-bottom: 3rem;
+    }
+    
+    .footer__socials a {
+        padding: 0.7rem;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    footer {
+        padding: 2.5rem 0;
+    }
+    
+    .footer__socials {
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 2.6rem;
+    }
+    
+    .footer__copyright {
+        margin-bottom: 2rem;
+        font-size: 0.9rem;
+    }
+    
+    /* Reducir animaciones en móviles para mejor rendimiento */
+    footer,
+    .footer__logo,
+    .footer__socials,
+    .footer__socials a,
+    .footer__copyright {
+        animation-duration: 0.3s;
+    }
+    
+    footer::before {
+        animation-duration: 12s;
+    }
+}
+
+/* Comentarios de las permalink descomentadas por si las necesitas */
 .permalinks {
-
-flex-direction: column;
-gap: 1.5rem;
-
-
-}
-.footer__socials{
-margin-bottom: 2.6 rem;
-
-
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin: 0 auto 3rem;
+    animation: slideInUp 0.6s ease-out 0.3s both;
 }
 
+.permalinks a {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
+.permalinks a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    transition: left 0.3s ease;
+}
+
+.permalinks a:hover::before {
+    left: 0;
+}
+
+.permalinks a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+@media screen and (max-width: 600px) {
+    .permalinks {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+    }
+}

@@ -1,40 +1,89 @@
 nav {
-background-color: rgba(0, 0, 0, 0);
-width: max-content;
-display: block;
-padding: 0.7rem 1.7rem;
-z-index: 2;
-position: fixed;
-left: 50%;
-transform: translateX(-50%);
-bottom: 2rem;
-display: flex;
-gap: 0.8rem;
-border-radius: 3rem;
-backdrop-filter: blur(15px);
-
-
-
+    background-color: rgba(0, 0, 0, 0);
+    width: max-content;
+    display: block;
+    padding: 0.7rem 1.7rem;
+    z-index: 2;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 2rem;
+    display: flex;
+    gap: 0.8rem;
+    border-radius: 3rem;
+    backdrop-filter: blur(15px);
 }
 
 nav a {
-background: transparent;
-padding: 0.9rem;
-border-radius: 50%  ;
-display: flex;
-color: var(--color-light);
-font-size: 1.1rem;
+    background: transparent;
+    padding: 0.9rem;
+    border-radius: 50%;
+    display: flex;
+    color: var(--color-light);
+    font-size: 1.1rem;
 }
+
 nav a:hover {
-
-background: rgba(0, 0, 0, 0);
-
-
+    background: rgba(0, 0, 0, 0);
 }
 
-
-nav a.activate{
+nav a.active {
     background: var(--color-primary);
     color: var(--color-bg);
-    
+}
+
+/* Estilos específicos para el botón de IA */
+nav a.ai-toggle {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efecto de pulso sutil para el botón de IA */
+nav a.ai-toggle::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: var(--color-primary);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.3;
+    animation: aiPulse 3s infinite;
+    z-index: -1;
+}
+
+@keyframes aiPulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0.1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0.3;
+    }
+}
+
+/* Hover especial para el botón IA */
+nav a.ai-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+/* Efecto cuando está activo el chat */
+nav a.ai-toggle.chat-active {
+    background: var(--color-primary);
+    color: var(--color-bg);
+    box-shadow: 0 0 20px rgba(var(--color-primary-rgb), 0.5);
+}
+
+/* Ocultar la animación de pulso cuando el chat está activo */
+nav a.ai-toggle.chat-active::before {
+    animation: none;
 }
