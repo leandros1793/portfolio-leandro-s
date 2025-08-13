@@ -10,17 +10,19 @@ import Footer from './components/footer/Footer';
 import Login from './components/Login/Login';
 import AIChatbot from './components/AIChatbot/AIChatbot'; // Importar el chatbot
 
+
 const App = () => {
   // Estado para controlar el chatbot
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
   return (
     <Router>
+          
             <Nav 
         onAIToggle={() => setIsChatbotOpen(!isChatbotOpen)} 
         isChatbotOpen={isChatbotOpen} 
       />
-      {/* ... tus rutas ... */}
+
       
       {isChatbotOpen && (
         <AIChatbot onClose={() => setIsChatbotOpen(false)} />

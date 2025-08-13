@@ -6,6 +6,9 @@ import IMG3 from "../../assets/ReservasMedicas.png";
 import IMG4 from "../../assets/portfolio4.png";
 import IMG5 from "../../assets/IMG5.png";
 import IMG6 from "../../assets/Captura de pantalla (75).png";
+import IMG7 from "../../assets/Captura de pantalla 2025-08-13 112941.png";
+import IMG8 from "../../assets/Captura de pantalla 2025-08-13 115629.png";
+import IMG9 from "../../assets/courierinternacional.png"
 
 const data = [
   { 
@@ -57,7 +60,30 @@ const data = [
     github: "https://github.com/leandros1793/ReservasMedicasWeb_2025t",
     demo: "https://reservasmedicasweb2025.vercel.app/inicio",
   },
-
+    { 
+    id: 7,
+    image: IMG7,
+    
+    titulo: "Demo de Wordpress landing page pro consumo",
+    github: "https://github.com/leandros1793",
+    demo: "/propuestasWorkana/propuesta.html",
+  },
+    { 
+    id: 8,
+    image: IMG8,
+    
+    titulo: "Demo de Hotmart SaaS WhatsApp Automation",
+    github: "https://github.com/leandros1793",
+    demo: "/propuestasWorkana/SaasWhatsappAutomation.html",
+  },
+    { 
+    id: 9,
+    image: IMG9,
+    
+    titulo: "Gestióde Courier Internacional envíos puerta a puerta y administración de casilleros",
+    github: "https://github.com/leandros1793",
+    demo: "/propuestasWorkana/GestiódeCourierInternacional.html",
+  },
 
 ];
 
@@ -76,15 +102,14 @@ const Portfolio = () => {
               </div>
 
               <h3> {titulo} </h3>
-              <div className="portfolio__item-cta">
-                <a href={github} className="btn" target="_blank">
-                  Github
-                </a>
-                <a href={demo} className="btn btn-primary" target="_blank">
-                  {" "}
-                  Live Demo
-                </a>
-              </div>
+               <div className="portfolio__item-cta">
+              <a href={github} className="btn" target="_blank" rel="noreferrer">
+                Github
+              </a>
+              <a href={demo} className="btn btn-primary" target="_blank" rel="noreferrer">
+                Live Demo
+              </a>
+            </div>
             </article>
           );
         })}
