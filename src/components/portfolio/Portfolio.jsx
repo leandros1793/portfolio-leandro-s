@@ -1,115 +1,113 @@
 import React from "react";
 import "./portfolio.css";
-import IMG1 from "../../assets/portfolio1.png";
-import IMG2 from "../../assets/portfolio2.png";
-import IMG3 from "../../assets/ReservasMedicas.png";
-import IMG4 from "../../assets/portfolio4.png";
-import IMG5 from "../../assets/IMG5.png";
-import IMG6 from "../../assets/Captura de pantalla (75).png";
-import IMG7 from "../../assets/Captura de pantalla 2025-08-13 112941.png";
-import IMG8 from "../../assets/Captura de pantalla 2025-08-13 115629.png";
-import IMG9 from "../../assets/courierinternacional.png"
+
+// IMPORTANTE: Tienes que sacar capturas de pantalla nuevas de estas webs reales
+// y guardarlas en tu carpeta assets con estos nombres (o cambiarlos aquí)
+import IMG1 from "../../assets/fumarmata.png";     // Captura de fumarmata.shop
+import IMG2 from "../../assets/acadevor.png";      // Captura de acadevor.com
+import IMG3 from "../../assets/impulsa.png";       // Captura de impulsa-5-estrellas
+import IMG4 from "../../assets/hoyoenuno.png";     // Captura de hoyoenuno.golf
+import IMG5 from "../../assets/xclusive.png";      // Captura de xclusivetravelworld.com
+import IMG6 from "../../assets/almaobrador.png";   // Captura de almaobrador.art
 
 const data = [
+  // --- TUS PROYECTOS ESTRELLA (Los que más venden) ---
   { 
     id: 1,
     image: IMG1,
-    
-    titulo: "Seguimiento de pacientes ",
-    github: "https://github.com/leandros1793/citas-react.git",
-    demo: "https://citas-react-sooty.vercel.app/",
+    titulo: "FumarMata.shop (Dueño de Producto)",
+    subtitulo: "E-commerce End-to-End",
+    tecnologias: "Shopify / Liquid / Estrategia de Ventas",
+    // Si es tu proyecto propio, quizás sí tengas repo, si no, pon tu perfil
+    github: "https://github.com/leandros1793", 
+    demo: "https://www.fumarmata.shop/",
   },
-
-  {
+  { 
     id: 2,
     image: IMG2,
-    titulo: "Control de gastos presupuesto",
-    github: "https://github.com/leandros1793/Control-Gastos.git",
-    demo: "https://control-presupuesto-react-sh94.vercel.app/",
-  },
-
-
-  {
-    id: 4,
-    image: IMG4,
-    titulo: "Cotiza Criptomonedas al Instante",
-    github: "https://github.com/leandros1793/03-criptos-react-FIN",
-    demo: "https://criptos-react-17.vercel.app/",
-  },
-  { 
-    id: 5,
-    image: IMG5,
-    
-    titulo: "CRM-REACT BACKEND UTILIZANDO API ",
-    github: "https://github.com/leandros1793/crm-react",
-    demo: "https://crm-react-iota.vercel.app/",
-  },
-  { 
-    id: 6,
-    image: IMG6,
-    
-    titulo: "App de quiosco next js, prisma, tailwind",
-    github: "https://github.com/leandros1793/quiosco_app_deploy.git",
-    demo: "https://quioscoappleandro-production.up.railway.app/",
+    titulo: "Acadevor - Infraestructura",
+    subtitulo: "Diagnóstico y Solución de Error Crítico en VPS",
+    tecnologias: "Linux / MySQL / Optimización Backend",
+    github: "https://github.com/leandros1793",
+    demo: "https://acadevor.com/",
+    // Nota: Aquí el cliente valorará que arreglaste el bug del servidor
   },
   { 
     id: 3,
     image: IMG3,
-    
-    titulo: "Reservas Medicas con Angular, Django y Mysql ",
-    github: "https://github.com/leandros1793/ReservasMedicasWeb_2025t",
-    demo: "https://reservasmedicasweb2025.vercel.app/inicio",
-  },
-    { 
-    id: 7,
-    image: IMG7,
-    
-    titulo: "Demo de Wordpress landing page pro consumo",
+    titulo: "Impulsa 5 Estrellas",
+    subtitulo: "Sistema de Automatización & SaaS",
+    tecnologias: "React / Next.js / Automatización",
     github: "https://github.com/leandros1793",
-    demo: "/propuestasWorkana/propuesta.html",
-  },
-    { 
-    id: 8,
-    image: IMG8,
-    
-    titulo: "Demo de Hotmart SaaS WhatsApp Automation",
-    github: "https://github.com/leandros1793",
-    demo: "/propuestasWorkana/SaasWhatsappAutomation.html",
-  },
-    { 
-    id: 9,
-    image: IMG9,
-    
-    titulo: "Gestióde Courier Internacional envíos puerta a puerta y administración de casilleros",
-    github: "https://github.com/leandros1793",
-    demo: "/propuestasWorkana/GestiódeCourierInternacional.html",
+    demo: "https://impulsa-5-estrellas.vercel.app/",
   },
 
+  // --- CLIENTES & VERSATILIDAD ---
+  { 
+    id: 4,
+    image: IMG4,
+    titulo: "Hoyo en Uno Golf",
+    subtitulo: "Plataforma Deportiva",
+    tecnologias: "Desarrollo Web / UX Deportivo",
+    github: "https://github.com/leandros1793",
+    demo: "https://hoyoenuno.golf/",
+  },
+  { 
+    id: 5,
+    image: IMG5,
+    titulo: "Xclusive Travel World",
+    subtitulo: "Sitio Web Corporativo de Turismo",
+    tecnologias: "Diseño Web / Optimización SEO",
+    github: "https://github.com/leandros1793",
+    demo: "https://www.xclusivetravelworld.com/",
+  },
+  { 
+    id: 6,
+    image: IMG6,
+    titulo: "Alma Obrador",
+    subtitulo: "Web Gastronómica & Identidad",
+    tecnologias: "Diseño UI / Frontend",
+    github: "https://github.com/leandros1793",
+    demo: "https://almaobrador.art/",
+  },
 ];
 
 const Portfolio = () => {
   return (
     <section id="portfolio">
-      <h5>Mi Trabajo Reciente</h5>
-      <h2>Portfolio</h2>
+      <h5>Portafolio Real</h5>
+      <h2>Casos de Éxito y Proyectos</h2>
 
       <div className="container portfolio__container">
-        {data.map(({ id, image, titulo, github, demo }) => {
+        {data.map(({ id, image, titulo, subtitulo, tecnologias, github, demo }) => {
           return (
             <article key={id} className="portfolio__item">
               <div className="portfolio__item-image">
-                <img src={image} alt={titulo} />
+                <img 
+                  src={image} 
+                  alt={titulo} 
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
 
-              <h3> {titulo} </h3>
-               <div className="portfolio__item-cta">
-              <a href={github} className="btn" target="_blank" rel="noreferrer">
-                Github
-              </a>
-              <a href={demo} className="btn btn-primary" target="_blank" rel="noreferrer">
-                Live Demo
-              </a>
-            </div>
+              <h3>{titulo}</h3>
+              <h5 style={{marginBottom: '0.5rem', opacity: '0.8', fontSize: '0.95rem', fontWeight: '500'}}>
+                {subtitulo}
+              </h5>
+              <small className="text-light" style={{display:'block', marginBottom: '1.5rem', fontSize: '0.8rem'}}>
+                 Stack: {tecnologias}
+              </small>
+
+              <div className="portfolio__item-cta">
+                {/* Botón Github genérico para clientes (ya que el código suele ser privado) */}
+                <a href={github} className="btn" target="_blank" rel="noreferrer">
+                  Github
+                </a>
+                <a href={demo} className="btn btn-primary" target="_blank" rel="noreferrer">
+                  Visitar Web
+                </a>
+              </div>
             </article>
           );
         })}

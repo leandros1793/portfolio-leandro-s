@@ -1,0 +1,12 @@
+# robots.txt para Portfolio Leandro Santiago
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: http://portfolioleandros.com/sitemap.xml
+
+# Disallow admin/login pages
+Disallow: /login
+Disallow: /admin
+
+

@@ -63,20 +63,36 @@
   animation: shine 0.8s ease-in-out;
 }
 
+/* --- CORRECCIÓN DE IMÁGENES --- */
+
 .portfolio__item-image {
   border-radius: 1.5rem;
-  overflow: hidden;
+  overflow: hidden; /* Esto recorta la imagen en las esquinas */
   width: 100%;
   height: 220px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  /* Quitamos el flex para que la imagen no flote en el medio */
+  display: block; 
   position: relative;
   margin-bottom: 1rem;
-  /* Gradiente sutil de overlay */
-  background: linear-gradient(135deg, 
-    var(--color-primary-variant) 0%, 
-    var(--color-primary) 100%);
+}
+
+.portfolio__item-image img {
+  /* CAMBIO CLAVE: Forzamos a que llene todo el cuadro */
+  width: 100%;
+  height: 100%;
+  
+  /* Esto hace que la imagen se recorte para llenar sin deformarse */
+  object-fit: cover;
+  
+  /* Enfoca la parte de arriba de la web (el menú/logo) */
+  object-position: top; 
+  
+  transition: all 0.5s ease;
+}
+
+/* Efecto Zoom al pasar el mouse */
+.portfolio__item:hover .portfolio__item-image img {
+  transform: scale(1.1);
 }
 
 .portfolio__item-image::after {

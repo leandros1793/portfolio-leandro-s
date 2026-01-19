@@ -1,6 +1,6 @@
-import React, { useState } from 'react'; // Importar useState
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/header/Header';
+// import Header from './components/header/Header'; // <-- ELIMINADO PORQUE NO SE USABA
 import Nav from './components/nav/Nav';
 import PortfolioPage from './components/portfoliopage/PortfolioPage';
 import Home from './components/home/Home';
@@ -8,25 +8,24 @@ import Ecommerce from './components/eccomerce/Eccomerce';
 import Blog from './components/blogs/Blog';
 import Footer from './components/footer/Footer';
 import Login from './components/Login/Login';
-import AIChatbot from './components/AIChatbot/AIChatbot'; // Importar el chatbot
 
+// Importamos el Chat y el Icono del robot
+import AIChatbot from './components/AIChatbot/AIChatbot'; 
+import { RiRobot2Line } from 'react-icons/ri'; 
 
 const App = () => {
-  // Estado para controlar el chatbot
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
   return (
     <Router>
-          
-            <Nav 
+      {/* Si quieres que el Nav también pueda abrir el chat, déjalo así.
+         Si no, puedes quitar las props onAIToggle e isChatbotOpen.
+      */}
+      <Nav 
         onAIToggle={() => setIsChatbotOpen(!isChatbotOpen)} 
         isChatbotOpen={isChatbotOpen} 
       />
-
       
-      {isChatbotOpen && (
-        <AIChatbot onClose={() => setIsChatbotOpen(false)} />
-      )}
       <Routes>
         <Route path="/" element={<PortfolioPage />} />
         <Route path="/home" element={<Home />} />
@@ -34,9 +33,40 @@ const App = () => {
         <Route path="/blog" element={<Blog />} />
         <Route path="/login" element={<Login />} />
       </Routes>
+      
       <Footer />
       
-      {/* Chatbot condicional - se muestra en todas las páginas */}
+      {/* --- BOTÓN FLOTANTE (Siempre visible) --- */}
+      {!isChatbotOpen && (
+        <button 
+          onClick={() => setIsChatbotOpen(true)}
+          style={{
+            position: 'fixed',
+            bottom: '20px',
+            right: '20px',
+            width: '60px',
+            height: '60px',
+            borderRadius: '50%',
+            backgroundColor: '#4db5ff', // Azul moderno (puedes cambiarlo a tu color)
+            color: 'white',
+            border: 'none',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
+            cursor: 'pointer',
+            zIndex: 999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'transform 0.3s'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          title="Hablar con el Asistente IA"
+        >
+          <RiRobot2Line size={28} />
+        </button>
+      )}
+
+      {/* --- VENTANA DEL CHATBOT --- */}
       {isChatbotOpen && (
         <AIChatbot onClose={() => setIsChatbotOpen(false)} />
       )}

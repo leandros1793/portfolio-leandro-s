@@ -1,27 +1,23 @@
-import React, { useEffect } from 'react'; // Asegúrate de importar useEffect
+import React from 'react';
 import './header.css';
 import CTA from './CTA';
 import HeaderSocials from './HeaderSocials';
 
 const Header = () => {
-
-
   return (
     <header id="home">
       <div className="container header__container">
-        <h2>BIENVENIDOS AL PORTFOLIO DE</h2>
+        <h5>Hola, soy</h5>
         <h1>Leandro Santiago</h1>
-        <h3 className="text-light">Fullstack Developer</h3>
+        <h5 className="text-light">Técnico en Desarrollo Web | Node.js, Python & E-commerce</h5>
 
         <CTA />
 
-
+        <HeaderSocials />
 
         <a href="#contact" className="scroll__down">
           Scroll Down
         </a>
-
-        <HeaderSocials />
       </div>
     </header>
   );

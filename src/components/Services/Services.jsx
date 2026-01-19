@@ -1,138 +1,103 @@
 import React from "react";
 import "./services.css";
 import { FiCheck } from "react-icons/fi";
+import { BiCodeBlock, BiServer, BiCart } from "react-icons/bi"; // Iconos opcionales para decorar si quieres
+
 const Services = () => {
   return (
     <section id="services">
-      <h5>Lo que ofrezco</h5>
-      <h2>Servicios</h2>
+      <h5>¿Qué soluciones ofrezco?</h5>
+      <h2>Mis Servicios</h2>
+
       <div className="container services__container">
+        
+        {/* --- SERVICIO 1: DESARROLLO A MEDIDA --- */}
         <article className="service">
           <div className="service__head">
-            <h3>UI/UX Desing</h3>
+            <h3>Desarrollo Web & Apps</h3>
           </div>
           <ul className="service__list">
             <li>
               <FiCheck className="service__list-icon" />
-              <p>Creación de interfaces de usuario atractivas y funcionales que mejoren la experiencia del usuario.</p>
+              <p>Desarrollo de aplicaciones web SPA rápidas y escalables con <strong>React.js</strong> y Angular.</p>
             </li>
             <li>
               <FiCheck className="service__list-icon" />
-              <p> Creación de prototipos interactivos y esquemas de diseño para visualizar las ideas antes de la implementación.</p>
+              <p>Sistemas de gestión empresarial robustos utilizando <strong>.NET (C#)</strong> y Blazor.</p>
             </li>
             <li>
               <FiCheck className="service__list-icon" />
-              <p>Realización de investigaciones para comprender las necesidades y preferencias de los usuarios y aplicar ese conocimiento al diseño.</p>
+              <p>Diseño de interfaces (UI/UX) modernas, responsivas y centradas en la conversión.</p>
             </li>
             <li>
               <FiCheck className="service__list-icon" />
-              <p>Evaluación de la usabilidad del diseño a través de pruebas y retroalimentación de usuarios reales.</p>
+              <p>Integración de APIs RESTful y bases de datos SQL/NoSQL.</p>
             </li>
             <li>
               <FiCheck className="service__list-icon" />
-              <p>Adaptación de interfaces para que sean eficaces y atractivas en diferentes dispositivos y resoluciones.</p>
+              <p>Mantenimiento y refactorización de código legacy.</p>
             </li>
-
           </ul>
         </article>
 
-        {/*final de article*/}
-
+        {/* --- SERVICIO 2: E-COMMERCE (Tu especialidad) --- */}
         <article className="service">
           <div className="service__head">
-            <h3>Web Development</h3>
+            <h3>E-commerce Expert</h3>
           </div>
           <ul className="service__list">
             <li>
               <FiCheck className="service__list-icon" />
-              <p>
-                Creación de sitios web a medida que reflejen la identidad y los
-                objetivos de tus clientes, utilizando las últimas tecnologías y
-                prácticas de diseño.
-              </p>
+              <p>Creación de tiendas <strong>Shopify</strong> de alto rendimiento (configuración, apps y diseño).</p>
             </li>
             <li>
               <FiCheck className="service__list-icon" />
-              <p>
-                {" "}
-                Construcción de interfaces de usuario interactivas y atractivas
-                utilizando HTML, CSS y JavaScript para proporcionar una
-                experiencia de usuario excepcional.
-              </p>
-            </li>
-     
-            <li>
-              <FiCheck className="service__list-icon" />
-              <p>
-                Conexión de aplicaciones con servicios de terceros y APIs para
-                extender la funcionalidad y la integración de datos.
-              </p>
+              <p>Desarrollo y personalización de temas con <strong>Liquid</strong> y CSS avanzado.</p>
             </li>
             <li>
               <FiCheck className="service__list-icon" />
-              <p>
-                Garantía de que el sitio web se vea y funcione correctamente en
-                dispositivos móviles y pantallas de diferentes tamaños.
-              </p>
+              <p>Implementación de tiendas en <strong>WordPress + WooCommerce</strong>.</p>
             </li>
             <li>
               <FiCheck className="service__list-icon" />
-              <p>
-                Desarrollo de tiendas en línea seguras y fáciles de usar con
-                sistemas de pago integrados.
-              </p>
+              <p>Configuración de pasarelas de pago, envíos y automatización de correos.</p>
+            </li>
+            <li>
+              <FiCheck className="service__list-icon" />
+              <p>Optimización de la tasa de conversión (CRO) basada en experiencia real.</p>
             </li>
           </ul>
         </article>
-        {/* final de article*/}
+
+        {/* --- SERVICIO 3: INFRAESTRUCTURA (El bombero) --- */}
         <article className="service">
           <div className="service__head">
-            <h3>Manejo de Redes</h3>
+            <h3>Soporte & Servidores</h3>
           </div>
           <ul className="service__list">
             <li>
               <FiCheck className="service__list-icon" />
-              <p>
-                Diseño y ejecución de estrategias de marketing en redes sociales
-                para aumentar la visibilidad de tu marca, interactuar con la
-                audiencia y generar conversiones.
-              </p>
+              <p>Diagnóstico y reparación de errores críticos en servidores <strong>VPS (Linux)</strong>.</p>
             </li>
             <li>
               <FiCheck className="service__list-icon" />
-              <p>
-                Desarrollo de contenido atractivo y relevante para tus redes
-                sociales, incluyendo publicaciones, imágenes, videos y otros
-                formatos multimedia.
-              </p>
+              <p>Optimización de bases de datos <strong>MySQL</strong> y solución de cuellos de botella.</p>
             </li>
             <li>
               <FiCheck className="service__list-icon" />
-              <p>
-                Planificación y programación de contenido para que tus redes
-                estén activas en los momentos más efectivos, incluso cuando
-                estás ocupado con otras tareas.
-              </p>
+              <p>Mejora de velocidad de carga (Core Web Vitals) y rendimiento del servidor.</p>
             </li>
             <li>
               <FiCheck className="service__list-icon" />
-              <p>
-                {" "}
-                Monitoreo constante de las métricas de redes sociales para
-                evaluar el rendimiento de tus campañas y realizar ajustes en
-                tiempo real.
-              </p>
+              <p>Migración de sitios web y configuración de entornos de producción.</p>
             </li>
             <li>
               <FiCheck className="service__list-icon" />
-              <p>
-                Creación y administración de campañas publicitarias en
-                plataformas como Facebook, Instagram, Twitter y LinkedIn para
-                llegar a un público específico.
-              </p>
+              <p>Resolución de pantallas blancas (WSOD) y conflictos de plugins en WordPress.</p>
             </li>
           </ul>
         </article>
+      
       </div>
     </section>
   );

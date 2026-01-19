@@ -1,123 +1,56 @@
-/* About Section con el mismo estilo de animaciones del portfolio */
 .about__container {
   display: grid;
   grid-template-columns: 35% 50%;
   gap: 15%;
-  padding: 2rem 0;
-  /* Animación de entrada para el contenedor */
-  animation: fadeInUp 0.8s ease-out;
 }
 
-/* Imagen con animaciones consistentes */
-.about__me-image {
-  position: relative;
-  transform: rotate(10deg);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  border: 1px solid transparent;
-  border-radius: 1rem;
-  overflow: hidden;
-  /* Transformación inicial para animación */
-  opacity: 0;
-  animation: slideInLeft 0.6s ease-out 0.2s forwards;
-}
-
-/* Efecto de brillo en hover - igual al portfolio */
-.about__me-image::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
+/* --- IMAGEN DEL PERFIL --- */
+.about__me {
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 2rem;
   background: linear-gradient(
     45deg,
     transparent,
-    rgba(255, 255, 255, 0.1),
+    var(--color-primary),
     transparent
   );
-  transform: rotate(45deg);
-  transition: all 0.6s;
-  opacity: 0;
-  z-index: 1;
+  display: grid;
+  place-items: center;
 }
 
-.about__me-image:hover::before {
-  opacity: 1;
-  animation: shine 0.8s ease-in-out;
+.about__me-image {
+  border-radius: 2rem;
+  overflow: hidden; /* IMPORTANTE: Esto recorta lo que sobra del zoom */
+  transform: rotate(10deg);
+  transition: var(--transition);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  width: 100%; /* Asegura que llene el contenedor */
+  height: 100%;
 }
 
 .about__me-image:hover {
-  transform: rotate(0) scale(1.05);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  border-color: var(--color-primary-variant);
+  transform: rotate(0);
+  border: 1px solid var(--color-primary-variant);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-/* Indicador hover mejorado */
-.hover-indicator {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 2;
-  opacity: 0.8;
-  transform: translateY(0);
+/* --- TRUCO PARA OCULTAR EL MARCO AZUL --- */
+/* Esto hace zoom a la foto para que el marco quede fuera del área visible */
+.about__me-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;    /* Llena el espacio sin deformar */
+  object-position: center; /* Centra tu cara */
+  transform: scale(1.35);  /* EL SECRETO: 35% de zoom para "sacar" el marco */
+  transition: transform 0.5s ease; /* Suaviza el efecto si cambia */
 }
 
-.hover-indicator span {
-  font-size: 0.875rem;
-  color: #ffffff;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.rounded-full {
-  border-radius: 10%;
-}
-
-.arrow {
-  width: 1rem;
-  height: 1rem;
-  color: #ffffff;
-  animation: bounce 2s infinite;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-10px);
-  }
-  60% {
-    transform: translateY(-5px);
-  }
-}
-
-.about__me-image:hover .hover-indicator {
-  transform: translateY(-15px);
-  opacity: 0;
-}
-
-/* Cards con el mismo estilo del portfolio */
+/* --- TARJETAS (CARDS) --- */
 .about__cards {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
-  /* Animación de entrada */
-  opacity: 0;
-  animation: slideInRight 0.6s ease-out 0.4s forwards;
 }
 
 .about__card {
@@ -126,195 +59,43 @@
   border-radius: 1rem;
   padding: 2rem;
   text-align: center;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
-  overflow: hidden;
-  /* Sombra sutil inicial - igual al portfolio */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  /* Transformación inicial para animación */
-  transform: translateY(30px);
-  opacity: 0;
-  animation: slideInUp 0.6s ease-out forwards;
+  transition: var(--transition);
 }
 
-/* Animación escalonada para cada card - igual al portfolio */
-.about__card:nth-child(1) { animation-delay: 0.1s; }
-.about__card:nth-child(2) { animation-delay: 0.2s; }
-.about__card:nth-child(3) { animation-delay: 0.3s; }
-.about__card:nth-child(4) { animation-delay: 0.4s; }
-
-/* Efecto hover mejorado - igual al portfolio */
 .about__card:hover {
+  background: transparent;
   border-color: var(--color-primary-variant);
-  background: rgba(255, 255, 255, 0.05);
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
   cursor: default;
 }
 
-/* Efecto de brillo en hover - igual al portfolio */
-.about__card::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent,
-    rgba(255, 255, 255, 0.1),
-    transparent
-  );
-  transform: rotate(45deg);
-  transition: all 0.6s;
-  opacity: 0;
-}
-
-.about__card:hover::before {
-  opacity: 1;
-  animation: shine 0.8s ease-in-out;
-}
-
-/* Icono con transición suave */
 .about__icon {
   color: var(--color-primary);
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   margin-bottom: 1rem;
-  position: relative;
-  z-index: 1;
-  transition: all 0.3s ease;
-  display: inline-block;
 }
 
-.about__card:hover .about__icon {
-  transform: scale(1.15);
-  color: var(--color-primary-variant);
-}
-
-/* Texto con transiciones - igual al portfolio */
 .about__card h5 {
-  font-size: 1rem;
-  position: relative;
-  z-index: 1;
-  transition: all 0.3s ease;
-  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
 }
 
 .about__card small {
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   color: var(--color-light);
-  position: relative;
-  z-index: 1;
-  transition: all 0.3s ease;
 }
 
-.about__card:hover h5 {
-  color: var(--color-primary);
-  transform: translateY(-2px);
-}
-
-.about__card:hover small {
-  transform: translateY(-2px);
-}
-
-/* Línea animada bajo el título - igual al portfolio */
-.about__card h5::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    var(--color-primary),
-    var(--color-primary-variant)
-  );
-  transform: translateX(-50%);
-  transition: width 0.4s ease;
-}
-
-.about__card:hover h5::after {
-  width: 40px;
-}
-
-/* Contenido de texto con animación */
-.about__content {
-  opacity: 0;
-  animation: slideInUp 0.6s ease-out 0.6s forwards;
-}
-
+/* --- TEXTO --- */
 .about__content p {
-  margin: 2rem 0 2.6rem;
+  margin: 1.5rem 0 1rem;
   color: var(--color-light);
-  transition: all 0.3s ease;
-  line-height: 1.7;
-  position: relative;
+  line-height: 1.8;
 }
 
-/* Hover para todo el contenedor de cards - igual al portfolio */
-.about__cards:hover .about__card:not(:hover) {
-  opacity: 0.7;
-  transform: translateY(5px) scale(0.98);
-}
-
-/* Keyframes para animaciones - iguales al portfolio */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-50px) rotate(10deg);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0) rotate(10deg);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes shine {
-  0% {
-    transform: translateX(-100%) translateY(-100%) rotate(45deg);
-  }
-  100% {
-    transform: translateX(100%) translateY(100%) rotate(45deg);
-  }
-}
-
-/* Media queries mejoradas - igual al portfolio */
+/* --- MEDIA QUERIES --- */
 @media screen and (max-width: 1024px) {
   .about__container {
     grid-template-columns: 1fr;
     gap: 0;
-    padding: 1rem 0;
   }
 
   .about__me {
@@ -324,27 +105,19 @@
 
   .about__content p {
     margin: 1rem 0 1.5rem;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .about__container {
-    padding: 1rem 0;
+    text-align: center;
   }
   
   .about__cards {
-    gap: 1.2rem;
-  }
-  
-  .about__card {
-    padding: 1.5rem;
+     grid-template-columns: 1fr 1fr 1fr;
+     gap: 1rem;
   }
 }
 
 @media screen and (max-width: 600px) {
   .about__me {
-    width: 88%;
-    margin: 5rem 5rem 5rem;
+    width: 65%;
+    margin: 0 auto 3rem;
   }
 
   .about__cards {
@@ -357,22 +130,6 @@
   }
 
   .about__content p {
-    margin: 1.5rem 0;
-  }
-  
-  /* Reducir animaciones en móviles para mejor rendimiento - igual al portfolio */
-  .about__card {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-  
-  .about__card:hover {
-    transform: translateY(-4px) scale(1.01);
-  }
-  
-  .about__me-image {
-    animation: none;
-    opacity: 1;
+    text-align: justify;
   }
 }
