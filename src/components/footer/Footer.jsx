@@ -5,18 +5,17 @@ import { FaFacebook, FaInstagram, FaLinkedin, FaGithub } from 'react-icons/fa'
 const Footer = () => {
   return (
     <footer>
-      {/* Título profesional, sin "jr" */}
-      <a href="#" className='footer__logo'>
+      {/* CORREGIDO: href="#home" en lugar de "#" para evitar error de Vercel */}
+      <a href="#home" className='footer__logo'>
         Leandro Santiago
         <span style={{ display: 'block', fontSize: '0.9rem', marginTop: '0.5rem', opacity: '0.8', fontWeight: 'normal' }}>
           Técnico en Desarrollo Web
         </span>
       </a>
 
-      {/* Si decides descomentar los links de navegación en el futuro, el CSS ya está listo. 
-          Por ahora lo dejo limpio como lo tenías. */}
+      {/* Si decides descomentar los links de navegación en el futuro, el CSS ya está listo. */}
       <ul className='permalinks'>
-        {/* <li><a href="#">Inicio</a></li>
+        {/* <li><a href="#home">Inicio</a></li>
         <li><a href="#about">Sobre Mí</a></li>
         <li><a href="#experience">Stack</a></li>
         <li><a href="#portfolio">Proyectos</a></li>

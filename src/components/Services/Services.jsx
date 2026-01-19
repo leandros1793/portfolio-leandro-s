@@ -1,7 +1,7 @@
 import React from "react";
 import "./services.css";
 import { FiCheck } from "react-icons/fi";
-import { BiCodeBlock, BiServer, BiCart } from "react-icons/bi"; // Iconos opcionales para decorar si quieres
+
 
 const Services = () => {
   return (
