@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { IoSend } from 'react-icons/io5';
 import { RiRobot2Line } from 'react-icons/ri';
-import { FiUser, FiX } from 'react-icons/fi';
+import { FiX } from 'react-icons/fi';
 
 const AIChatbot = ({ onClose }) => {
   // ... (El estado inicial se mantiene igual)
