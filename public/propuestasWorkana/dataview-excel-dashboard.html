@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DataView — Excel to Dashboard en segundos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root{
+      --bg:#06080D;--surface:#0D1117;--card:#161B22;--card2:#1C2333;
+      --violet:#8B5CF6;--violet-glow:rgba(139,92,246,.1);--violet-dark:#7C3AED;
+      --cyan:#06B6D4;--cyan-glow:rgba(6,182,212,.1);
+      --emerald:#10B981;--emerald-glow:rgba(16,185,129,.1);
+      --amber:#F59E0B;--amber-glow:rgba(245,158,11,.1);
+      --rose:#F43F5E;--rose-glow:rgba(244,63,94,.1);
+      --blue:#3B82F6;
+      --text:#E2E8F0;--text70:rgba(226,232,240,.7);--text50:rgba(226,232,240,.5);
+      --text30:rgba(226,232,240,.3);--border:rgba(255,255,255,.06);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font-size:14px;line-height:1.5;overflow-x:hidden;min-height:100vh}
+    button{cursor:pointer;font-family:inherit;border:none;background:none;color:inherit}
+    ::selection{background:rgba(139,92,246,.25)}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+    @keyframes gradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    .fu{animation:fadeUp .5s ease-out both}
+
+    .page{max-width:1200px;margin:0 auto;padding:24px}
+
+    /* Upload zone */
+    .upload-zone{border:2px dashed var(--border);border-radius:20px;padding:80px 40px;text-align:center;transition:all .3s;cursor:pointer;position:relative;overflow:hidden}
+    .upload-zone:hover,.upload-zone.dragover{border-color:var(--violet);background:var(--violet-glow)}
+    .upload-zone.dragover::after{content:'Soltar archivo aquí';position:absolute;inset:0;background:rgba(139,92,246,.15);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:var(--violet)}
+    .upload-icon{font-size:56px;margin-bottom:16px;display:block}
+    .upload-title{font-size:24px;font-weight:700;margin-bottom:8px}
+    .upload-sub{color:var(--text50);font-size:15px;margin-bottom:24px}
+    .upload-btn{background:linear-gradient(135deg,var(--violet),var(--cyan));color:#fff;padding:14px 36px;border-radius:10px;font-size:15px;font-weight:600;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+    .upload-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(139,92,246,.25)}
+    .upload-formats{margin-top:16px;font-size:12px;color:var(--text30)}
+
+    /* Demo button */
+    .demo-btn{background:var(--card);border:1px solid var(--border);color:var(--text70);padding:10px 24px;border-radius:8px;font-size:13px;font-weight:500;transition:all .2s;margin-top:12px}
+    .demo-btn:hover{border-color:var(--violet);color:var(--violet)}
+
+    /* Dashboard */
+    .dashboard{display:none}
+    .dashboard.active{display:block}
+    .dash-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+    .dash-title{font-size:22px;font-weight:700}
+    .dash-file{font-family:'JetBrains Mono';font-size:12px;color:var(--text30);background:var(--card);padding:6px 14px;border-radius:6px}
+    .dash-actions{display:flex;gap:8px}
+    .dash-actions button{padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;border:1px solid var(--border);transition:all .2s}
+    .dash-actions button:hover{border-color:var(--violet)}
+
+    /* Stats row */
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+    .stat{background:var(--card);border-radius:14px;padding:20px;border:1px solid var(--border);position:relative;overflow:hidden}
+    .stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
+    .stat:nth-child(1)::before{background:var(--violet)}
+    .stat:nth-child(2)::before{background:var(--cyan)}
+    .stat:nth-child(3)::before{background:var(--emerald)}
+    .stat:nth-child(4)::before{background:var(--amber)}
+    .stat-label{font-size:12px;color:var(--text50);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+    .stat-val{font-family:'JetBrains Mono';font-size:26px;font-weight:700}
+    .stat-sub{font-size:11px;color:var(--text30);margin-top:4px}
+
+    /* Charts grid */
+    .charts{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-bottom:20px}
+    .chart-card{background:var(--card);border-radius:14px;padding:20px;border:1px solid var(--border)}
+    .chart-title{font-size:14px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .chart-wrap{position:relative;height:280px}
+
+    /* Table */
+    .table-card{background:var(--card);border-radius:14px;border:1px solid var(--border);overflow:hidden}
+    .table-header-bar{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+    .table-search{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text);font-family:inherit;font-size:13px;width:240px}
+    .table-search:focus{outline:none;border-color:var(--violet)}
+    .table-scroll{max-height:400px;overflow-y:auto}
+    table{width:100%;border-collapse:collapse}
+    th{position:sticky;top:0;background:var(--card2);padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--text50);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);cursor:pointer}
+    th:hover{color:var(--violet)}
+    td{padding:10px 16px;font-size:13px;border-bottom:1px solid var(--border);color:var(--text70);white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis}
+    tr:hover td{background:rgba(255,255,255,.02)}
+
+    /* Sheet tabs */
+    .sheet-tabs{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+    .sheet-tab{padding:8px 18px;border-radius:8px;font-size:13px;font-weight:500;border:1px solid var(--border);transition:all .2s}
+    .sheet-tab.active{background:var(--violet);color:#fff;border-color:var(--violet)}
+    .sheet-tab:hover:not(.active){border-color:var(--violet);color:var(--violet)}
+
+    /* Responsive */
+    @media(max-width:768px){
+      .stats{grid-template-columns:1fr 1fr}
+      .charts{grid-template-columns:1fr}
+      .chart-wrap{height:220px}
+      .dash-header{flex-direction:column;align-items:flex-start}
+    }
+    @media(max-width:480px){
+      .page{padding:16px}
+      .stats{grid-template-columns:1fr}
+      .upload-zone{padding:48px 20px}
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ═══ UPLOAD SECTION ═══ -->
+  <div id="upload-section" class="fu">
+    <div style="text-align:center;padding:40px 0 32px">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:var(--violet-glow);border:1px solid rgba(139,92,246,.2);color:var(--violet);padding:6px 18px;border-radius:20px;font-size:13px;font-weight:500;margin-bottom:20px">⚡ Sin servidor · 100% en tu navegador</div>
+      <h1 style="font-size:clamp(32px,5vw,48px);font-weight:800;margin-bottom:12px;letter-spacing:-.02em">
+        Excel → <span style="background:linear-gradient(135deg,var(--violet),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent">Dashboard</span> en segundos
+      </h1>
+      <p style="font-size:17px;color:var(--text50);max-width:520px;margin:0 auto">Arrastrá tu archivo Excel y obtené gráficos, tablas y métricas al instante. Sin subir nada a ningún servidor.</p>
+    </div>
+
+    <div class="upload-zone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+      <span class="upload-icon">📊</span>
+      <div class="upload-title">Arrastrá tu Excel acá</div>
+      <div class="upload-sub">o hacé click para seleccionar archivo</div>
+      <button class="upload-btn">📁 Seleccionar archivo .xlsx</button>
+      <div class="upload-formats">.xlsx · .xls · .csv — Máx 10MB — Todo se procesa localmente</div>
+    </div>
+    <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display:none">
+
+    <div style="text-align:center;margin-top:16px">
+      <button class="demo-btn" onclick="loadDemo()">¿Sin archivo? Probá con datos de ejemplo →</button>
+    </div>
+  </div>
+
+  <!-- ═══ DASHBOARD ═══ -->
+  <div id="dashboard" class="dashboard">
+    <div class="dash-header fu">
+      <div>
+        <div class="dash-title">📊 Dashboard</div>
+        <span class="dash-file" id="filename"></span>
+      </div>
+      <div class="dash-actions">
+        <button onclick="location.reload()">📁 Nuevo archivo</button>
+        <button onclick="exportPNG()">📸 Exportar imagen</button>
+      </div>
+    </div>
+
+    <!-- Sheet tabs -->
+    <div class="sheet-tabs fu" id="sheet-tabs"></div>
+
+    <!-- Stats -->
+    <div class="stats fu" id="stats-row"></div>
+
+    <!-- Charts -->
+    <div class="charts fu">
+      <div class="chart-card">
+        <div class="chart-title">📈 Gráfico Principal</div>
+        <div class="chart-wrap"><canvas id="chart1"></canvas></div>
+        <div style="display:flex;gap:6px;margin-top:12px" id="chart1-btns"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">🍩 Distribución</div>
+        <div class="chart-wrap"><canvas id="chart2"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card fu">
+      <div class="table-header-bar">
+        <div style="font-size:14px;font-weight:600">📋 Datos <span id="row-count" style="color:var(--text30);font-weight:400"></span></div>
+        <input class="table-search" placeholder="Buscar en tabla..." oninput="filterTable(this.value)">
+      </div>
+      <div class="table-scroll" id="table-container"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let allData = [];
+let allHeaders = [];
+let currentChart1 = null;
+let currentChart2 = null;
+let workbook = null;
+
+// ═══ FILE HANDLING ═══
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+dropzone.addEventListener('drop', e => { e.preventDefault(); dropzone.classList.remove('dragover'); handleFile(e.dataTransfer.files[0]); });
+fileInput.addEventListener('change', e => { if(e.target.files[0]) handleFile(e.target.files[0]); });
+
+function handleFile(file) {
+  if (!file) return;
+  document.getElementById('filename').textContent = file.name + ' · ' + (file.size/1024).toFixed(0) + 'KB';
+  const reader = new FileReader();
+  reader.onload = e => {
+    const data = new Uint8Array(e.target.result);
+    workbook = XLSX.read(data, {type:'array'});
+    renderSheetTabs();
+    loadSheet(workbook.SheetNames[0]);
+    document.getElementById('upload-section').style.display = 'none';
+    document.getElementById('dashboard').classList.add('active');
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+// ═══ DEMO DATA ═══
+function loadDemo() {
+  const wb = XLSX.utils.book_new();
+  const salesData = [
+    ['Mes','Ventas','Gastos','Margen','Región'],
+    ['Enero',245000,180000,65000,'Norte'],
+    ['Febrero',312000,195000,117000,'Sur'],
+    ['Marzo',289000,172000,117000,'Norte'],
+    ['Abril',356000,210000,146000,'Este'],
+    ['Mayo',401000,228000,173000,'Oeste'],
+    ['Junio',378000,215000,163000,'Norte'],
+    ['Julio',425000,240000,185000,'Sur'],
+    ['Agosto',398000,225000,173000,'Este'],
+    ['Septiembre',445000,252000,193000,'Oeste'],
+    ['Octubre',467000,260000,207000,'Norte'],
+    ['Noviembre',489000,275000,214000,'Sur'],
+    ['Diciembre',534000,295000,239000,'Este'],
+  ];
+  const ws = XLSX.utils.aoa_to_sheet(salesData);
+  XLSX.utils.book_append_sheet(wb, ws, 'Ventas 2025');
+
+  const prodData = [
+    ['Producto','Unidades','Precio Unit.','Total','Categoría'],
+    ['Widget Pro',1250,45.90,57375,'Tech'],
+    ['Gadget X',890,78.50,69865,'Tech'],
+    ['Service Plan A',340,120.00,40800,'Servicios'],
+    ['Widget Lite',2100,22.00,46200,'Tech'],
+    ['Consultoría',85,350.00,29750,'Servicios'],
+    ['Gadget Mini',1560,35.00,54600,'Tech'],
+    ['Soporte Premium',210,180.00,37800,'Servicios'],
+    ['Accesorio Z',3200,12.50,40000,'Accesorios'],
+  ];
+  const ws2 = XLSX.utils.aoa_to_sheet(prodData);
+  XLSX.utils.book_append_sheet(wb, ws2, 'Productos');
+
+  workbook = wb;
+  document.getElementById('filename').textContent = 'datos-ejemplo.xlsx · Demo';
+  renderSheetTabs();
+  loadSheet(workbook.SheetNames[0]);
+  document.getElementById('upload-section').style.display = 'none';
+  document.getElementById('dashboard').classList.add('active');
+}
+
+// ═══ SHEET TABS ═══
+function renderSheetTabs() {
+  const tabs = document.getElementById('sheet-tabs');
+  tabs.innerHTML = workbook.SheetNames.map((name, i) =>
+    `<button class="sheet-tab ${i===0?'active':''}" onclick="switchSheet('${name}',this)">${name}</button>`
+  ).join('');
+}
+
+function switchSheet(name, btn) {
+  document.querySelectorAll('.sheet-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  loadSheet(name);
+}
+
+// ═══ LOAD SHEET ═══
+function loadSheet(sheetName) {
+  const ws = workbook.Sheets[sheetName];
+  const json = XLSX.utils.sheet_to_json(ws);
+  if (!json.length) return;
+
+  allHeaders = Object.keys(json[0]);
+  allData = json;
+
+  renderStats();
+  renderCharts();
+  renderTable();
+}
+
+// ═══ STATS ═══
+function renderStats() {
+  const numCols = allHeaders.filter(h => allData.some(r => typeof r[h] === 'number'));
+  const stats = document.getElementById('stats-row');
+  const colors = ['var(--violet)','var(--cyan)','var(--emerald)','var(--amber)'];
+
+  const items = [
+    { label:'Registros', val: allData.length.toLocaleString(), sub: allHeaders.length + ' columnas' },
+  ];
+
+  numCols.slice(0,3).forEach(col => {
+    const vals = allData.map(r => r[col]).filter(v => typeof v === 'number');
+    const sum = vals.reduce((a,b) => a+b, 0);
+    const avg = sum / vals.length;
+    items.push({
+      label: col,
+      val: sum > 10000 ? (sum/1000).toFixed(0)+'K' : sum.toLocaleString('es-AR',{maximumFractionDigits:0}),
+      sub: 'Prom: ' + avg.toLocaleString('es-AR',{maximumFractionDigits:0})
+    });
+  });
+
+  stats.innerHTML = items.slice(0,4).map((s,i) => `
+    <div class="stat" style="--c:${colors[i]}">
+      <div class="stat-label">${s.label}</div>
+      <div class="stat-val" style="color:${colors[i]}">${s.val}</div>
+      <div class="stat-sub">${s.sub}</div>
+    </div>
+  `).join('');
+}
+
+// ═══ CHARTS ═══
+function renderCharts() {
+  const numCols = allHeaders.filter(h => allData.some(r => typeof r[h] === 'number'));
+  const textCols = allHeaders.filter(h => allData.some(r => typeof r[h] === 'string'));
+  const labelCol = textCols[0] || allHeaders[0];
+
+  // Chart 1 — Bar/Line
+  if (currentChart1) currentChart1.destroy();
+  const ctx1 = document.getElementById('chart1').getContext('2d');
+  const chartColors = ['rgba(139,92,246,.8)','rgba(6,182,212,.8)','rgba(16,185,129,.8)','rgba(245,158,11,.8)','rgba(244,63,94,.8)'];
+
+  const datasets = numCols.slice(0,3).map((col,i) => ({
+    label: col,
+    data: allData.map(r => r[col] || 0),
+    backgroundColor: chartColors[i],
+    borderColor: chartColors[i],
+    borderWidth: 2,
+    borderRadius: 6,
+    tension: 0.3,
+  }));
+
+  currentChart1 = new Chart(ctx1, {
+    type: 'bar',
+    data: {
+      labels: allData.map(r => r[labelCol] || ''),
+      datasets
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { labels: { color:'rgba(226,232,240,.5)', font:{family:'Outfit',size:11} } } },
+      scales: {
+        x: { ticks:{color:'rgba(226,232,240,.3)',font:{family:'Outfit',size:11}}, grid:{color:'rgba(255,255,255,.03)'} },
+        y: { ticks:{color:'rgba(226,232,240,.3)',font:{family:'Outfit',size:11}}, grid:{color:'rgba(255,255,255,.03)'} }
+      }
+    }
+  });
+
+  // Chart type buttons
+  const btns = document.getElementById('chart1-btns');
+  btns.innerHTML = ['bar','line','radar'].map(t =>
+    `<button onclick="changeChartType('${t}')" style="padding:4px 14px;border-radius:6px;font-size:11px;font-weight:600;border:1px solid var(--border);color:var(--text50)">${t==='bar'?'📊 Barras':t==='line'?'📈 Líneas':'🕸️ Radar'}</button>`
+  ).join('');
+
+  // Chart 2 — Doughnut by category
+  if (currentChart2) currentChart2.destroy();
+  const ctx2 = document.getElementById('chart2').getContext('2d');
+  const catCol = textCols.find(c => c !== labelCol) || textCols[0] || labelCol;
+  const firstNumCol = numCols[0];
+
+  if (catCol && firstNumCol) {
+    const groups = {};
+    allData.forEach(r => {
+      const key = r[catCol] || 'Otro';
+      groups[key] = (groups[key]||0) + (r[firstNumCol]||0);
+    });
+
+    currentChart2 = new Chart(ctx2, {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(groups),
+        datasets: [{
+          data: Object.values(groups),
+          backgroundColor: chartColors,
+          borderWidth: 0,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: { legend: { position:'bottom', labels:{ color:'rgba(226,232,240,.5)', font:{family:'Outfit',size:11}, padding:12 } } }
+      }
+    });
+  }
+}
+
+function changeChartType(type) {
+  if (!currentChart1) return;
+  currentChart1.config.type = type;
+  currentChart1.update();
+}
+
+// ═══ TABLE ═══
+function renderTable(data) {
+  const d = data || allData;
+  const container = document.getElementById('table-container');
+  document.getElementById('row-count').textContent = `(${d.length} filas × ${allHeaders.length} columnas)`;
+
+  let html = '<table><thead><tr>';
+  html += allHeaders.map(h => `<th onclick="sortTable('${h}')">${h} ↕</th>`).join('');
+  html += '</tr></thead><tbody>';
+  d.forEach(row => {
+    html += '<tr>';
+    allHeaders.forEach(h => {
+      const val = row[h];
+      const display = typeof val === 'number' ? val.toLocaleString('es-AR') : (val || '—');
+      html += `<td>${display}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+let sortDir = {};
+function sortTable(col) {
+  sortDir[col] = !sortDir[col];
+  const dir = sortDir[col] ? 1 : -1;
+  const sorted = [...allData].sort((a,b) => {
+    if (typeof a[col] === 'number') return (a[col] - b[col]) * dir;
+    return String(a[col]||'').localeCompare(String(b[col]||'')) * dir;
+  });
+  renderTable(sorted);
+}
+
+function filterTable(query) {
+  if (!query) { renderTable(); return; }
+  const q = query.toLowerCase();
+  const filtered = allData.filter(row =>
+    allHeaders.some(h => String(row[h]||'').toLowerCase().includes(q))
+  );
+  renderTable(filtered);
+}
+
+function exportPNG() {
+  alert('En la versión final esto exporta el dashboard completo como imagen PNG o PDF.');
+}
+</script>
+</body>
+</html>

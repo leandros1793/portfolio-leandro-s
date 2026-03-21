@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flow Bar — Pedidos Digitales para Bares</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#07060B;--surface:#12111A;--card:#1A1925;--card2:#221F30;
+      --neon:#A855F7;--neon-glow:rgba(168,85,247,.12);--neon-dark:#7C3AED;
+      --pink:#EC4899;--pink-glow:rgba(236,72,153,.1);
+      --cyan:#22D3EE;--cyan-glow:rgba(34,211,238,.1);
+      --green:#10B981;--green-glow:rgba(16,185,129,.12);
+      --amber:#FBBF24;--amber-glow:rgba(251,191,36,.1);
+      --red:#EF4444;
+      --text:#F0EDF6;--text70:rgba(240,237,246,.7);--text50:rgba(240,237,246,.5);
+      --text30:rgba(240,237,246,.3);--border:rgba(168,85,247,.08);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;overflow-x:hidden}
+    button{cursor:pointer;font-family:inherit;border:none;background:none;color:inherit}
+    ::selection{background:rgba(168,85,247,.3)}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes glow{0%,100%{box-shadow:0 0 20px rgba(168,85,247,.15)}50%{box-shadow:0 0 40px rgba(168,85,247,.3)}}
+    @keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
+    .fu{animation:fadeUp .45s ease-out both}
+
+    /* Mode selector */
+    .mode-bar{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,6,11,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;justify-content:center;gap:4px;padding:8px}
+    .mode-btn{padding:8px 20px;border-radius:8px;font-size:12px;font-weight:600;transition:all .2s;letter-spacing:.04em}
+    .mode-btn.active{background:var(--neon);color:var(--bg)}
+    .mode-btn:hover:not(.active){background:var(--neon-glow);color:var(--neon)}
+
+    .page{max-width:480px;margin:0 auto;padding:56px 0 100px;min-height:100vh}
+    .page.wide{max-width:900px}
+    .view{display:none}.view.active{display:block}
+
+    /* ═══ CLIENT VIEW ═══ */
+    .client-header{padding:20px 20px 0;text-align:center}
+    .bar-logo{font-size:28px;font-weight:800;letter-spacing:-.01em;background:linear-gradient(135deg,var(--neon),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .bar-sub{font-size:12px;color:var(--text30);letter-spacing:.12em;text-transform:uppercase;margin-top:2px}
+
+    .cat-scroll{display:flex;gap:8px;padding:20px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .cat-pill{flex-shrink:0;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:500;border:1px solid var(--border);transition:all .2s;white-space:nowrap}
+    .cat-pill.active{background:var(--neon);color:var(--bg);border-color:var(--neon)}
+    .cat-pill:hover:not(.active){border-color:var(--neon)}
+
+    .menu-item{display:flex;gap:14px;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.03);transition:background .15s;cursor:pointer}
+    .menu-item:hover{background:rgba(168,85,247,.04)}
+    .menu-img{width:72px;height:72px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0}
+    .menu-name{font-size:15px;font-weight:600;margin-bottom:2px}
+    .menu-desc{font-size:12px;color:var(--text30);line-height:1.4;margin-bottom:6px}
+    .menu-price{font-family:'JetBrains Mono';font-size:16px;font-weight:700;color:var(--neon)}
+    .menu-add{width:36px;height:36px;border-radius:50%;background:var(--neon);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;transition:all .2s;flex-shrink:0;align-self:center}
+    .menu-add:hover{transform:scale(1.1);background:var(--pink)}
+
+    /* Cart */
+    .cart-bar{position:fixed;bottom:0;left:0;right:0;z-index:100;padding:12px 20px;display:none}
+    .cart-bar.show{display:block}
+    .cart-inner{max-width:480px;margin:0 auto;background:var(--neon);border-radius:16px;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;animation:glow 2s infinite;cursor:pointer}
+    .cart-inner:hover{background:var(--neon-dark)}
+    .cart-count{width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+    .cart-total{font-family:'JetBrains Mono';font-size:18px;font-weight:700}
+
+    /* Cart modal */
+    .cart-modal{display:none;position:fixed;inset:0;z-index:150;background:rgba(7,6,11,.92);backdrop-filter:blur(8px);overflow-y:auto}
+    .cart-modal.open{display:flex;flex-direction:column}
+    .cart-content{max-width:480px;width:100%;margin:0 auto;padding:20px;flex:1}
+    .cart-item{display:flex;align-items:center;gap:12px;padding:16px;background:var(--card);border-radius:12px;margin-bottom:8px;border:1px solid var(--border)}
+    .cart-item-emoji{font-size:28px;width:48px;height:48px;border-radius:10px;background:var(--card2);display:flex;align-items:center;justify-content:center}
+    .qty-btn{width:32px;height:32px;border-radius:8px;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;transition:all .15s}
+    .qty-btn:hover{background:var(--neon);color:var(--bg)}
+
+    /* QR Ticket */
+    .qr-ticket{display:none;text-align:center;padding:40px 20px}
+    .qr-ticket.show{display:block}
+    .qr-box{width:200px;height:200px;background:#fff;border-radius:20px;margin:20px auto;display:flex;align-items:center;justify-content:center;font-size:14px;color:#333;font-family:'JetBrains Mono';flex-direction:column;gap:8px;padding:20px}
+    .qr-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;width:120px}
+    .qr-cell{aspect-ratio:1;border-radius:2px}
+
+    /* ═══ BARMAN VIEW ═══ */
+    .order-card{background:var(--card);border-radius:16px;padding:20px;border:1px solid var(--border);margin-bottom:12px}
+    .order-card.new{border-color:var(--neon);animation:glow 1.5s infinite}
+    .order-id{font-family:'JetBrains Mono';font-size:12px;color:var(--text30)}
+    .order-time{font-size:12px;color:var(--text30)}
+    .order-items{margin:12px 0;font-size:14px;color:var(--text70)}
+    .order-total{font-family:'JetBrains Mono';font-size:18px;font-weight:700;color:var(--neon)}
+    .order-status{padding:6px 16px;border-radius:8px;font-size:12px;font-weight:600}
+    .order-btn{padding:10px 24px;border-radius:10px;font-size:13px;font-weight:600;transition:all .2s}
+
+    /* ═══ ADMIN VIEW ═══ */
+    .admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+    .admin-stat{background:var(--card);border-radius:14px;padding:18px;border:1px solid var(--border);text-align:center}
+    .admin-stat-val{font-family:'JetBrains Mono';font-size:28px;font-weight:700;margin:6px 0}
+    .admin-stat-label{font-size:11px;color:var(--text30);text-transform:uppercase;letter-spacing:.08em}
+    .admin-table{width:100%;border-collapse:collapse}
+    .admin-table th{padding:10px 14px;text-align:left;font-size:11px;color:var(--text30);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);background:var(--card2)}
+    .admin-table td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--text70)}
+    .admin-table tr:hover td{background:rgba(168,85,247,.03)}
+
+    @media(max-width:480px){
+      .admin-stats{grid-template-columns:1fr 1fr}
+      .mode-bar{gap:2px;padding:6px}
+      .mode-btn{padding:6px 12px;font-size:11px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- Mode selector -->
+<div class="mode-bar">
+  <button class="mode-btn active" onclick="switchMode('client')">📱 Cliente</button>
+  <button class="mode-btn" onclick="switchMode('cart-modal-view')">🛒 Carrito</button>
+  <button class="mode-btn" onclick="switchMode('barman')">🍸 Barman</button>
+  <button class="mode-btn" onclick="switchMode('admin')">⚙️ Admin</button>
+</div>
+
+<!-- ═══ CLIENT VIEW ═══ -->
+<div id="view-client" class="view active">
+  <div class="page">
+    <div class="client-header fu">
+      <div class="bar-logo">FLOW BAR</div>
+      <div class="bar-sub">📍 Av. Hipólito Yrigoyen 325 · Mesa 12</div>
+    </div>
+
+    <div class="cat-scroll fu" id="categories"></div>
+    <div id="menu-list"></div>
+
+    <div class="cart-bar" id="cart-bar" onclick="switchMode('cart-modal-view')">
+      <div class="cart-inner">
+        <div style="display:flex;align-items:center;gap:12px;color:var(--bg)">
+          <span class="cart-count" id="cart-count-badge">0</span>
+          <span style="font-weight:600;font-size:14px">Ver pedido</span>
+        </div>
+        <span class="cart-total" id="cart-total-badge" style="color:var(--bg)">$0</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CART MODAL ═══ -->
+<div id="view-cart-modal-view" class="view">
+  <div class="page">
+    <div class="fu" style="padding:20px 0">
+      <button onclick="switchMode('client')" style="color:var(--text50);font-size:14px;margin-bottom:16px">← Volver a la carta</button>
+      <h2 style="font-size:22px;font-weight:700;margin-bottom:20px">Tu Pedido 🍹</h2>
+      <div id="cart-items"></div>
+      <div id="cart-summary" style="margin-top:16px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ QR TICKET ═══ -->
+<div id="view-ticket" class="view">
+  <div class="page" style="display:flex;align-items:center;justify-content:center;min-height:80vh">
+    <div class="fu" style="text-align:center">
+      <div style="font-size:56px;margin-bottom:16px">✅</div>
+      <h2 style="font-size:24px;font-weight:700;margin-bottom:8px">¡Pago confirmado!</h2>
+      <p style="color:var(--text50);margin-bottom:24px">Mostrá este código en la barra para retirar tu pedido</p>
+      <div class="qr-box">
+        <div class="qr-grid" id="qr-grid"></div>
+        <div id="qr-code-text" style="font-size:18px;font-weight:700;color:var(--neon-dark);margin-top:4px"></div>
+      </div>
+      <div style="background:var(--card);border-radius:12px;padding:16px;margin-top:20px;border:1px solid var(--border)">
+        <div style="font-size:13px;color:var(--text50);margin-bottom:8px">Detalle del pedido</div>
+        <div id="ticket-items" style="font-size:14px;text-align:left"></div>
+        <div id="ticket-total" style="font-family:'JetBrains Mono';font-size:20px;font-weight:700;color:var(--neon);margin-top:12px;text-align:right"></div>
+      </div>
+      <p style="font-size:12px;color:var(--text30);margin-top:16px">Pedido #<span id="ticket-order-id"></span> · Mesa 12</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BARMAN VIEW ═══ -->
+<div id="view-barman" class="view">
+  <div class="page" style="max-width:600px">
+    <div class="fu" style="padding:20px 0">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <div>
+          <h2 style="font-size:22px;font-weight:700">🍸 Panel Barman</h2>
+          <p style="font-size:13px;color:var(--text30)">Pedidos en tiempo real</p>
+        </div>
+        <div style="display:flex;gap:8px">
+          <span style="padding:6px 14px;border-radius:8px;background:var(--green-glow);color:var(--green);font-size:12px;font-weight:600;animation:pulse 2s infinite">● EN VIVO</span>
+        </div>
+      </div>
+
+      <!-- Stats mini -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px">
+        <div style="background:var(--card);border-radius:10px;padding:14px;text-align:center;border:1px solid var(--border)">
+          <div style="font-family:'JetBrains Mono';font-size:24px;font-weight:700;color:var(--neon)">3</div>
+          <div style="font-size:11px;color:var(--text30)">Pendientes</div>
+        </div>
+        <div style="background:var(--card);border-radius:10px;padding:14px;text-align:center;border:1px solid var(--border)">
+          <div style="font-family:'JetBrains Mono';font-size:24px;font-weight:700;color:var(--amber)">1</div>
+          <div style="font-size:11px;color:var(--text30)">Preparando</div>
+        </div>
+        <div style="background:var(--card);border-radius:10px;padding:14px;text-align:center;border:1px solid var(--border)">
+          <div style="font-family:'JetBrains Mono';font-size:24px;font-weight:700;color:var(--green)">24</div>
+          <div style="font-size:11px;color:var(--text30)">Entregados</div>
+        </div>
+      </div>
+
+      <div id="barman-orders"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADMIN VIEW ═══ -->
+<div id="view-admin" class="view">
+  <div class="page wide">
+    <div class="fu" style="padding:20px 0">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+        <div>
+          <h2 style="font-size:22px;font-weight:700">⚙️ Panel de Administración</h2>
+          <p style="font-size:13px;color:var(--text30)">Flow Bar · Sucursal Centro</p>
+        </div>
+        <select style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text);font-family:inherit;font-size:13px">
+          <option>📍 Sucursal Centro</option>
+          <option>📍 Sucursal Norte</option>
+          <option>📍 Sucursal Costanera</option>
+        </select>
+      </div>
+
+      <div class="admin-stats fu">
+        <div class="admin-stat"><div class="admin-stat-label">Ventas Hoy</div><div class="admin-stat-val" style="color:var(--neon)">$847K</div><div style="font-size:11px;color:var(--green)">↑ 23%</div></div>
+        <div class="admin-stat"><div class="admin-stat-label">Pedidos</div><div class="admin-stat-val" style="color:var(--cyan)">142</div><div style="font-size:11px;color:var(--green)">↑ 15%</div></div>
+        <div class="admin-stat"><div class="admin-stat-label">Ticket Prom.</div><div class="admin-stat-val" style="color:var(--amber)">$5.9K</div><div style="font-size:11px;color:var(--text30)">= vs ayer</div></div>
+        <div class="admin-stat"><div class="admin-stat-label">Tiempo Prom.</div><div class="admin-stat-val" style="color:var(--green)">3.2m</div><div style="font-size:11px;color:var(--green)">↓ 18%</div></div>
+      </div>
+
+      <!-- Top products -->
+      <div class="fu" style="background:var(--card);border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:16px">
+        <div style="padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)">
+          <span style="font-size:14px;font-weight:600">🏆 Top Productos</span>
+          <button style="font-size:12px;color:var(--neon)">Exportar CSV →</button>
+        </div>
+        <table class="admin-table">
+          <thead><tr><th>#</th><th>Producto</th><th>Vendidos</th><th>Revenue</th><th>% Total</th></tr></thead>
+          <tbody>
+            <tr><td style="color:var(--amber)">1</td><td>🍹 Fernet con Cola</td><td style="font-family:'JetBrains Mono'">89</td><td style="font-family:'JetBrains Mono';color:var(--neon)">$356K</td><td>21%</td></tr>
+            <tr><td style="color:var(--text30)">2</td><td>🥃 Whisky Doble</td><td style="font-family:'JetBrains Mono'">67</td><td style="font-family:'JetBrains Mono';color:var(--neon)">$335K</td><td>16%</td></tr>
+            <tr><td style="color:var(--text30)">3</td><td>🍺 Cerveza Artesanal</td><td style="font-family:'JetBrains Mono'">54</td><td style="font-family:'JetBrains Mono';color:var(--neon)">$162K</td><td>14%</td></tr>
+            <tr><td style="color:var(--text30)">4</td><td>🍸 Gin Tonic Premium</td><td style="font-family:'JetBrains Mono'">48</td><td style="font-family:'JetBrains Mono';color:var(--neon)">$240K</td><td>12%</td></tr>
+            <tr><td style="color:var(--text30)">5</td><td>🧊 Vodka Limon</td><td style="font-family:'JetBrains Mono'">41</td><td style="font-family:'JetBrains Mono';color:var(--neon)">$164K</td><td>10%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Hourly chart simulation -->
+      <div class="fu" style="background:var(--card);border-radius:14px;padding:20px;border:1px solid var(--border)">
+        <div style="font-size:14px;font-weight:600;margin-bottom:16px">📈 Ventas por Hora</div>
+        <div style="display:flex;align-items:flex-end;gap:6px;height:140px" id="hourly-chart"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══ DATA ═══
+const MENU = [
+  {id:1,name:"Fernet con Cola",desc:"Branca + Coca 750ml. El clásico argentino.",price:4000,cat:"Tragos",emoji:"🍹",bg:"linear-gradient(135deg,#2D1B0E,#1A0F06)"},
+  {id:2,name:"Gin Tonic Premium",desc:"Gin Bombay + Tónica Schweppes + pepino y romero.",price:5000,cat:"Tragos",emoji:"🍸",bg:"linear-gradient(135deg,#0B2E2E,#0A1F1F)"},
+  {id:3,name:"Whisky Doble",desc:"Jack Daniel's doble medida. Con hielo.",price:5500,cat:"Tragos",emoji:"🥃",bg:"linear-gradient(135deg,#2E1A0B,#1F1206)"},
+  {id:4,name:"Vodka Limón",desc:"Smirnoff + jugo de limón natural + hielo.",price:4000,cat:"Tragos",emoji:"🧊",bg:"linear-gradient(135deg,#0B1A2E,#06121F)"},
+  {id:5,name:"Mojito",desc:"Ron + menta fresca + lima + soda. Refrescante.",price:4500,cat:"Tragos",emoji:"🌿",bg:"linear-gradient(135deg,#0B2E14,#061F0D)"},
+  {id:6,name:"Aperol Spritz",desc:"Aperol + Prosecco + soda. Servido en copa.",price:5000,cat:"Tragos",emoji:"🍊",bg:"linear-gradient(135deg,#2E1A0B,#1F1206)"},
+  {id:7,name:"Cerveza Artesanal",desc:"IPA de la casa. Pinta 500ml.",price:3000,cat:"Cervezas",emoji:"🍺",bg:"linear-gradient(135deg,#1A1A0B,#12120A)"},
+  {id:8,name:"Cerveza Corona",desc:"Corona Extra. Botella 355ml con limón.",price:3500,cat:"Cervezas",emoji:"🍻",bg:"linear-gradient(135deg,#1A1A0B,#12120A)"},
+  {id:9,name:"Agua Mineral",desc:"Sin gas. 500ml.",price:1500,cat:"Sin Alcohol",emoji:"💧",bg:"linear-gradient(135deg,#0B1A2E,#0A1420)"},
+  {id:10,name:"Red Bull",desc:"Energizante 250ml. Solo o para mezclar.",price:3000,cat:"Sin Alcohol",emoji:"⚡",bg:"linear-gradient(135deg,#1A0B2E,#120A20)"},
+  {id:11,name:"Papas Fritas",desc:"Porción grande con salsas.",price:3500,cat:"Snacks",emoji:"🍟",bg:"linear-gradient(135deg,#2E2E0B,#1F1F06)"},
+  {id:12,name:"Nachos con Queso",desc:"Nachos + cheddar + guacamole + jalapeños.",price:4500,cat:"Snacks",emoji:"🧀",bg:"linear-gradient(135deg,#2E1A0B,#1F1206)"},
+];
+
+const CATS = ["Todos","Tragos","Cervezas","Sin Alcohol","Snacks"];
+let cart = [];
+let activeCat = "Todos";
+
+const fmt = n => "$" + n.toLocaleString("es-AR");
+
+// ═══ MODE SWITCHING ═══
+function switchMode(mode) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-'+mode).classList.add('active');
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mode-btn').forEach(b => {
+    const map = {'📱 Cliente':'client','🛒 Carrito':'cart-modal-view','🍸 Barman':'barman','⚙️ Admin':'admin'};
+    if(map[b.textContent.trim()]===mode) b.classList.add('active');
+  });
+  if(mode==='cart-modal-view') renderCartModal();
+  if(mode==='barman') renderBarmanOrders();
+}
+
+// ═══ RENDER MENU ═══
+function renderCategories() {
+  document.getElementById('categories').innerHTML = CATS.map(c =>
+    `<button class="cat-pill ${activeCat===c?'active':''}" onclick="filterCat('${c}')">${c}</button>`
+  ).join('');
+}
+
+function filterCat(cat) {
+  activeCat = cat;
+  renderCategories();
+  renderMenu();
+}
+
+function renderMenu() {
+  const items = activeCat === "Todos" ? MENU : MENU.filter(m => m.cat === activeCat);
+  document.getElementById('menu-list').innerHTML = items.map(m => `
+    <div class="menu-item fu" onclick="addToCart(${m.id})">
+      <div class="menu-img" style="background:${m.bg}"><span>${m.emoji}</span></div>
+      <div style="flex:1;min-width:0">
+        <div class="menu-name">${m.name}</div>
+        <div class="menu-desc">${m.desc}</div>
+        <div class="menu-price">${fmt(m.price)}</div>
+      </div>
+      <button class="menu-add" onclick="event.stopPropagation();addToCart(${m.id})">+</button>
+    </div>
+  `).join('');
+}
+
+// ═══ CART ═══
+function addToCart(id) {
+  const existing = cart.find(c => c.id === id);
+  if (existing) existing.qty++;
+  else cart.push({id, qty:1});
+  updateCartBar();
+}
+
+function updateCartBar() {
+  const total = cart.reduce((s,c) => s + MENU.find(m=>m.id===c.id).price * c.qty, 0);
+  const count = cart.reduce((s,c) => s + c.qty, 0);
+  const bar = document.getElementById('cart-bar');
+  bar.classList.toggle('show', count > 0);
+  document.getElementById('cart-count-badge').textContent = count;
+  document.getElementById('cart-total-badge').textContent = fmt(total);
+}
+
+function renderCartModal() {
+  const items = document.getElementById('cart-items');
+  const summary = document.getElementById('cart-summary');
+  if (cart.length === 0) {
+    items.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text30)">Tu pedido está vacío</div>';
+    summary.innerHTML = '';
+    return;
+  }
+  const total = cart.reduce((s,c) => s + MENU.find(m=>m.id===c.id).price * c.qty, 0);
+  items.innerHTML = cart.map(c => {
+    const m = MENU.find(x=>x.id===c.id);
+    return `<div class="cart-item">
+      <div class="cart-item-emoji">${m.emoji}</div>
+      <div style="flex:1"><div style="font-weight:600;font-size:14px">${m.name}</div><div style="font-size:12px;color:var(--text30)">${fmt(m.price)} c/u</div></div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button class="qty-btn" onclick="changeQty(${c.id},-1)">−</button>
+        <span style="font-family:'JetBrains Mono';font-size:16px;font-weight:700;width:24px;text-align:center">${c.qty}</span>
+        <button class="qty-btn" onclick="changeQty(${c.id},1)">+</button>
+      </div>
+      <div style="font-family:'JetBrains Mono';font-size:16px;font-weight:700;color:var(--neon);min-width:70px;text-align:right">${fmt(m.price*c.qty)}</div>
+    </div>`;
+  }).join('');
+
+  summary.innerHTML = `
+    <div style="background:var(--card);border-radius:14px;padding:20px;border:1px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px;color:var(--text50)"><span>Subtotal</span><span style="color:var(--text)">${fmt(total)}</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:14px;color:var(--text50)"><span>Servicio</span><span style="color:var(--text)">${fmt(Math.round(total*0.1))}</span></div>
+      <div style="border-top:1px solid var(--border);padding-top:12px;display:flex;justify-content:space-between">
+        <span style="font-size:18px;font-weight:700">Total</span>
+        <span style="font-family:'JetBrains Mono';font-size:22px;font-weight:700;color:var(--neon)">${fmt(Math.round(total*1.1))}</span>
+      </div>
+    </div>
+    <button onclick="payOrder()" style="width:100%;margin-top:12px;padding:16px;border-radius:12px;background:linear-gradient(135deg,var(--neon),var(--pink));color:#fff;font-size:16px;font-weight:700;transition:all .2s">
+      💳 Pagar con Mercado Pago
+    </button>
+    <p style="text-align:center;font-size:12px;color:var(--text30);margin-top:10px">🔒 Pago seguro · Se genera QR de retiro</p>
+  `;
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(c => c.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart = cart.filter(c => c.id !== id);
+  updateCartBar();
+  renderCartModal();
+}
+
+function payOrder() {
+  const total = cart.reduce((s,c) => s + MENU.find(m=>m.id===c.id).price * c.qty, 0);
+  const orderId = 'FB-' + Math.random().toString(36).substr(2,6).toUpperCase();
+  
+  // Generate QR visual
+  const grid = document.getElementById('qr-grid');
+  grid.innerHTML = Array.from({length:49}, () => 
+    `<div class="qr-cell" style="background:${Math.random()>.4?'#333':'#fff'}"></div>`
+  ).join('');
+  
+  document.getElementById('qr-code-text').textContent = orderId;
+  document.getElementById('ticket-order-id').textContent = orderId;
+  document.getElementById('ticket-total').textContent = fmt(Math.round(total*1.1));
+  document.getElementById('ticket-items').innerHTML = cart.map(c => {
+    const m = MENU.find(x=>x.id===c.id);
+    return `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span>${m.emoji} ${m.name} x${c.qty}</span><span style="font-family:'JetBrains Mono';color:var(--neon)">${fmt(m.price*c.qty)}</span></div>`;
+  }).join('');
+
+  switchMode('ticket');
+}
+
+// ═══ BARMAN ORDERS ═══
+function renderBarmanOrders() {
+  const orders = [
+    {id:'FB-A3X9K2',mesa:12,time:'Hace 30 seg',items:'2x Fernet con Cola, 1x Papas Fritas',total:11500,status:'new'},
+    {id:'FB-B7M2P1',mesa:5,time:'Hace 2 min',items:'1x Gin Tonic Premium, 2x Cerveza Artesanal',total:11000,status:'new'},
+    {id:'FB-C1N8R4',mesa:8,time:'Hace 4 min',items:'3x Whisky Doble, 1x Nachos con Queso',total:21000,status:'new'},
+    {id:'FB-D5K3L7',mesa:3,time:'Hace 8 min',items:'1x Mojito, 1x Aperol Spritz',total:9500,status:'preparing'},
+    {id:'FB-E9P1M6',mesa:15,time:'Hace 15 min',items:'2x Cerveza Corona, 1x Red Bull',total:10000,status:'ready'},
+  ];
+
+  document.getElementById('barman-orders').innerHTML = orders.map(o => `
+    <div class="order-card ${o.status==='new'?'new':''}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div><span class="order-id">${o.id}</span> · <span style="font-size:13px;font-weight:600">Mesa ${o.mesa}</span></div>
+        <span class="order-time">${o.time}</span>
+      </div>
+      <div class="order-items">${o.items}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+        <span class="order-total">${fmt(o.total)}</span>
+        ${o.status==='new'?`
+          <button class="order-btn" style="background:var(--neon);color:var(--bg)" onclick="this.textContent='⏳ Preparando...';this.style.background='var(--amber)'">✓ Aceptar Pedido</button>
+        `:o.status==='preparing'?`
+          <button class="order-btn" style="background:var(--amber);color:var(--bg)" onclick="this.textContent='📸 Escanear QR';this.style.background='var(--green)'">⏳ Preparando...</button>
+        `:`
+          <button class="order-btn" style="background:var(--green);color:var(--bg)">📸 Escanear QR para entregar</button>
+        `}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ═══ ADMIN HOURLY CHART ═══
+function renderHourlyChart() {
+  const hours = ['22h','23h','00h','01h','02h','03h','04h'];
+  const vals = [45,78,142,189,167,98,34];
+  const max = Math.max(...vals);
+  document.getElementById('hourly-chart').innerHTML = hours.map((h,i) => `
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+      <span style="font-family:'JetBrains Mono';font-size:11px;color:var(--neon)">${vals[i]}</span>
+      <div style="width:100%;height:${(vals[i]/max)*100}%;min-height:8px;background:linear-gradient(180deg,var(--neon),rgba(168,85,247,.3));border-radius:6px 6px 0 0;transition:height .5s"></div>
+      <span style="font-size:11px;color:var(--text30)">${h}</span>
+    </div>
+  `).join('');
+}
+
+// ═══ INIT ═══
+renderCategories();
+renderMenu();
+renderHourlyChart();
+</script>
+</body>
+</html>

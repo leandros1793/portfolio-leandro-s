@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ManteniPro — Sistema de Gestión de Mantenimiento</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0B0F1A;
+      --surface: #111827;
+      --card: #1F2937;
+      --card-hover: #263244;
+      --blue: #3B82F6;
+      --blue-glow: rgba(59,130,246,0.15);
+      --green: #10B981;
+      --green-glow: rgba(16,185,129,0.15);
+      --amber: #F59E0B;
+      --amber-glow: rgba(245,158,11,0.15);
+      --red: #EF4444;
+      --red-glow: rgba(239,68,68,0.15);
+      --purple: #8B5CF6;
+      --text: #F1F5F9;
+      --text70: rgba(241,245,249,0.7);
+      --text50: rgba(241,245,249,0.5);
+      --text30: rgba(241,245,249,0.3);
+      --border: rgba(255,255,255,0.06);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.5;overflow-x:hidden}
+    button{cursor:pointer;font-family:inherit;border:none;background:none;color:inherit}
+    ::selection{background:rgba(59,130,246,0.3)}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .fu{animation:fadeUp .4s ease-out both}
+
+    /* Layout */
+    .app{display:flex;min-height:100vh}
+    .sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);padding:20px 0;position:fixed;top:0;left:0;height:100vh;z-index:50;display:flex;flex-direction:column}
+    .main{margin-left:220px;flex:1;padding:24px 32px;min-height:100vh}
+
+    .nav-item{display:flex;align-items:center;gap:12px;padding:10px 24px;font-size:13px;font-weight:500;color:var(--text50);cursor:pointer;transition:all .2s;border-left:3px solid transparent}
+    .nav-item:hover{color:var(--text);background:rgba(255,255,255,0.03)}
+    .nav-item.active{color:var(--blue);background:var(--blue-glow);border-left-color:var(--blue)}
+
+    .stat-card{background:var(--card);border-radius:14px;padding:20px 24px;border:1px solid var(--border);transition:transform .2s}
+    .stat-card:hover{transform:translateY(-2px)}
+    .stat-value{font-family:'JetBrains Mono';font-size:28px;font-weight:700;margin:8px 0 4px}
+    .stat-label{font-size:12px;color:var(--text50);text-transform:uppercase;letter-spacing:.08em}
+    .stat-change{font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:4px}
+
+    .ticket{background:var(--card);border-radius:12px;padding:16px 20px;border:1px solid var(--border);display:flex;align-items:center;gap:16px;margin-bottom:8px;transition:background .2s;cursor:pointer}
+    .ticket:hover{background:var(--card-hover)}
+    .priority{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .badge{padding:3px 10px;border-radius:4px;font-size:11px;font-weight:600;letter-spacing:.04em}
+
+    .cal-day{aspect-ratio:1;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px;cursor:pointer;transition:all .15s;border:1px solid transparent}
+    .cal-day:hover{background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.2)}
+    .cal-day.today{background:var(--blue);color:#fff;font-weight:700}
+    .cal-day.has-event{position:relative}
+    .cal-day.has-event::after{content:'';width:5px;height:5px;border-radius:50%;background:var(--amber);position:absolute;bottom:6px}
+
+    .inv-row{display:grid;grid-template-columns:1fr 120px 100px 100px 120px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--border);font-size:13px;transition:background .15s}
+    .inv-row:hover{background:rgba(255,255,255,0.02)}
+    .inv-header{font-weight:600;color:var(--text50);text-transform:uppercase;letter-spacing:.06em;font-size:11px}
+
+    .metric-ring{position:relative;display:flex;align-items:center;justify-content:center}
+
+    .btn-primary{background:var(--blue);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;transition:all .2s}
+    .btn-primary:hover{background:#2563EB;transform:translateY(-1px)}
+
+    .search{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 16px;color:var(--text);font-family:inherit;font-size:13px;width:100%}
+    .search:focus{outline:none;border-color:var(--blue)}
+
+    .view{display:none}.view.active{display:block}
+
+    /* Responsive */
+    @media(max-width:768px){
+      .sidebar{display:none}
+      .main{margin-left:0;padding:16px}
+      .stats-grid{grid-template-columns:1fr 1fr !important}
+      .inv-row{grid-template-columns:1fr 80px 80px !important;font-size:12px}
+      .inv-row>:nth-child(4),.inv-row>:nth-child(5){display:none}
+      .mobile-nav{display:flex !important}
+    }
+    .mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);z-index:50;justify-content:space-around;padding:8px 0}
+    .mobile-nav button{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;color:var(--text50);padding:8px}
+    .mobile-nav button.active{color:var(--blue)}
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar">
+    <div style="padding:0 24px 24px;border-bottom:1px solid var(--border);margin-bottom:16px">
+      <div style="font-size:18px;font-weight:700;color:var(--blue);letter-spacing:.02em">ManteniPro</div>
+      <div style="font-size:10px;color:var(--text30);letter-spacing:.1em;text-transform:uppercase;margin-top:2px">CMMS Platform</div>
+    </div>
+    <nav>
+      <div class="nav-item active" onclick="showView('dashboard')">📊 Dashboard</div>
+      <div class="nav-item" onclick="showView('tickets')">🎫 Tickets</div>
+      <div class="nav-item" onclick="showView('calendar')">📅 Calendario</div>
+      <div class="nav-item" onclick="showView('inventory')">📦 Inventario</div>
+      <div class="nav-item" onclick="showView('metrics')">📈 Métricas</div>
+    </nav>
+    <div style="margin-top:auto;padding:16px 24px;border-top:1px solid var(--border)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:32px;height:32px;border-radius:8px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">JD</div>
+        <div><div style="font-size:13px;font-weight:600">Juan Díaz</div><div style="font-size:11px;color:var(--text30)">Supervisor</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN ═══ -->
+  <main class="main">
+
+    <!-- ═══ DASHBOARD ═══ -->
+    <div id="view-dashboard" class="view active">
+      <div class="fu" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px">
+        <div>
+          <h1 style="font-size:24px;font-weight:700">Dashboard</h1>
+          <p style="font-size:13px;color:var(--text50)">Resumen general del sistema de mantenimiento</p>
+        </div>
+        <button class="btn-primary" onclick="showView('tickets')">+ Nuevo Ticket</button>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid fu" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px">
+        <div class="stat-card">
+          <div class="stat-label">Tickets Abiertos</div>
+          <div class="stat-value" style="color:var(--amber)">12</div>
+          <span class="stat-change" style="background:var(--amber-glow);color:var(--amber)">↑ 3 esta semana</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">MTTR (Promedio)</div>
+          <div class="stat-value" style="color:var(--green)">2.4h</div>
+          <span class="stat-change" style="background:var(--green-glow);color:var(--green)">↓ 18% vs mes anterior</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">MTBF (Promedio)</div>
+          <div class="stat-value" style="color:var(--blue)">168h</div>
+          <span class="stat-change" style="background:var(--blue-glow);color:var(--blue)">↑ 12% mejora</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Inventario Bajo</div>
+          <div class="stat-value" style="color:var(--red)">5</div>
+          <span class="stat-change" style="background:var(--red-glow);color:var(--red)">⚠ Requiere reorden</span>
+        </div>
+      </div>
+
+      <!-- Recent tickets + Calendar preview -->
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px">
+        <div class="fu" style="background:var(--card);border-radius:14px;padding:20px;border:1px solid var(--border)">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <h3 style="font-size:15px;font-weight:600">Tickets Recientes</h3>
+            <button style="font-size:12px;color:var(--blue)" onclick="showView('tickets')">Ver todos →</button>
+          </div>
+          <div id="dashboard-tickets"></div>
+        </div>
+        <div class="fu" style="background:var(--card);border-radius:14px;padding:20px;border:1px solid var(--border)">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <h3 style="font-size:15px;font-weight:600">Próximo Mantenimiento</h3>
+            <button style="font-size:12px;color:var(--blue)" onclick="showView('calendar')">Calendario →</button>
+          </div>
+          <div id="dashboard-upcoming"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ TICKETS ═══ -->
+    <div id="view-tickets" class="view">
+      <div class="fu" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+        <h1 style="font-size:24px;font-weight:700">Tickets de Mantenimiento</h1>
+        <button class="btn-primary" onclick="openNewTicket()">+ Nuevo Ticket</button>
+      </div>
+      <div class="fu" style="display:flex;gap:12px;margin-bottom:20px">
+        <input class="search" placeholder="Buscar tickets..." style="max-width:300px">
+        <select class="search" style="max-width:160px"><option>Todos</option><option>Abierto</option><option>En Progreso</option><option>Cerrado</option></select>
+        <select class="search" style="max-width:160px"><option>Prioridad</option><option>Crítica</option><option>Alta</option><option>Media</option><option>Baja</option></select>
+      </div>
+      <div id="tickets-list"></div>
+    </div>
+
+    <!-- ═══ CALENDAR ═══ -->
+    <div id="view-calendar" class="view">
+      <div class="fu" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+        <h1 style="font-size:24px;font-weight:700">Calendario de Mantenimiento</h1>
+        <div style="display:flex;gap:8px">
+          <button class="btn-primary" style="background:var(--card);color:var(--text)" id="cal-prev">←</button>
+          <span id="cal-month" style="font-size:15px;font-weight:600;padding:10px 16px"></span>
+          <button class="btn-primary" style="background:var(--card);color:var(--text)" id="cal-next">→</button>
+        </div>
+      </div>
+      <div class="fu" style="background:var(--card);border-radius:14px;padding:20px;border:1px solid var(--border)">
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:8px">
+          <div style="text-align:center;font-size:11px;color:var(--text30);padding:8px;font-weight:600">LUN</div>
+          <div style="text-align:center;font-size:11px;color:var(--text30);padding:8px;font-weight:600">MAR</div>
+          <div style="text-align:center;font-size:11px;color:var(--text30);padding:8px;font-weight:600">MIÉ</div>
+          <div style="text-align:center;font-size:11px;color:var(--text30);padding:8px;font-weight:600">JUE</div>
+          <div style="text-align:center;font-size:11px;color:var(--text30);padding:8px;font-weight:600">VIE</div>
+          <div style="text-align:center;font-size:11px;color:var(--text30);padding:8px;font-weight:600">SÁB</div>
+          <div style="text-align:center;font-size:11px;color:var(--text30);padding:8px;font-weight:600">DOM</div>
+        </div>
+        <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px"></div>
+      </div>
+      <div class="fu" style="margin-top:20px;background:var(--card);border-radius:14px;padding:20px;border:1px solid var(--border)">
+        <h3 style="font-size:15px;font-weight:600;margin-bottom:16px">Tareas Programadas</h3>
+        <div id="cal-events"></div>
+      </div>
+    </div>
+
+    <!-- ═══ INVENTORY ═══ -->
+    <div id="view-inventory" class="view">
+      <div class="fu" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+        <h1 style="font-size:24px;font-weight:700">Control de Inventario</h1>
+        <button class="btn-primary">+ Agregar Ítem</button>
+      </div>
+      <div class="fu" style="background:var(--card);border-radius:14px;border:1px solid var(--border);overflow:hidden">
+        <div class="inv-row inv-header" style="background:rgba(255,255,255,0.02)">
+          <div>Refacción / Consumible</div><div>Stock</div><div>Mín.</div><div>Estado</div><div>Último Mov.</div>
+        </div>
+        <div id="inv-list"></div>
+      </div>
+    </div>
+
+    <!-- ═══ METRICS ═══ -->
+    <div id="view-metrics" class="view">
+      <div class="fu" style="margin-bottom:24px">
+        <h1 style="font-size:24px;font-weight:700">Métricas y Resultados</h1>
+        <p style="font-size:13px;color:var(--text50)">Indicadores clave de rendimiento del equipo de mantenimiento</p>
+      </div>
+      <div class="fu" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
+        <div class="stat-card" style="text-align:center">
+          <div class="stat-label">MTTR</div>
+          <div class="stat-value" style="color:var(--green);font-size:36px">2.4h</div>
+          <p style="font-size:12px;color:var(--text50)">Mean Time To Repair</p>
+          <div style="margin-top:12px;height:6px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden">
+            <div style="width:35%;height:100%;background:var(--green);border-radius:3px"></div>
+          </div>
+          <p style="font-size:11px;color:var(--green);margin-top:6px">Meta: &lt; 4h ✓</p>
+        </div>
+        <div class="stat-card" style="text-align:center">
+          <div class="stat-label">MTBF</div>
+          <div class="stat-value" style="color:var(--blue);font-size:36px">168h</div>
+          <p style="font-size:12px;color:var(--text50)">Mean Time Between Failures</p>
+          <div style="margin-top:12px;height:6px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden">
+            <div style="width:70%;height:100%;background:var(--blue);border-radius:3px"></div>
+          </div>
+          <p style="font-size:11px;color:var(--blue);margin-top:6px">Meta: &gt; 120h ✓</p>
+        </div>
+        <div class="stat-card" style="text-align:center">
+          <div class="stat-label">Disponibilidad</div>
+          <div class="stat-value" style="color:var(--purple);font-size:36px">94.2%</div>
+          <p style="font-size:12px;color:var(--text50)">Uptime de activos</p>
+          <div style="margin-top:12px;height:6px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden">
+            <div style="width:94%;height:100%;background:var(--purple);border-radius:3px"></div>
+          </div>
+          <p style="font-size:11px;color:var(--purple);margin-top:6px">Meta: &gt; 90% ✓</p>
+        </div>
+      </div>
+
+      <!-- MTTR Trend -->
+      <div class="fu" style="background:var(--card);border-radius:14px;padding:24px;border:1px solid var(--border);margin-bottom:16px">
+        <h3 style="font-size:15px;font-weight:600;margin-bottom:20px">Tendencia MTTR — Últimos 6 meses</h3>
+        <div id="mttr-chart" style="display:flex;align-items:flex-end;gap:12px;height:160px"></div>
+      </div>
+
+      <!-- Team performance -->
+      <div class="fu" style="background:var(--card);border-radius:14px;padding:24px;border:1px solid var(--border)">
+        <h3 style="font-size:15px;font-weight:600;margin-bottom:16px">Rendimiento por Técnico</h3>
+        <div id="team-perf"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav">
+  <button class="active" onclick="showView('dashboard')">📊<span>Dashboard</span></button>
+  <button onclick="showView('tickets')">🎫<span>Tickets</span></button>
+  <button onclick="showView('calendar')">📅<span>Calendario</span></button>
+  <button onclick="showView('inventory')">📦<span>Inventario</span></button>
+  <button onclick="showView('metrics')">📈<span>Métricas</span></button>
+</div>
+
+<script>
+// ═══ DATA ═══
+const TICKETS = [
+  {id:"TK-001",title:"Bomba hidráulica — fuga en sello",asset:"Bomba HX-200",priority:"critical",status:"open",assignee:"Carlos M.",created:"Hace 2h",eta:"4h"},
+  {id:"TK-002",title:"Cinta transportadora — alineación",asset:"Cinta CT-05",priority:"high",status:"progress",assignee:"Ana R.",created:"Hace 5h",eta:"2h"},
+  {id:"TK-003",title:"Compresor — cambio de filtro",asset:"Compresor AC-12",priority:"medium",status:"progress",assignee:"Luis G.",created:"Hace 1d",eta:"1h"},
+  {id:"TK-004",title:"Motor eléctrico — vibración anormal",asset:"Motor ME-08",priority:"high",status:"open",assignee:"Sin asignar",created:"Hace 3h",eta:"6h"},
+  {id:"TK-005",title:"Válvula de control — calibración",asset:"Válvula VC-15",priority:"low",status:"open",assignee:"Pedro S.",created:"Hace 2d",eta:"30min"},
+  {id:"TK-006",title:"Panel eléctrico — revisión preventiva",asset:"Panel PE-03",priority:"medium",status:"closed",assignee:"Carlos M.",created:"Hace 3d",eta:"Completado"},
+  {id:"TK-007",title:"Banda de transmisión — desgaste",asset:"Máquina BT-11",priority:"critical",status:"open",assignee:"Ana R.",created:"Hace 1h",eta:"8h"},
+  {id:"TK-008",title:"Sistema HVAC — limpieza ductos",asset:"HVAC Central",priority:"low",status:"progress",assignee:"Luis G.",created:"Hace 4d",eta:"3h"},
+];
+
+const EVENTS = [
+  {date:19,title:"Preventivo — Bomba HX-200",type:"preventive",time:"09:00"},
+  {date:21,title:"Calibración — Sensores línea 3",type:"preventive",time:"10:30"},
+  {date:22,title:"Cambio aceite — Compresor AC-12",type:"preventive",time:"08:00"},
+  {date:25,title:"Inspección — Cinta CT-05",type:"corrective",time:"14:00"},
+  {date:28,title:"Revisión general — HVAC",type:"preventive",time:"07:00"},
+];
+
+const INVENTORY = [
+  {name:"Rodamiento SKF 6205",cat:"Rodamientos",stock:24,min:10,last:"12 Mar"},
+  {name:"Filtro de aceite FO-200",cat:"Filtros",stock:8,min:5,last:"10 Mar"},
+  {name:"Sello mecánico SM-150",cat:"Sellos",stock:3,min:5,last:"8 Mar"},
+  {name:"Correa V A-68",cat:"Correas",stock:2,min:4,last:"5 Mar"},
+  {name:"Aceite hidráulico ISO 68 (L)",cat:"Lubricantes",stock:45,min:20,last:"14 Mar"},
+  {name:"Fusible NH 100A",cat:"Eléctricos",stock:12,min:8,last:"11 Mar"},
+  {name:"Manguera hidráulica 1/2\"",cat:"Hidráulica",stock:1,min:3,last:"3 Mar"},
+  {name:"Contacto auxiliar CA-01",cat:"Eléctricos",stock:6,min:4,last:"9 Mar"},
+  {name:"Empaque de válvula EV-15",cat:"Sellos",stock:0,min:4,last:"1 Mar"},
+  {name:"Grasa multiuso EP2 (kg)",cat:"Lubricantes",stock:18,min:10,last:"13 Mar"},
+];
+
+const TEAM = [
+  {name:"Carlos M.",role:"Mecánico Sr.",tickets:8,resolved:6,mttr:"2.1h",rating:95},
+  {name:"Ana R.",role:"Eléctrica",tickets:6,resolved:5,mttr:"1.8h",rating:98},
+  {name:"Luis G.",role:"Mecánico",tickets:7,resolved:4,mttr:"3.2h",rating:82},
+  {name:"Pedro S.",role:"Instrumentista",tickets:5,resolved:5,mttr:"1.5h",rating:100},
+];
+
+const MTTR_DATA = [{m:"Oct",v:4.2},{m:"Nov",v:3.8},{m:"Dic",v:3.1},{m:"Ene",v:2.9},{m:"Feb",v:2.6},{m:"Mar",v:2.4}];
+
+const priorityColors = {critical:"var(--red)",high:"var(--amber)",medium:"var(--blue)",low:"var(--text30)"};
+const priorityLabels = {critical:"Crítica",high:"Alta",medium:"Media",low:"Baja"};
+const statusLabels = {open:"Abierto",progress:"En Progreso",closed:"Cerrado"};
+const statusColors = {open:"var(--amber)",progress:"var(--blue)",closed:"var(--green)"};
+const statusBg = {open:"var(--amber-glow)",progress:"var(--blue-glow)",closed:"var(--green-glow)"};
+
+// ═══ NAVIGATION ═══
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>{if(n.textContent.toLowerCase().includes(id==='dashboard'?'dashboard':id))n.classList.add('active')});
+  document.querySelectorAll('.mobile-nav button').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.mobile-nav button').forEach((b,i)=>{
+    const map=['dashboard','tickets','calendar','inventory','metrics'];
+    if(map[i]===id)b.classList.add('active');
+  });
+  window.scrollTo({top:0});
+}
+
+// ═══ RENDER TICKETS ═══
+function renderTickets(container, tickets, compact=false) {
+  document.getElementById(container).innerHTML = tickets.map(t=>`
+    <div class="ticket">
+      <div class="priority" style="background:${priorityColors[t.priority]}"></div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+          <span style="font-family:'JetBrains Mono';font-size:11px;color:var(--text30)">${t.id}</span>
+          <span style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.title}</span>
+        </div>
+        ${compact?'':`<div style="font-size:12px;color:var(--text50)">${t.asset} · ${t.assignee} · ${t.created}</div>`}
+      </div>
+      <span class="badge" style="background:${statusBg[t.status]};color:${statusColors[t.status]}">${statusLabels[t.status]}</span>
+      ${compact?'':`<span class="badge" style="background:rgba(255,255,255,0.04);color:var(--text50)">ETA: ${t.eta}</span>`}
+    </div>
+  `).join('');
+}
+
+// ═══ RENDER CALENDAR ═══
+let calMonth = 2; // March (0-indexed)
+let calYear = 2026;
+function renderCalendar() {
+  const months = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+  document.getElementById('cal-month').textContent = months[calMonth]+" "+calYear;
+  const firstDay = new Date(calYear,calMonth,1).getDay();
+  const daysInMonth = new Date(calYear,calMonth+1,0).getDate();
+  const offset = firstDay===0?6:firstDay-1;
+  const today = new Date().getDate();
+  const isCurrentMonth = calMonth===new Date().getMonth()&&calYear===new Date().getFullYear();
+  const eventDays = EVENTS.map(e=>e.date);
+  let html = '';
+  for(let i=0;i<offset;i++) html+='<div class="cal-day" style="color:var(--text30)"></div>';
+  for(let d=1;d<=daysInMonth;d++){
+    const isToday = isCurrentMonth&&d===today;
+    const hasEvent = eventDays.includes(d);
+    html+=`<div class="cal-day ${isToday?'today':''} ${hasEvent?'has-event':''}" style="color:${isToday?'#fff':'var(--text70)'}">${d}</div>`;
+  }
+  document.getElementById('cal-grid').innerHTML = html;
+  document.getElementById('cal-events').innerHTML = EVENTS.map(e=>`
+    <div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border)">
+      <div style="width:44px;height:44px;border-radius:10px;background:${e.type==='preventive'?'var(--green-glow)':'var(--amber-glow)'};display:flex;align-items:center;justify-content:center;font-size:18px">${e.type==='preventive'?'🔧':'⚡'}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:600">${e.title}</div>
+        <div style="font-size:12px;color:var(--text50)">${e.date} Mar · ${e.time}</div>
+      </div>
+      <span class="badge" style="background:${e.type==='preventive'?'var(--green-glow)':'var(--amber-glow)'};color:${e.type==='preventive'?'var(--green)':'var(--amber)'}">${e.type==='preventive'?'Preventivo':'Correctivo'}</span>
+    </div>
+  `).join('');
+}
+document.getElementById('cal-prev').onclick=()=>{calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCalendar()};
+document.getElementById('cal-next').onclick=()=>{calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCalendar()};
+
+// ═══ RENDER INVENTORY ═══
+function renderInventory() {
+  document.getElementById('inv-list').innerHTML = INVENTORY.map(item=>{
+    const low = item.stock <= item.min;
+    const out = item.stock === 0;
+    const statusText = out?"Sin Stock":low?"Stock Bajo":"OK";
+    const statusColor = out?"var(--red)":low?"var(--amber)":"var(--green)";
+    return `<div class="inv-row">
+      <div><div style="font-weight:600">${item.name}</div><div style="font-size:11px;color:var(--text30)">${item.cat}</div></div>
+      <div style="font-family:'JetBrains Mono';color:${low?statusColor:'var(--text)'};font-weight:${low?'700':'400'}">${item.stock}</div>
+      <div style="font-family:'JetBrains Mono';color:var(--text30)">${item.min}</div>
+      <div><span class="badge" style="background:${out?'var(--red-glow)':low?'var(--amber-glow)':'var(--green-glow)'};color:${statusColor}">${statusText}</span></div>
+      <div style="color:var(--text30)">${item.last}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══ RENDER METRICS ═══
+function renderMetrics() {
+  const maxV = Math.max(...MTTR_DATA.map(d=>d.v));
+  document.getElementById('mttr-chart').innerHTML = MTTR_DATA.map(d=>{
+    const pct = (d.v/maxV)*100;
+    return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+      <span style="font-family:'JetBrains Mono';font-size:12px;color:var(--green);font-weight:600">${d.v}h</span>
+      <div style="width:100%;height:${pct}%;min-height:20px;background:linear-gradient(180deg,var(--green),rgba(16,185,129,0.3));border-radius:6px 6px 0 0;transition:height .5s"></div>
+      <span style="font-size:11px;color:var(--text30)">${d.m}</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('team-perf').innerHTML = TEAM.map(t=>`
+    <div style="display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--border)">
+      <div style="width:40px;height:40px;border-radius:10px;background:var(--blue-glow);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--blue)">${t.name.split(' ').map(n=>n[0]).join('')}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:600">${t.name}</div>
+        <div style="font-size:12px;color:var(--text50)">${t.role} · MTTR: ${t.mttr}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:'JetBrains Mono';font-size:14px;font-weight:600;color:${t.rating>=90?'var(--green)':'var(--amber)'}">${t.rating}%</div>
+        <div style="font-size:11px;color:var(--text30)">${t.resolved}/${t.tickets} resueltos</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ═══ UPCOMING (Dashboard) ═══
+function renderUpcoming() {
+  document.getElementById('dashboard-upcoming').innerHTML = EVENTS.slice(0,4).map(e=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
+      <div style="width:36px;height:36px;border-radius:8px;background:${e.type==='preventive'?'var(--green-glow)':'var(--amber-glow)'};display:flex;align-items:center;justify-content:center;font-size:15px">${e.type==='preventive'?'🔧':'⚡'}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.title}</div>
+        <div style="font-size:11px;color:var(--text30)">${e.date} Mar · ${e.time}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ═══ INIT ═══
+renderTickets('dashboard-tickets', TICKETS.filter(t=>t.status!=='closed').slice(0,4), true);
+renderTickets('tickets-list', TICKETS);
+renderCalendar();
+renderInventory();
+renderMetrics();
+renderUpcoming();
+</script>
+</body>
+</html>

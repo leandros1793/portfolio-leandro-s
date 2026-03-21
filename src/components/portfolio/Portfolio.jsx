@@ -9,6 +9,12 @@
   import IMG4 from "../../assets/hoyoenuno.png";     // Captura de hoyoenuno.golf
   import IMG5 from "../../assets/xclusive.png";      // Captura de xclusivetravelworld.com
   import IMG6 from "../../assets/almaobrador.png";   // Captura de almaobrador.art
+  // Imports de imágenes - agregá estos 5 junto a los existentes
+import IMG7 from "../../assets/dataextract.png";
+import IMG8 from "../../assets/dataview.png";
+import IMG9 from "../../assets/dental.png";
+import IMG10 from "../../assets/flowbar.png";
+import IMG11 from "../../assets/mantenipro.png";
 
   const data = [
     // --- TUS PROYECTOS ESTRELLA (Los que más venden) ---
@@ -70,51 +76,52 @@
       github: "https://github.com/leandros1793",
       demo: "https://almaobrador.art/",
     },
-    { 
-  id: 7,
-  image: IMG7,
-  titulo: "DataExtract",
-  subtitulo: "Herramienta de Scraping Automatizado",
-  tecnologias: "Google Maps API / Instagram / Node.js",
-  github: "https://github.com/leandros1793",
-  demo: "https://dataextract-demo.vercel.app/", // reemplazá con la URL real
-},
-{ 
-  id: 8,
-  image: IMG8,
-  titulo: "DataView Dashboard",
-  subtitulo: "Excel a Dashboard en Segundos",
-  tecnologias: "React / Chart.js / Excel Parsing",
-  github: "https://github.com/leandros1793",
-  demo: "https://dataview-demo.vercel.app/",
-},
-{ 
-  id: 9,
-  image: IMG9,
-  titulo: "Sonríe Dental",
-  subtitulo: "Landing Page para Clínica Dental",
-  tecnologias: "HTML / CSS / Diseño UI",
-  github: "https://github.com/leandros1793",
-  demo: "https://sonrie-dental-demo.vercel.app/",
-},
-{ 
-  id: 10,
-  image: IMG10,
-  titulo: "Flow Bar",
-  subtitulo: "Sistema de Pedidos Digitales para Bares",
-  tecnologias: "JavaScript / UX / PWA",
-  github: "https://github.com/leandros1793",
-  demo: "https://flowbar-demo.vercel.app/",
-},
-{ 
-  id: 11,
-  image: IMG11,
-  titulo: "ManteniPro",
-  subtitulo: "Sistema de Gestión de Mantenimiento",
-  tecnologias: "React / Dashboard / Gestión",
-  github: "https://github.com/leandros1793",
-  demo: "https://mantenipro-demo.vercel.app/",
-},
+    // --- DEMOS & PROPUESTAS WORKANA ---
+  { 
+    id: 7,
+    image: IMG7,
+    titulo: "DataExtract",
+    subtitulo: "Scraping Automatizado Google Maps + Instagram",
+    tecnologias: "JavaScript / Web Scraping / Automatización",
+    github: "https://github.com/leandros1793",
+    demo: "https://portfolio-leandro-s.vercel.app/dataextract-demo",
+  },
+  { 
+    id: 8,
+    image: IMG8,
+    titulo: "DataView Dashboard",
+    subtitulo: "De Excel a Dashboard Interactivo en Segundos",
+    tecnologias: "JavaScript / Chart.js / Excel Parsing",
+    github: "https://github.com/leandros1793",
+    demo: "https://portfolio-leandro-s.vercel.app/dataview-excel-dashboard",
+  },
+  { 
+    id: 9,
+    image: IMG9,
+    titulo: "Sonríe Dental",
+    subtitulo: "Landing Page para Clínica Dental",
+    tecnologias: "HTML / CSS / Diseño UI Médico",
+    github: "https://github.com/leandros1793",
+    demo: "https://portfolio-leandro-s.vercel.app/dental-landing-demo",
+  },
+  { 
+    id: 10,
+    image: IMG10,
+    titulo: "Flow Bar",
+    subtitulo: "Sistema de Pedidos Digitales para Bares",
+    tecnologias: "JavaScript / UX / Tiempo Real",
+    github: "https://github.com/leandros1793",
+    demo: "https://portfolio-leandro-s.vercel.app/flowbar-demo",
+  },
+  { 
+    id: 11,
+    image: IMG11,
+    titulo: "ManteniPro",
+    subtitulo: "Sistema de Gestión de Mantenimiento",
+    tecnologias: "JavaScript / Dashboard / Gestión Operativa",
+    github: "https://github.com/leandros1793",
+    demo: "https://portfolio-leandro-s.vercel.app/mantenipro-demo",
+  },
   ];
 
   const Portfolio = () => {
