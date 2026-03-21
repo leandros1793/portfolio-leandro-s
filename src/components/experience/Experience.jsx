@@ -1,165 +1,119 @@
 import React from 'react'
 import './experience.css'
-import {BsFillPatchCheckFill} from "react-icons/bs"
+import { BsFillPatchCheckFill } from "react-icons/bs"
+
 const Experience = () => {
   return (
     <section id='experience'>
-      <h5>Que Habilidades tengo?</h5>
-      <h2>Mis Conocimientos</h2>
+      <h5>¿Qué tecnologías domino?</h5>
+      <h2>Mi Stack Técnico</h2>
+
       <div className='container experience__container'>
+        
+        {/* --- FRONTEND --- */}
         <div className='experience__frontend'>
-          <h3>Frontend Experiencia</h3>
+          <h3>Desarrollo Frontend</h3>
           <div className='experience__content'>
             <article className='experience__details'>
-              <BsFillPatchCheckFill  classname="experience__details-icon" />
-             <div> <h4>HTML</h4>
-        
-              </div>
-            </article>
-            <article className='experience__details'>
-              <BsFillPatchCheckFill classname="experience__details-icon"/>
-              <div><h4>CSS</h4>
-        
-              </div>
-            </article>
-            <article className='experience__details'>
-              <BsFillPatchCheckFill classname="experience__details-icon"/>
-             <div>
-             <h4>Javascript</h4>
-            
-             </div>
-            </article>
-            <article className='experience__details'>
-              <BsFillPatchCheckFill classname="experience__details-icon"/>
+              <BsFillPatchCheckFill className="experience__details-icon" />
               <div>
-              <h4>ReactJs</h4>
-        
+                <h4>React.js</h4>
+                <small className='text-light'>Avanzado</small>
               </div>
             </article>
             <article className='experience__details'>
-              <BsFillPatchCheckFill classname="experience__details-icon"/>
-             <div>
-             <h4>Angular</h4>
-            
-             </div>
+              <BsFillPatchCheckFill className="experience__details-icon" />
+              <div>
+                <h4>Angular</h4>
+                <small className='text-light'>Intermedio</small>
+              </div>
             </article>
             <article className='experience__details'>
-              <BsFillPatchCheckFill classname="experience__details-icon"/>
-             <div>
-             <h4>Wordpress</h4>
-            
-             </div>
+              <BsFillPatchCheckFill className="experience__details-icon" />
+              <div>
+                <h4>JavaScript (ES6+)</h4>
+                <small className='text-light'>Avanzado</small>
+              </div>
             </article>
             <article className='experience__details'>
-              <BsFillPatchCheckFill classname="experience__details-icon"/>
-             <div>
-             <h4>Redux</h4>
-            
-             </div>
-             </article>
-             <article className='experience__details'>
-              <BsFillPatchCheckFill classname="experience__details-icon"/>
-             <div>
-             <h4>Tailwind</h4>
-            
-             </div>
+              <BsFillPatchCheckFill className="experience__details-icon" />
+              <div>
+                <h4>Tailwind CSS</h4>
+                <small className='text-light'>Experiencia</small>
+              </div>
             </article>
-           
-
+            <article className='experience__details'>
+              <BsFillPatchCheckFill className="experience__details-icon" />
+              <div>
+                <h4>HTML5 / CSS3</h4>
+                <small className='text-light'>Avanzado</small>
+              </div>
+            </article>
           </div>
         </div>
+
+        {/* --- BACKEND (.NET & NODE) --- */}
         <div className='experience__backend'>
-        <h3>Backend Experiencia</h3>
-        <div className='experience__content'>
+          <h3>Backend & Arquitectura</h3>
+          <div className='experience__content'>
             <article className='experience__details'>
-              <BsFillPatchCheckFill classname="experience__details-icon"/>
+              <BsFillPatchCheckFill className="experience__details-icon" />
               <div>
-              <h4>Node Js</h4>
-            
+                <h4>C# / .NET Core</h4>
+                <small className='text-light'>Arquitectura Sólida</small>
               </div>
             </article>
             <article className='experience__details'>
-              <BsFillPatchCheckFill classname="experience__details-icon"/>
+              <BsFillPatchCheckFill className="experience__details-icon" />
               <div>
-              <h4>Mongo Db</h4>
-              
+                <h4>Node.js</h4>
+                <small className='text-light'>APIs REST</small>
               </div>
             </article>
             <article className='experience__details'>
-              <BsFillPatchCheckFill classname="experience__details-icon"/>
+              <BsFillPatchCheckFill className="experience__details-icon" />
               <div>
-              <h4>Java</h4>
-              
+                <h4>SQL Server / MySQL</h4>
+                <small className='text-light'>Base de Datos</small>
               </div>
             </article>
             <article className='experience__details'>
-              <BsFillPatchCheckFill classname="experience__details-icon"/>
+              <BsFillPatchCheckFill className="experience__details-icon" />
               <div>
-              <h4>Python</h4>
-              
+                <h4>Linux / VPS</h4>
+                <small className='text-light'>Gestión de Servidores</small>
               </div>
             </article>
-            <article className='experience__details'>
-              <BsFillPatchCheckFill classname="experience__details-icon"/>
-              <div>
-              <h4>Mysql</h4>
-              
-              </div>
-            </article>
-            
-
           </div>
+        </div>
 
-
-          
-      </div>
-
-      <div className='experience__backend'>
-        <h3>Aplicaciones Moviles</h3>
-        <div className='experience__content'>
+        {/* --- E-COMMERCE & CMS (ESTO VENDE) --- */}
+        <div className='experience__backend'>
+          <h3>E-commerce & CMS</h3>
+          <div className='experience__content'>
             <article className='experience__details'>
-              <BsFillPatchCheckFill classname="experience__details-icon"/>
+              <BsFillPatchCheckFill className="experience__details-icon" />
               <div>
-              <h4>Android Studio</h4>
-            
+                <h4>Shopify (Liquid)</h4>
+                <small className='text-light'>Desarrollo de Themes</small>
               </div>
             </article>
             <article className='experience__details'>
-              <BsFillPatchCheckFill classname="experience__details-icon"/>
+              <BsFillPatchCheckFill className="experience__details-icon" />
               <div>
-              <h4>Java POO</h4>
-              
+                <h4>WordPress</h4>
+                <small className='text-light'>Personalización Avanzada</small>
               </div>
             </article>
             <article className='experience__details'>
-              <BsFillPatchCheckFill classname="experience__details-icon"/>
+              <BsFillPatchCheckFill className="experience__details-icon" />
               <div>
-              <h4>Kotlin</h4>
-              
+                <h4>WooCommerce</h4>
+                <small className='text-light'>Tiendas Online</small>
               </div>
             </article>
-            <article className='experience__details'>
-              <BsFillPatchCheckFill classname="experience__details-icon"/>
-              <div>
-              <h4>XML</h4>
-              
-              </div>
-            </article>
-            <article className='experience__details'>
-              <BsFillPatchCheckFill classname="experience__details-icon"/>
-              <div>
-              <h4>Gradle</h4>
-              
-              </div>
-            </article>
-            
-
           </div>
-
-
-          
-      </div>
-     
+        </div>
 
       </div>
     </section>
