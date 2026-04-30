@@ -1,0 +1,45 @@
+/* ─────────────────────────────────────────────
+   Pixel Character – walking frame animation
+   Frame 1 and Frame 2 alternate every 300 ms
+   giving a crisp 8-bit step-by-step look.
+───────────────────────────────────────────── */
+
+/* Walking cycle: alternate between two leg frames */
+@keyframes showFrame1 {
+  0%,    49.9% { opacity: 1; }
+  50%,  100%   { opacity: 0; }
+}
+
+@keyframes showFrame2 {
+  0%,   49.9% { opacity: 0; }
+  50%,  100%  { opacity: 1; }
+}
+
+.pixel-frame-1 {
+  animation: showFrame1 0.3s linear infinite;
+}
+
+.pixel-frame-2 {
+  animation: showFrame2 0.3s linear infinite;
+}
+
+/* Subtle vertical bob in sync with the step cycle */
+.pixel-walker svg {
+  animation: pixelBob 0.3s ease-in-out infinite alternate;
+}
+
+@keyframes pixelBob {
+  from { transform: translateY(0px); }
+  to   { transform: translateY(-2px); }
+}
+
+/* On mobile: reduce animation overhead */
+@media screen and (max-width: 600px) {
+  .pixel-walker svg {
+    animation-duration: 0.4s;
+  }
+  .pixel-frame-1,
+  .pixel-frame-2 {
+    animation-duration: 0.4s;
+  }
+}

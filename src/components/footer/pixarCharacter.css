@@ -1,0 +1,82 @@
+/* ═══════════════════════════════════════════════════
+   Pixar-style walking character — footer animation
+═══════════════════════════════════════════════════ */
+
+/* ── Body: subtle squash-and-stretch bob ── */
+.char-body-wrap {
+  animation: charBob 0.5s ease-in-out infinite alternate;
+}
+@keyframes charBob {
+  from { transform: translateY(0)    scaleY(1)     scaleX(1);    }
+  to   { transform: translateY(-3px) scaleY(1.018) scaleX(0.988); }
+}
+
+/* ── Legs: pendulum swing ── */
+.char-leg-left {
+  transform-box:    fill-box;
+  transform-origin: 50% 0%;
+  animation: legSwing 0.5s ease-in-out infinite alternate;
+}
+.char-leg-right {
+  transform-box:    fill-box;
+  transform-origin: 50% 0%;
+  animation: legSwing 0.5s ease-in-out infinite alternate-reverse;
+}
+@keyframes legSwing {
+  from { transform: rotate(-22deg); }
+  to   { transform: rotate( 22deg); }
+}
+
+/* ── Arms: opposite to same-side leg ── */
+.char-arm-left {
+  transform-box:    fill-box;
+  transform-origin: 50% 0%;
+  animation: legSwing 0.5s ease-in-out infinite alternate-reverse;
+}
+.char-arm-right {
+  transform-box:    fill-box;
+  transform-origin: 50% 0%;
+  animation: legSwing 0.5s ease-in-out infinite alternate;
+}
+
+/* ── Eyes: natural blink every ~4 s ── */
+.char-blink-left,
+.char-blink-right {
+  transform-box:    fill-box;
+  transform-origin: center 38%;
+  animation: eyeBlink 4s ease-in-out infinite;
+}
+.char-blink-right {
+  animation-delay: 0.06s;   /* tiny offset = more natural */
+}
+@keyframes eyeBlink {
+  0%, 86%, 100% { transform: scaleY(1);    }
+  90%           { transform: scaleY(0.04); }
+  93%           { transform: scaleY(0.04); }
+}
+
+/* ── Coffee steam ── */
+.char-steam-a,
+.char-steam-b {
+  animation: steamRise 1.6s ease-in-out infinite;
+}
+.char-steam-b {
+  animation-delay: 0.45s;
+}
+@keyframes steamRise {
+  0%   { opacity: 0;   transform: translateY(0)     scaleX(1);   }
+  25%  { opacity: 0.9; transform: translateY(-3px)  scaleX(1.1); }
+  70%  { opacity: 0.4; transform: translateY(-8px)  scaleX(0.9); }
+  100% { opacity: 0;   transform: translateY(-12px) scaleX(1);   }
+}
+
+/* ── Reduce motion on mobile ── */
+@media (max-width: 600px) {
+  .char-body-wrap,
+  .char-leg-left,
+  .char-leg-right,
+  .char-arm-left,
+  .char-arm-right {
+    animation-duration: 0.65s;
+  }
+}

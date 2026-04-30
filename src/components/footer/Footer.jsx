@@ -1,6 +1,7 @@
 import React from 'react'
 import './footer.css'
 import { FaFacebook, FaInstagram, FaLinkedin, FaGithub } from 'react-icons/fa'
+import PixarCharacter from './PixarCharacter'
 
 const Footer = () => {
   return (
@@ -42,6 +43,9 @@ const Footer = () => {
       <div className='footer__copyright'>
         <small>&copy; {new Date().getFullYear()} Leandro Santiago. Todos los derechos reservados.</small>
       </div>
+
+      {/* Personaje animado estilo Pixar caminando por el footer */}
+      <PixarCharacter />
     </footer>
   )
 }
