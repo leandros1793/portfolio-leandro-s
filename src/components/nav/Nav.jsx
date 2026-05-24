@@ -18,7 +18,7 @@ const Nav = ({ onAIToggle, isChatbotOpen }) => { // Recibe función y estado del
   }
    
   return (
-  <nav>
+  <nav className="floating-nav">
     <a 
       href={isHome ? '#' : '/'} 
       onClick={() => setActiveNav('#')} 

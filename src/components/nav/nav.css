@@ -1,4 +1,4 @@
-nav {
+.floating-nav {
     /* CORREGIDO: De 0 a 0.3 para que se vea el fondo oscuro */
     background: rgba(0, 0, 0, 0.3);
     width: max-content;
@@ -15,7 +15,7 @@ nav {
     backdrop-filter: blur(15px);
 }
 
-nav a {
+.floating-nav a {
     background: transparent;
     padding: 0.9rem;
     border-radius: 50%;
@@ -25,24 +25,24 @@ nav a {
     transition: all 0.3s ease; /* Suaviza el hover */
 }
 
-nav a:hover {
+.floating-nav a:hover {
     background: rgba(0, 0, 0, 0.3); /* Un poco más oscuro al pasar el mouse */
 }
 
-nav a.active {
+.floating-nav a.active {
     background: var(--color-primary);
     color: var(--color-bg);
 }
 
 /* --- ESTILOS DEL BOTÓN IA --- */
-nav a.ai-toggle {
+.floating-nav a.ai-toggle {
     position: relative;
     overflow: hidden;
     cursor: pointer;
 }
 
 /* Efecto de pulso */
-nav a.ai-toggle::before {
+.floating-nav a.ai-toggle::before {
     content: '';
     position: absolute;
     top: 50%;
@@ -72,19 +72,19 @@ nav a.ai-toggle::before {
     }
 }
 
-nav a.ai-toggle:hover {
+.floating-nav a.ai-toggle:hover {
     background: rgba(255, 255, 255, 0.1);
     transform: translateY(-3px);
 }
 
 /* Estado Activo del Chat */
-nav a.ai-toggle.chat-active {
+.floating-nav a.ai-toggle.chat-active {
     background: var(--color-primary);
     color: var(--color-bg);
     /* CORREGIDO: Usamos el color directo o variable HEX para evitar errores */
     box-shadow: 0 0 15px var(--color-primary); 
 }
 
-nav a.ai-toggle.chat-active::before {
+.floating-nav a.ai-toggle.chat-active::before {
     animation: none;
 }
