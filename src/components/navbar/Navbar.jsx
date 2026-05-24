@@ -39,6 +39,15 @@ const Navbar = () => {
           >
             E-commerce Demo
           </NavLink>
+
+          <NavLink 
+            to="/auditor" 
+            className={({ isActive }) => 
+              isActive ? "nav-item active-link" : "nav-item"
+            }
+          >
+            Auditor Shopify
+          </NavLink>
           
           <NavLink 
             to="/blog" 

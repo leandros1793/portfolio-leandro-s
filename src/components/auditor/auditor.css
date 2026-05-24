@@ -1,0 +1,525 @@
+.auditor-page {
+  padding-top: 8rem;
+  padding-bottom: 6rem;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  position: relative;
+  z-index: 1;
+}
+
+.auditor-container {
+  max-width: 900px !important;
+}
+
+.auditor-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.auditor-header h5 {
+  color: var(--color-primary);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+}
+
+.auditor-header h1 {
+  font-size: 2.8rem;
+  margin-bottom: 1.2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--color-white) 30%, var(--color-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.auditor-subtitle {
+  color: var(--color-light);
+  max-width: 650px;
+  margin: 0 auto;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+/* CARDS GLASSMORPHIC */
+.auditor-card {
+  background: var(--color-bg-variant);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.2rem;
+  padding: 2.5rem;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-medium);
+  margin-bottom: 2rem;
+  transition: var(--transition);
+}
+
+.auditor-card:hover {
+  border-color: rgba(0, 242, 254, 0.2);
+  box-shadow: var(--shadow-glow);
+}
+
+/* ESTADO FORMULARIO */
+.form-card {
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: rgba(7, 8, 13, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.6rem;
+  padding: 0.4rem 1.2rem;
+  margin-bottom: 1.5rem;
+  transition: var(--transition-fast);
+}
+
+.search-input-wrapper:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.15);
+}
+
+.search-icon {
+  color: var(--color-primary);
+  margin-right: 0.8rem;
+  font-size: 1.3rem;
+}
+
+.search-input-wrapper input {
+  background: transparent;
+  border: none;
+  color: var(--color-white);
+  font-size: 1.05rem;
+  padding: 0.8rem 0;
+  width: 100%;
+  font-family: inherit;
+}
+
+.search-input-wrapper input::placeholder {
+  color: #64748b;
+}
+
+.scan-btn {
+  width: 100% !important;
+  font-size: 1.1rem;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem !important;
+  border-radius: 0.6rem !important;
+}
+
+.security-note {
+  font-size: 0.8rem;
+  color: var(--color-light);
+  text-align: center;
+  margin-top: 1.2rem;
+}
+
+/* ESTADO ESCANEANDO */
+.scanning-card {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.scanning-pulse {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(0, 242, 254, 0.08);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 2rem;
+  animation: pulse-ring 2s infinite ease-out;
+  border: 1px solid var(--color-primary-variant);
+}
+
+.pulse-icon {
+  font-size: 2.2rem;
+  color: var(--color-primary);
+  animation: spin-slow 3s linear infinite;
+}
+
+.scanning-card h3 {
+  font-size: 1.4rem;
+  color: var(--color-white);
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 0.8rem;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-primary) 100%);
+  width: 0%;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 10px var(--color-primary);
+}
+
+.progress-percentage {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 1.5rem;
+}
+
+.scanning-text {
+  color: var(--color-light);
+  font-size: 0.95rem;
+  font-style: italic;
+  min-height: 24px;
+}
+
+/* ESTADO RESULTADOS */
+.result-wrapper {
+  animation: containerFadeIn 0.6s ease-out;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1.3fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Velocímetro */
+.gauge-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.gauge-card h3, .vitals-card h3, .issues-card h3 {
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--color-white);
+  margin-bottom: 1.8rem;
+  text-align: left;
+}
+
+.gauge-container {
+  position: relative;
+  width: 220px;
+  margin: 0 auto 1.5rem;
+}
+
+.gauge {
+  width: 100%;
+  height: auto;
+}
+
+.gauge-fill {
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.1, 0.8, 0.3, 1);
+}
+
+.gauge-score-value {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.gauge-label {
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.gauge-summary {
+  color: var(--color-light);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-top: 1.5rem;
+}
+
+/* Core Web Vitals */
+.vitals-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.vital-item {
+  margin-bottom: 1.5rem;
+}
+
+.vital-item:last-child {
+  margin-bottom: 0;
+}
+
+.vital-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: var(--color-white);
+  margin-bottom: 0.4rem;
+}
+
+.vital-val {
+  font-weight: 600;
+}
+
+.vital-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.4rem;
+}
+
+.vital-fill {
+  height: 100%;
+  border-radius: 4px;
+}
+
+.vital-desc {
+  color: var(--color-light);
+  font-size: 0.8rem;
+}
+
+/* Lista de Problemas */
+.issue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.issue-item {
+  display: flex;
+  align-items: flex-start;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.issue-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.issue-icon {
+  font-size: 1.4rem;
+  margin-right: 1rem;
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+.issue-info h4 {
+  font-size: 1.05rem;
+  color: var(--color-white);
+  margin-bottom: 0.3rem;
+  text-align: left;
+}
+
+.issue-info p {
+  color: var(--color-light);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Colores Semáforo */
+.text-red {
+  color: #ef4444;
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+}
+
+.bg-red {
+  background-color: #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+}
+
+.text-yellow {
+  color: #f59e0b;
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+}
+
+.bg-yellow {
+  background-color: #f59e0b;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+}
+
+/* TARJETA DE CONVERSIÓN DE VENTAS (CTA) */
+.cta-conversion-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(127, 0, 255, 0.2) 0%, rgba(0, 242, 254, 0.2) 100%);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  border-radius: 1.2rem;
+  padding: 3rem;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 242, 254, 0.1);
+  margin-top: 3rem;
+}
+
+.cta-glow-pulse {
+  position: absolute;
+  top: -20%;
+  left: -20%;
+  width: 140%;
+  height: 140%;
+  background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, transparent 60%);
+  pointer-events: none;
+  animation: pulse-ring 4s infinite ease-in-out;
+}
+
+.cta-content {
+  position: relative;
+  z-index: 2;
+}
+
+.cta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(0, 242, 254, 0.15);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary-variant);
+  border-radius: 50px;
+  padding: 0.4rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.1);
+}
+
+.cta-content h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--color-white) 0%, var(--color-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: left;
+  margin-bottom: 1.2rem;
+  line-height: 1.3;
+}
+
+.cta-content p {
+  color: #cbd5e1;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 2.2rem;
+  max-width: 750px;
+}
+
+.cta-offer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  background: rgba(7, 8, 13, 0.4);
+  padding: 1.5rem 2rem;
+  border-radius: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cta-price-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-label {
+  font-size: 0.85rem;
+  color: var(--color-light);
+  margin-bottom: 0.3rem;
+}
+
+.price-val {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+}
+
+.cta-action-block {
+  display: flex;
+  gap: 1rem;
+}
+
+.cta-buy-btn {
+  font-size: 1.05rem;
+  padding: 0.8rem 1.6rem !important;
+  font-weight: 600;
+}
+
+.btn-outline-alt {
+  background: transparent;
+  color: var(--color-white);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-outline-alt:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--color-white);
+  color: var(--color-white);
+  transform: translateY(-2px);
+}
+
+/* ANIMACIONES */
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* RESPONSIVE */
+@media screen and (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .auditor-header h1 {
+    font-size: 2.1rem;
+  }
+  
+  .cta-content h2 {
+    font-size: 1.6rem;
+  }
+  
+  .cta-offer-row {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.2rem;
+  }
+  
+  .cta-action-block {
+    flex-direction: column;
+  }
+  
+  .cta-action-block button {
+    width: 100% !important;
+    text-align: center;
+  }
+}

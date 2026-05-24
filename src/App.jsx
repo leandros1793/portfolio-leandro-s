@@ -8,6 +8,7 @@ import Ecommerce from './components/ecommerce/Ecommerce';
 import Blog from './components/blogs/Blog';
 import Footer from './components/footer/Footer';
 import Login from './components/Login/Login';
+import Auditor from './components/auditor/Auditor';
 
 // Importamos el Chat y el Icono del robot
 import AIChatbot from './components/AIChatbot/AIChatbot'; 
@@ -30,6 +31,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<PortfolioPage />} />
         <Route path="/ecommerce" element={<Ecommerce />} />
+        <Route path="/auditor" element={<Auditor />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/login" element={<Login />} />
       </Routes>

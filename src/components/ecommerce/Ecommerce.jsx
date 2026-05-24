@@ -1,32 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import './ecommerce.css';
 import { FiShoppingCart, FiPlus, FiMinus, FiTrash2, FiX, FiCheckCircle, FiLoader } from 'react-icons/fi';
-import { RiServerLine, RiShoppingBag3Line, RiCodeBoxLine } from 'react-icons/ri';
+import { RiServerLine, RiShoppingBag3Line, RiSpeedUpLine } from 'react-icons/ri';
 
 const productsData = [
   {
     id: 101,
-    title: 'VPS Rescue & Linux Setup',
-    description: 'Diagnóstico de caídas en servidores, reparación de bases de datos MySQL, optimización de performance y configuración de backups automáticos.',
-    price: 199.00,
-    icon: <RiServerLine className="product-icon-art" />,
-    tecnologias: ['Linux', 'MySQL', 'SSH', 'Cronjobs'],
+    title: 'Shopify Speed Booster',
+    description: 'Optimización artesanal y profunda de rendimiento. Purgado de código Liquid muerto, carga diferida de imágenes y scripts de apps, y métricas Core Web Vitals en 90+.',
+    price: 349.00,
+    icon: <RiSpeedUpLine className="product-icon-art" />,
+    tecnologias: ['Shopify Liquid', 'Core Web Vitals', 'Lazy loading', 'JS Purging'],
   },
   {
     id: 102,
-    title: 'Shopify Custom Liquid & Integration',
-    description: 'Creación de secciones a medida sin apps lentas, customización del checkout, vinculación con pasarelas de pago y lógica de negocio avanzada.',
-    price: 299.00,
+    title: 'Premium Liquid Sections Kit',
+    description: 'Colección de secciones Liquid de alto rendimiento listas para instalar. Incluye Cart Drawer inteligente, Sticky ATC, y banners optimizados sin suscripciones.',
+    price: 49.00,
     icon: <RiShoppingBag3Line className="product-icon-art" />,
-    tecnologias: ['Shopify Liquid', 'Javascript', 'Webhooks', 'Stripe'],
+    tecnologias: ['Shopify Liquid', 'HTML5', 'Vanilla CSS', 'JS ES6'],
   },
   {
     id: 103,
-    title: 'Full-Stack Enterprise App',
-    description: 'Aplicación web corporativa con base de datos robusta, panel de control administrativo, login seguro y renderizado de alta performance.',
-    price: 599.00,
-    icon: <RiCodeBoxLine className="product-icon-art" />,
-    tecnologias: ['.NET Blazor', 'C#', 'React', 'SQL Server'],
+    title: 'VPS Setup & Docker Stack',
+    description: 'Aprovisionamiento de servidores Linux (DigitalOcean, AWS, Linode). Configuración de contenedores Docker, proxy inverso NGINX y copias de seguridad automatizadas.',
+    price: 199.00,
+    icon: <RiServerLine className="product-icon-art" />,
+    tecnologias: ['Linux', 'Docker', 'NGINX', 'SSL & Backups'],
   },
 ];
 
@@ -35,6 +36,36 @@ const Ecommerce = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [checkoutStep, setCheckoutStep] = useState(1); // 1 = Form, 2 = Loading, 3 = Success
+  
+  const location = useLocation();
+
+  useEffect(() => {
+    // Verificar si venimos desde el auditor con checkout activado
+    const queryParams = new URLSearchParams(location.search);
+    if (queryParams.get('checkout') === 'true') {
+      const pending = localStorage.getItem('pending_checkout');
+      if (pending) {
+        try {
+          const product = JSON.parse(pending);
+          // Agregamos al carrito
+          setCart((prev) => {
+            const exists = prev.find(item => item.id === product.id);
+            if (exists) {
+              return prev.map(item => item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item);
+            }
+            return [...prev, { ...product, icon: <RiSpeedUpLine className="product-icon-art" /> }];
+          });
+          // Abrimos el carrito y el checkout modal
+          setIsCartOpen(true);
+          setIsCheckoutOpen(true);
+          // Limpiamos localStorage para evitar triggers repetidos
+          localStorage.removeItem('pending_checkout');
+        } catch (e) {
+          console.error("Error parsing pending checkout product", e);
+        }
+      }
+    }
+  }, [location]);
   
   // Checkout Form State
   const [email, setEmail] = useState('');
