@@ -1,0 +1,395 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Roboto:wght@100;300;700;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+}
+
+:root {
+  /* Paleta Deep Space Slate */
+  --color-bg: #07080d;
+  --color-bg-variant: rgba(18, 20, 32, 0.65); /* Tarjeta Glassmorphism */
+  --color-primary: #00f2fe; /* Cian eléctrico neón */
+  --color-primary-variant: rgba(0, 242, 254, 0.25);
+  --color-white: #f8fafc;
+  --color-light: #94a3b8;
+  --color-accent: #7f00ff; /* Violeta real neón */
+  --color-accent-variant: rgba(127, 0, 255, 0.25);
+  
+  /* Transiciones mejoradas - NUEVAS */
+  --transition: all 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-fast: all 200ms ease-out;
+  --transition-slow: all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  
+  /* Dimensiones */
+  --container-width-lg: 75%;
+  --container-width-md: 86%;
+  --container-width-sm: 90%;
+  
+  /* Sombras y Resplandores */
+  --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.2);
+  --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.3);
+  --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(0, 242, 254, 0.25);
+  --shadow-glow-accent: 0 0 20px rgba(127, 0, 255, 0.25);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-white);
+  line-height: 1.7;
+  will-change: scroll-position;
+  overflow-x: hidden;
+}
+
+/* --- ORBES DE LUZ FLOTANTES (AURORAS) --- */
+.aurora-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(140px);
+  z-index: -2;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.aurora-1 {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, var(--color-primary) 0%, transparent 80%);
+  top: -10%;
+  left: -10%;
+  animation: drift-slow 25s infinite alternate ease-in-out;
+}
+
+.aurora-2 {
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, var(--color-accent) 0%, transparent 80%);
+  bottom: -15%;
+  right: -15%;
+  animation: drift-medium 30s infinite alternate ease-in-out;
+}
+
+.aurora-3 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, var(--color-primary-variant) 0%, transparent 80%);
+  top: 40%;
+  left: 60%;
+  animation: drift-fast 20s infinite alternate ease-in-out;
+}
+
+@keyframes drift-slow {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(120px, 60px) scale(1.2); }
+}
+
+@keyframes drift-medium {
+  0% { transform: translate(0, 0) scale(1.2); }
+  100% { transform: translate(-140px, -80px) scale(0.9); }
+}
+
+@keyframes drift-fast {
+  0% { transform: translate(0, 0) scale(0.9); }
+  100% { transform: translate(90px, -90px) scale(1.15); }
+}
+
+.container {
+  width: var(--container-width-lg);
+  margin: 0 auto;
+  animation: containerFadeIn 0.8s ease-out;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+  text-align: center;
+  transition: var(--transition);
+}
+
+h1 {
+  font-size: 2.5rem;
+  background: linear-gradient(135deg, var(--color-white) 40%, var(--color-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: titleSlideIn 1s ease-out;
+}
+
+section {
+  margin-top: 8rem;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: sectionSlideIn 0.8s ease-out forwards;
+}
+
+/* Animación escalonada para secciones */
+section:nth-of-type(1) { animation-delay: 0.1s; }
+section:nth-of-type(2) { animation-delay: 0.2s; }
+section:nth-of-type(3) { animation-delay: 0.3s; }
+section:nth-of-type(4) { animation-delay: 0.4s; }
+
+section > h2, section > h5 {
+  text-align: center;
+}
+
+section > h5 {
+  color: var(--color-light);
+  font-size: 0.9rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+}
+
+section > h2 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 3rem;
+  position: relative;
+  transition: var(--transition);
+}
+
+/* Línea animada bajo títulos de sección */
+section > h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  width: 0;
+  height: 2.5px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: width 0.5s ease;
+  animation: lineExpand 1s ease-out 0.5s forwards;
+}
+
+.text-light {
+  color: var(--color-primary); /* TU COLOR ORIGINAL */
+}
+
+/* Enlaces con animaciones mejoradas */
+a {
+  transition: var(--transition);
+  color: var(--color-primary); /* TU COLOR ORIGINAL */
+  position: relative;
+  overflow: hidden;
+}
+
+a::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-primary);
+  transition: width 0.3s ease;
+}
+
+a:hover::before {
+  width: 100%;
+}
+
+a:hover {
+  color: var(--color-white); /* TU COLOR ORIGINAL */
+  transform: translateY(-1px);
+}
+
+/* Botones con animaciones mejoradas pero colores originales */
+.btn {
+  width: max-content;
+  display: inline-block;
+  color: var(--color-primary); /* TU COLOR ORIGINAL */
+  padding: 0.75rem 1.2rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  border: 1px solid var(--color-primary); /* TU COLOR ORIGINAL */
+  transition: var(--transition-slow);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto de brillo en botones */
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:hover {
+  background-color: var(--color-white); /* TU COLOR ORIGINAL */
+  color: var(--color-bg); /* TU COLOR ORIGINAL */
+  border-color: transparent;
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-primary {
+  background-color: var(--color-primary); /* TU COLOR ORIGINAL */
+  color: var(--color-bg); /* TU COLOR ORIGINAL */
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: var(--shadow-heavy);
+}
+
+/* Imágenes con animaciones suaves */
+img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+img:hover {
+  transform: scale(1.02);
+  filter: brightness(1.05);
+}
+
+/* Keyframes para todas las animaciones */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes containerFadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes sectionSlideIn {
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes titleSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lineExpand {
+  to {
+    width: 60px;
+  }
+}
+
+/* Animaciones específicas para elementos que se cargan */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+/* Media queries originales con animaciones optimizadas */
+@media screen and (max-width: 1024px) {
+  .container {
+    width: var(--container-width-md);
+  }
+
+  section {
+    margin-top: 6rem;
+  }
+  
+  /* Reducir animaciones complejas en tablet */
+  body::before {
+    animation-duration: 30s;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    width: var(--container-width-sm);
+  }
+
+  section > h2 {
+    margin-bottom: 2rem;
+  }
+  
+  /* Simplificar animaciones en móviles */
+  body::before {
+    display: none;
+  }
+  
+  section {
+    animation: fadeInUp 0.4s ease-out forwards;
+  }
+  
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Respeto por preferencias de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

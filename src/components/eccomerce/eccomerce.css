@@ -1,0 +1,148 @@
+/* Estilo base para la página de ecommerce */
+.ecommerce {
+    width: 80%;
+    margin: 2rem auto;
+    font-family: 'Helvetica', sans-serif;
+    color: var(--color-text);
+  }
+  
+  .ecommerce h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--color-primary);
+  }
+  
+  /* Estilo para los productos */
+  .product-item {
+    background: var(--color-bg-variant);
+    padding: 2rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+  
+  .product-item:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+  }
+  
+  .product-item img {
+    max-width: 100%;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .product-item h2 {
+    font-size: 1.8rem;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+  }
+  
+  .product-item p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: var(--color-text);
+  }
+  
+  .product-item .price {
+    font-size: 1.5rem;
+    color: var(--color-secondary);
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .product-item .add-to-cart {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .product-item .add-to-cart:hover {
+    background-color: var(--color-secondary);
+  }
+  
+  /* Estilo para el encabezado de la tienda */
+  .ecommerce-header {
+    background-color: var(--color-bg);
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+  }
+  
+  .ecommerce-header nav ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .ecommerce-header nav ul li {
+    display: inline;
+    margin-right: 20px;
+  }
+  
+  .ecommerce-header nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+  }
+  
+  /* Estilo para el pie de página */
+  .ecommerce-footer {
+    background-color: var(--color-bg);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    margin-top: 2rem;
+  }
+  
+  /* Responsividad */
+  @media screen and (max-width: 768px) {
+    .ecommerce {
+      width: 90%;
+    }
+  
+    .ecommerce h1 {
+      font-size: 2rem;
+    }
+  
+    .product-item h2 {
+      font-size: 1.6rem;
+    }
+  
+    .product-item p {
+      font-size: 1.1rem;
+    }
+  
+    .product-item .price {
+      font-size: 1.4rem;
+    }
+  
+    .ecommerce-header nav ul li {
+      margin-right: 15px;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .ecommerce h1 {
+      font-size: 1.8rem;
+    }
+  
+    .product-item h2 {
+      font-size: 1.4rem;
+    }
+  
+    .product-item p {
+      font-size: 1rem;
+    }
+  
+    .product-item .price {
+      font-size: 1.2rem;
+    }
+  }
+  

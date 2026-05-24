@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DataExtract — Scraping Google Maps + Instagram</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0A0E17;--surface:#111827;--card:#1E293B;--blue:#3B82F6;--green:#10B981;
+      --amber:#F59E0B;--red:#EF4444;--purple:#8B5CF6;--cyan:#06B6D4;
+      --text:#F1F5F9;--text70:rgba(241,245,249,.7);--text50:rgba(241,245,249,.5);
+      --text30:rgba(241,245,249,.3);--border:rgba(255,255,255,.06);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;min-height:100vh}
+    button{cursor:pointer;font-family:inherit;border:none;background:none;color:inherit}
+    ::selection{background:rgba(59,130,246,.3)}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .fu{animation:fadeUp .45s ease-out both}
+
+    .page{max-width:1000px;margin:0 auto;padding:24px}
+
+    .header{display:flex;align-items:center;justify-content:space-between;padding:20px 0 32px;border-bottom:1px solid var(--border);margin-bottom:32px}
+    .logo{font-size:20px;font-weight:700;color:var(--cyan);letter-spacing:.02em;display:flex;align-items:center;gap:10px}
+    .logo span{font-size:10px;color:var(--text30);letter-spacing:.12em;text-transform:uppercase;font-weight:500}
+
+    .source-tabs{display:flex;gap:8px;margin-bottom:24px}
+    .tab{padding:10px 24px;border-radius:8px;font-size:13px;font-weight:600;transition:all .2s;border:1px solid var(--border)}
+    .tab.active{background:var(--cyan);color:var(--bg);border-color:var(--cyan)}
+    .tab:hover:not(.active){background:rgba(6,182,212,.08)}
+
+    .input-group{display:flex;gap:12px;margin-bottom:24px}
+    .input{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 16px;color:var(--text);font-family:inherit;font-size:13px;flex:1}
+    .input:focus{outline:none;border-color:var(--cyan)}
+    .input::placeholder{color:var(--text30)}
+
+    .btn{padding:12px 24px;border-radius:8px;font-size:13px;font-weight:600;transition:all .2s;letter-spacing:.04em}
+    .btn-primary{background:var(--cyan);color:var(--bg)}
+    .btn-primary:hover{background:#0891B2;transform:translateY(-1px)}
+    .btn-export{background:var(--green);color:var(--bg)}
+    .btn-export:hover{background:#059669}
+    .btn-outline{border:1px solid var(--border);color:var(--text70)}
+    .btn-outline:hover{border-color:var(--cyan);color:var(--cyan)}
+
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+    .stat{background:var(--card);border-radius:10px;padding:16px;border:1px solid var(--border);text-align:center}
+    .stat-val{font-family:'JetBrains Mono';font-size:24px;font-weight:700;margin:4px 0}
+    .stat-label{font-size:11px;color:var(--text50);text-transform:uppercase;letter-spacing:.08em}
+
+    .table-wrap{background:var(--card);border-radius:12px;border:1px solid var(--border);overflow:hidden}
+    .table-row{display:grid;grid-template-columns:50px 1fr 160px 180px 1fr 80px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;transition:background .15s}
+    .table-row:hover{background:rgba(255,255,255,.02)}
+    .table-header{font-weight:600;color:var(--text50);text-transform:uppercase;letter-spacing:.06em;font-size:11px;background:rgba(255,255,255,.02)}
+    .table-row:last-child{border-bottom:none}
+
+    .badge{padding:3px 10px;border-radius:4px;font-size:11px;font-weight:600}
+    .progress-bar{height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;margin-top:12px}
+    .progress-fill{height:100%;border-radius:2px;transition:width 1.5s ease-out}
+
+    .log{background:var(--surface);border-radius:8px;padding:16px;font-family:'JetBrains Mono';font-size:12px;color:var(--text50);max-height:160px;overflow-y:auto;border:1px solid var(--border);margin-bottom:24px}
+    .log-line{padding:2px 0;border-bottom:1px solid rgba(255,255,255,.02)}
+    .log-time{color:var(--text30)}
+    .log-ok{color:var(--green)}
+    .log-warn{color:var(--amber)}
+    .log-info{color:var(--cyan)}
+
+    @media(max-width:768px){
+      .stats{grid-template-columns:1fr 1fr}
+      .table-row{grid-template-columns:40px 1fr 120px 100px;font-size:12px}
+      .table-row>:nth-child(5),.table-row>:nth-child(6){display:none}
+      .input-group{flex-direction:column}
+    }
+    @media(max-width:480px){
+      .page{padding:16px}
+      .source-tabs{flex-wrap:wrap}
+      .stats{grid-template-columns:1fr 1fr}
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header fu">
+    <div class="logo">⚡ DataExtract <span>Scraping Tool</span></div>
+    <button class="btn btn-export" onclick="exportExcel()" id="export-btn" style="display:none">📥 Exportar Excel</button>
+  </div>
+
+  <!-- Source tabs -->
+  <div class="source-tabs fu">
+    <button class="tab active" id="tab-maps" onclick="setSource('maps')">📍 Google Maps</button>
+    <button class="tab" id="tab-instagram" onclick="setSource('instagram')">📸 Instagram</button>
+    <button class="tab" id="tab-both" onclick="setSource('both')">🔄 Ambos</button>
+  </div>
+
+  <!-- Search inputs -->
+  <div id="search-area" class="fu">
+    <div class="input-group">
+      <input class="input" id="query" placeholder="Ej: restaurantes, peluquerías, dentistas..." value="Restaurantes">
+      <input class="input" id="location" placeholder="Ciudad o zona" value="Bogotá, Colombia" style="max-width:250px">
+      <input class="input" id="limit" type="number" placeholder="Cantidad" value="50" style="max-width:100px">
+      <button class="btn btn-primary" onclick="startScraping()">🔍 Extraer Datos</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats fu" id="stats-area" style="display:none">
+    <div class="stat">
+      <div class="stat-label">Encontrados</div>
+      <div class="stat-val" style="color:var(--cyan)" id="s-found">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Con Teléfono</div>
+      <div class="stat-val" style="color:var(--green)" id="s-phone">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Con Instagram</div>
+      <div class="stat-val" style="color:var(--purple)" id="s-ig">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Completitud</div>
+      <div class="stat-val" style="color:var(--amber)" id="s-complete">0%</div>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div id="progress-area" style="display:none" class="fu">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <span style="font-size:13px;font-weight:600" id="progress-text">Extrayendo datos...</span>
+      <span style="font-family:'JetBrains Mono';font-size:13px;color:var(--cyan)" id="progress-pct">0%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%;background:var(--cyan)"></div></div>
+  </div>
+
+  <!-- Log -->
+  <div class="log fu" id="log-area" style="display:none"></div>
+
+  <!-- Results table -->
+  <div id="results-area" style="display:none" class="fu">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3 style="font-size:16px;font-weight:700">Resultados</h3>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline" onclick="exportExcel()">📥 Excel</button>
+        <button class="btn btn-outline" onclick="exportCSV()">📄 CSV</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <div class="table-row table-header">
+        <div>#</div><div>Negocio</div><div>Teléfono</div><div>Instagram</div><div>Descripción</div><div>Fuente</div>
+      </div>
+      <div id="table-body"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let currentSource = 'maps';
+let results = [];
+let scraping = false;
+
+// Simulated business data for demo
+const NAMES_MAPS = [
+  "La Cocina de María","El Rincón Gourmet","Sabor Criollo","Don Julio Parrilla","Café del Parque",
+  "Sushi Express Centro","Wok & Roll","La Barra Gastrobar","Trattoria Roma","El Jardín Secreto",
+  "Hamburguesas El Corral","Arepa Gourmet","La Puerta Grande","Casa Nostra","Punto Orgánico",
+  "La Hamburguesería","Tacos & Beer","Ramen House","El Balcón","Pizzería Napoli",
+  "La Terraza Bar","Marisquería del Puerto","El Fogón de Leña","Asia Express","Café Literario",
+  "Delicias del Valle","La Panadería","Bistró Central","El Asador","Taco Loco",
+  "Sazón Costeño","La Candelaria Café","El Cielo Restaurant","Cevichería Lima","Veggie House",
+  "La Esquina Dulce","Restaurante Andrés","Mar y Tierra","El Patio","La Brasa Roja",
+  "Gyoza Bar","La Fonda Antioqueña","Crepes & Waffles","Archie's Pizza","El Corral Gourmet",
+  "La Juguería","Wok to Walk","Subway Centro","La Casa del Abuelo","Doña Juana"
+];
+
+const NAMES_IG = [
+  "@lacocinademaria_","@rincon.gourmet","@saborcriollo.co","@donjulioparrilla","@cafedelparque_",
+  "@sushiexpress.co","@wokandroll_co","@labarra.gastro","@trattoria.roma.co","@jardinsecretobog",
+  "@elcorral_oficial","@arepagourmet.co","@puerta.grande","@casanostra.bog","@puntoorganico.co",
+  "@lahamburguese","@tacosandbeer.co","@ramenhouse.bog","@elbalcon.rest","@napoli.pizza.co",
+  "@laterraza.bar","@marisqueriapuerto","@elfogondlena","@asiaexpress.co","@cafeliterario.bog",
+  "@deliciasdelvalle","@lapanaderia.co","@bistrocentral_","@elasador.bog","@tacoloco.co"
+];
+
+function randomPhone() {
+  return "+57 " + (300 + Math.floor(Math.random()*20)) + " " + 
+    Math.floor(1000000 + Math.random()*9000000);
+}
+
+function randomDesc() {
+  const descs = [
+    "Comida tradicional colombiana, platos del día y menú ejecutivo",
+    "Restaurante de autor con cocina fusión latinoamericana",
+    "Parrilla argentina, cortes premium y vinos seleccionados",
+    "Café especialidad, brunch y pastelería artesanal",
+    "Sushi, ramen y cocina japonesa con ingredientes frescos",
+    "Comida rápida gourmet, hamburguesas artesanales",
+    "Cocina italiana auténtica, pastas frescas del día",
+    "Bar gastronómico, cocteles de autor y tapas",
+    "Comida saludable, bowls, jugos naturales y wraps",
+    "Pizzería artesanal, masa madre y horno de leña",
+    "Comida mexicana, tacos al pastor y margaritas",
+    "Mariscos frescos, ceviches y arroces marineros",
+    "Bakery & café, pan artesanal y postres franceses",
+    "Comida asiática, wok, dim sum y bubble tea",
+    "Restaurante campestre, almuerzo familiar domingos",
+  ];
+  return descs[Math.floor(Math.random()*descs.length)];
+}
+
+function setSource(src) {
+  currentSource = src;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-'+src).classList.add('active');
+}
+
+function addLog(text, type='info') {
+  const log = document.getElementById('log-area');
+  const time = new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  log.innerHTML += `<div class="log-line"><span class="log-time">[${time}]</span> <span class="log-${type}">${text}</span></div>`;
+  log.scrollTop = log.scrollHeight;
+}
+
+async function startScraping() {
+  if (scraping) return;
+  scraping = true;
+  results = [];
+  
+  const query = document.getElementById('query').value || 'Restaurantes';
+  const location = document.getElementById('location').value || 'Bogotá';
+  const limit = parseInt(document.getElementById('limit').value) || 50;
+
+  // Show areas
+  document.getElementById('stats-area').style.display = 'grid';
+  document.getElementById('progress-area').style.display = 'block';
+  document.getElementById('log-area').style.display = 'block';
+  document.getElementById('log-area').innerHTML = '';
+  document.getElementById('results-area').style.display = 'none';
+  document.getElementById('export-btn').style.display = 'none';
+
+  addLog(`Iniciando extracción: "${query}" en ${location}`, 'info');
+  addLog(`Fuente: ${currentSource === 'both' ? 'Google Maps + Instagram' : currentSource === 'maps' ? 'Google Maps' : 'Instagram'}`, 'info');
+  addLog(`Límite: ${limit} resultados`, 'info');
+
+  if (currentSource === 'maps' || currentSource === 'both') {
+    addLog('Conectando a Google Maps API...', 'info');
+    await delay(800);
+    addLog('Conexión establecida ✓', 'ok');
+  }
+  if (currentSource === 'instagram' || currentSource === 'both') {
+    addLog('Conectando a Instagram Graph API...', 'info');
+    await delay(600);
+    addLog('Conexión establecida ✓', 'ok');
+  }
+
+  addLog('Buscando resultados...', 'info');
+  await delay(500);
+
+  const total = Math.min(limit, NAMES_MAPS.length);
+  
+  for (let i = 0; i < total; i++) {
+    await delay(80 + Math.random() * 120);
+    
+    const hasPhone = Math.random() > 0.15;
+    const hasIG = Math.random() > 0.3;
+    const entry = {
+      id: i + 1,
+      name: NAMES_MAPS[i] || `Negocio ${i+1}`,
+      phone: hasPhone ? randomPhone() : '—',
+      instagram: hasIG ? (NAMES_IG[i] || `@negocio${i+1}`) : '—',
+      desc: randomDesc(),
+      source: currentSource === 'both' ? (Math.random() > 0.5 ? 'Maps' : 'IG') : (currentSource === 'maps' ? 'Maps' : 'IG'),
+    };
+    results.push(entry);
+
+    // Update progress
+    const pct = Math.round(((i+1)/total)*100);
+    document.getElementById('progress-pct').textContent = pct + '%';
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-text').textContent = `Extrayendo: ${entry.name}`;
+
+    // Update stats
+    const withPhone = results.filter(r => r.phone !== '—').length;
+    const withIG = results.filter(r => r.instagram !== '—').length;
+    document.getElementById('s-found').textContent = results.length;
+    document.getElementById('s-phone').textContent = withPhone;
+    document.getElementById('s-ig').textContent = withIG;
+    document.getElementById('s-complete').textContent = Math.round(((withPhone+withIG)/(results.length*2))*100) + '%';
+
+    if (i % 8 === 0 && i > 0) {
+      addLog(`Procesados ${i+1}/${total} — ${entry.name}`, 'ok');
+    }
+    if (!hasPhone && Math.random() > 0.7) {
+      addLog(`⚠ ${entry.name}: teléfono no disponible`, 'warn');
+    }
+  }
+
+  addLog(`✅ Extracción completada: ${results.length} resultados`, 'ok');
+  addLog(`📊 ${results.filter(r=>r.phone!=='—').length} con teléfono, ${results.filter(r=>r.instagram!=='—').length} con Instagram`, 'ok');
+  
+  document.getElementById('progress-text').textContent = '✅ Extracción completada';
+  document.getElementById('export-btn').style.display = 'block';
+
+  // Render table
+  renderTable();
+  document.getElementById('results-area').style.display = 'block';
+  scraping = false;
+}
+
+function renderTable() {
+  document.getElementById('table-body').innerHTML = results.map(r => `
+    <div class="table-row">
+      <div style="font-family:'JetBrains Mono';color:var(--text30);font-size:12px">${r.id}</div>
+      <div style="font-weight:600">${r.name}</div>
+      <div style="font-family:'JetBrains Mono';font-size:12px;color:${r.phone==='—'?'var(--text30)':'var(--green)'}">${r.phone}</div>
+      <div style="font-size:12px;color:${r.instagram==='—'?'var(--text30)':'var(--purple)'}">${r.instagram}</div>
+      <div style="font-size:12px;color:var(--text50);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.desc}</div>
+      <div><span class="badge" style="background:${r.source==='Maps'?'rgba(59,130,246,.15)':'rgba(139,92,246,.15)'};color:${r.source==='Maps'?'var(--blue)':'var(--purple)'}">${r.source}</span></div>
+    </div>
+  `).join('');
+}
+
+function exportExcel() {
+  // Generate CSV (opens as Excel)
+  let csv = "Negocio,Teléfono,Instagram,Descripción,Fuente\n";
+  results.forEach(r => {
+    csv += `"${r.name}","${r.phone}","${r.instagram}","${r.desc}","${r.source}"\n`;
+  });
+  const blob = new Blob(["\uFEFF"+csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `DataExtract_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportCSV() { exportExcel(); }
+
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+</script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+.login-page {
+  padding-top: 8rem;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-white);
+  padding-bottom: 4rem;
+}
+
+.login-box {
+  background: var(--color-bg-variant);
+  border: 1px solid rgba(77, 181, 255, 0.15);
+  border-radius: 1.5rem;
+  width: 90%;
+  max-width: 440px;
+  padding: 2.5rem;
+  box-shadow: var(--shadow-heavy);
+  animation: containerFadeIn 0.4s ease-out;
+}
+
+.login-box h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-align: center;
+  margin-bottom: 0.4rem;
+  text-shadow: 0 0 10px rgba(77, 181, 255, 0.1);
+}
+
+.login-subtitle {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-light);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.login-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.login-form label {
+  font-size: 0.85rem;
+  color: var(--color-light);
+  font-weight: 500;
+}
+
+/* Iconos integrados en inputs */
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--color-primary);
+  opacity: 0.8;
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+.login-form input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.8rem 1rem 0.8rem 2.8rem; /* Espacio para el icono */
+  border-radius: 0.5rem;
+  color: white;
+  outline: none;
+  font-size: 0.9rem;
+  font-family: 'Poppins', sans-serif;
+  transition: var(--transition-fast);
+}
+
+.login-form input:focus {
+  border-color: var(--color-primary);
+  background: rgba(77, 181, 255, 0.05);
+  box-shadow: 0 0 8px rgba(77, 181, 255, 0.1);
+}
+
+.login-submit-btn {
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+/* Divisor Social */
+.social-login-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.5rem 0;
+  font-size: 0.75rem;
+  color: var(--color-light);
+}
+
+.social-login-divider::before,
+.social-login-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.social-login-divider:not(:empty)::before {
+  margin-right: .75em;
+}
+
+.social-login-divider:not(:empty)::after {
+  margin-left: .75em;
+}
+
+/* Botones Sociales */
+.social-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.social-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-white);
+  padding: 0.7rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-family: 'Poppins', sans-serif;
+  transition: var(--transition-fast);
+}
+
+.social-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--color-primary-variant);
+  transform: translateY(-2px);
+}
+
+/* Footer Link de alternancia */
+.login-toggle-footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-light);
+  margin-top: 1rem;
+}
+
+.toggle-mode-link {
+  color: var(--color-primary);
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+
+.toggle-mode-link:hover {
+  color: var(--color-white);
+  text-shadow: 0 0 4px rgba(77, 181, 255, 0.3);
+}
+
+/* Pantalla de Éxito */
+.form-success {
+  text-align: center;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.success-icon-spin {
+  color: var(--color-primary);
+  filter: drop-shadow(0 0 8px rgba(77, 181, 255, 0.4));
+  animation: float 3s ease-in-out infinite;
+}
+
+.form-success h2 {
+  font-size: 1.6rem;
+  color: var(--color-white);
+}
+
+.form-success p {
+  color: var(--color-light);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* Ajustes de Responsividad */
+@media screen and (max-width: 600px) {
+  .login-page {
+    padding-top: 6rem;
+  }
+  .login-box {
+    padding: 2rem 1.5rem;
+  }
+}
