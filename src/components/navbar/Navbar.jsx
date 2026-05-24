@@ -16,7 +16,7 @@ const Navbar = () => {
   return (
     <nav className="global-navbar">
       <div className="navbar-container">
-        <NavLink to="/" onClick={handleBrandClick} className="navbar-brand">
+        <NavLink to="/" end onClick={handleBrandClick} className="navbar-brand" title="Volver al Inicio">
           <RiCodeSSlashLine className="brand-icon" />
           <span>Leandro Santiago</span>
         </NavLink>
@@ -24,8 +24,9 @@ const Navbar = () => {
         <div className="navbar-links">
           <NavLink 
             to="/" 
+            end
             className={({ isActive }) => 
-              isActive && isHome ? "nav-item active-link" : "nav-item"
+              isActive ? "nav-item active-link" : "nav-item"
             }
           >
             Inicio

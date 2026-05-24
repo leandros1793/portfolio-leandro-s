@@ -16,7 +16,8 @@
 }
 
 .navbar-container {
-  width: var(--container-width-lg);
+  width: 92%;
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -33,6 +34,7 @@
   text-decoration: none;
   cursor: pointer;
   transition: var(--transition);
+  flex-shrink: 0;
 }
 
 .brand-icon {
@@ -47,13 +49,13 @@
 }
 
 .navbar-brand::before {
-  display: none !important; /* Quitar la línea inferior del hover de enlaces generales */
+  display: none !important;
 }
 
 .navbar-links {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .nav-item {
@@ -62,10 +64,11 @@
   font-weight: 400;
   padding: 0.5rem 0.2rem;
   transition: var(--transition-fast);
+  flex-shrink: 0;
 }
 
 .nav-item::before {
-  display: none !important; /* Desactivar hover general del body */
+  display: none !important;
 }
 
 .nav-item:hover {
@@ -102,32 +105,19 @@
 /* Responsividad */
 @media screen and (max-width: 1024px) {
   .navbar-container {
-    width: var(--container-width-md);
+    width: 94%;
+  }
+  .navbar-links {
+    gap: 1.2rem;
   }
 }
 
-@media screen and (max-width: 768px) {
-  .navbar-container {
-    width: 92%;
+@media screen and (max-width: 900px) {
+  .navbar-brand span {
+    display: none; /* Ocultar texto y dejar solo el icono </> como logo de inicio */
   }
   .navbar-links {
     gap: 1rem;
-    overflow-x: auto;
-    white-space: nowrap;
-    max-width: 75%;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    padding: 0.2rem 0;
-  }
-  .navbar-links::-webkit-scrollbar {
-    display: none;
-  }
-  .nav-item {
-    font-size: 0.85rem;
-    flex-shrink: 0;
-  }
-  .navbar-brand span {
-    display: none; /* En móviles pequeños solo se muestra el icono */
   }
 }
 
@@ -136,11 +126,19 @@
     height: 4rem;
   }
   .navbar-container {
-    width: 95%;
+    width: 96%;
   }
   .navbar-links {
     gap: 0.8rem;
+    overflow-x: auto;
+    white-space: nowrap;
     max-width: 80%;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 0.2rem 0;
+  }
+  .navbar-links::-webkit-scrollbar {
+    display: none;
   }
   .login-btn {
     padding: 0.3rem 0.6rem;
