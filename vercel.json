@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/ai-leadbot-crm", "destination": "/ai-leadbot-crm.html" },
     { "source": "/flowbar-demo", "destination": "/flowbar-demo.html" },
     { "source": "/mantenipro-demo", "destination": "/mantenipro-demo.html" },
     { "source": "/dental-landing-demo", "destination": "/dental-landing-demo.html" },

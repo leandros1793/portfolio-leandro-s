@@ -12,9 +12,20 @@ import IMG8 from "../../assets/dataview.png";
 import IMG9 from "../../assets/dental.png";
 import IMG10 from "../../assets/flowbar.png";
 import IMG11 from "../../assets/mantenipro.png";
+import IMG12 from "../../assets/aileadbot.png";
 
 const data = [
   // --- TUS PROYECTOS ESTRELLA (Los que más venden) ---
+  { 
+    id: 12,
+    image: IMG12,
+    titulo: "AI LeadBot & CRM Orchestrator",
+    subtitulo: "Conversational AI & Sales Automations Pipeline",
+    tecnologias: "JavaScript / HTML5 / CSS3 / AI / Webhooks",
+    category: "interactive",
+    github: "https://github.com/leandros1793", 
+    demo: "https://portfolio-leandro-s.vercel.app/ai-leadbot-crm",
+  },
   { 
     id: 1,
     image: IMG1,

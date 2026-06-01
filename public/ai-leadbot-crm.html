@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI LeadBot & CRM Orchestrator — Demo de Automatización</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --surface: #121826;
+      --card: #182235;
+      --card-hover: #1e2c44;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(59, 130, 246, 0.3);
+      
+      --primary: #3b82f6;
+      --primary-glow: rgba(59, 130, 246, 0.15);
+      --secondary: #a855f7;
+      --secondary-glow: rgba(168, 85, 247, 0.15);
+      --cyan: #06b6d4;
+      --cyan-glow: rgba(6, 182, 212, 0.15);
+      --green: #10b981;
+      --green-glow: rgba(16, 185, 129, 0.15);
+      --amber: #f59e0b;
+      --red: #ef4444;
+      
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dark: #64748b;
+      
+      --font-main: 'Outfit', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* Background decorative blobs */
+    .blob {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: -1;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+    .blob-1 {
+      top: 10%;
+      left: 10%;
+      background: var(--primary);
+    }
+    .blob-2 {
+      bottom: 10%;
+      right: 10%;
+      background: var(--secondary);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--surface);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Layout */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+
+    .brand-title h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-title p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .select-style {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-weight: 500;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .select-style:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px var(--primary-glow);
+    }
+
+    .btn-reset {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--red);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-reset:hover {
+      background: var(--red);
+      color: #fff;
+    }
+
+    /* Main Grid */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Guide Panel */
+    .guide-panel {
+      background: rgba(59, 130, 246, 0.05);
+      border: 1px solid var(--border-glow);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      grid-column: span 2;
+    }
+    @media (max-width: 1024px) {
+      .guide-panel {
+        grid-column: span 1;
+      }
+    }
+    .guide-panel h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .guide-panel p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .guide-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .guide-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .guide-btn:hover {
+      border-color: var(--primary);
+      color: var(--text);
+      background: var(--card-hover);
+      transform: translateY(-1px);
+    }
+
+    /* Column Left: Phone Emulator */
+    .phone-container {
+      background: #0f1420;
+      border-radius: 40px;
+      padding: 12px;
+      border: 4px solid #1e293b;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      aspect-ratio: 9/19;
+      width: 100%;
+      max-width: 380px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .phone-speaker {
+      width: 60px;
+      height: 4px;
+      background: #334155;
+      border-radius: 2px;
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .phone-screen {
+      background: #0b141a; /* WhatsApp Dark Mode Background */
+      border-radius: 32px;
+      overflow: hidden;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    /* WhatsApp Header */
+    .chat-header {
+      background: #1f2c34;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--cyan), var(--primary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #fff;
+    }
+
+    .chat-info {
+      flex: 1;
+    }
+
+    .chat-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .chat-status {
+      font-size: 0.75rem;
+      color: #00a884; /* WhatsApp online green */
+      font-weight: 500;
+    }
+
+    /* Chat Messages */
+    .chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+
+    .msg {
+      max-width: 80%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      animation: msgPop 0.25s cubic-bezier(0.1, 0.8, 0.2, 1) both;
+    }
+
+    @keyframes msgPop {
+      from { opacity: 0; transform: translateY(8px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .msg-bot {
+      background: #202c33;
+      color: #e9edef;
+      align-self: flex-start;
+      border-top-left-radius: 2px;
+    }
+
+    .msg-user {
+      background: #005c4b; /* WhatsApp user dark green */
+      color: #e9edef;
+      align-self: flex-end;
+      border-top-right-radius: 2px;
+    }
+
+    .msg-time {
+      display: block;
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.4);
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 14px;
+      background: #202c33;
+      border-radius: 12px;
+      align-self: flex-start;
+      border-top-left-radius: 2px;
+    }
+
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      animation: typingBounce 1.4s infinite ease-in-out;
+    }
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes typingBounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+
+    /* Chat Input */
+    .chat-input-area {
+      background: #1f2c34;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chat-input {
+      flex: 1;
+      background: #2a3942;
+      border: none;
+      outline: none;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-family: inherit;
+    }
+
+    .chat-input::placeholder {
+      color: #8696a0;
+    }
+
+    .chat-send-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #00a884;
+      color: #fff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .chat-send-btn:hover {
+      background: #008f72;
+    }
+
+    /* Column Right: Dashboard & Terminal */
+    .dashboard-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* KPI Stats */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .kpi-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--primary);
+    }
+    .kpi-card.kpi-secondary::after { background: var(--secondary); }
+    .kpi-card.kpi-cyan::after { background: var(--cyan); }
+    .kpi-card.kpi-green::after { background: var(--green); }
+
+    .kpi-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .kpi-val {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    /* CRM Kanban Board */
+    .kanban-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-title span {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-family: var(--font-mono);
+    }
+
+    .kanban-board {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      min-height: 180px;
+    }
+
+    @media (max-width: 768px) {
+      .kanban-board {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .kanban-col {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .col-header {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .col-count {
+      background: rgba(255,255,255,0.05);
+      padding: 2px 6px;
+      border-radius: 8px;
+      font-size: 0.7rem;
+    }
+
+    .kanban-cards-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .lead-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      animation: cardEnter 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
+    }
+    .lead-card:hover {
+      background: var(--card-hover);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    @keyframes cardEnter {
+      from { opacity: 0; transform: scale(0.9) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .lead-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+
+    .lead-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .lead-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .badge-qualified { background: var(--green-glow); color: var(--green); }
+    .badge-new { background: var(--primary-glow); color: var(--primary); }
+    .badge-details { background: var(--secondary-glow); color: var(--secondary); }
+
+    .lead-email {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 6px;
+    }
+
+    .lead-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255,255,255,0.03);
+      padding-top: 6px;
+      font-size: 0.75rem;
+    }
+
+    .lead-budget {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--cyan);
+    }
+
+    .lead-score {
+      font-size: 0.7rem;
+      background: rgba(255,255,255,0.05);
+      padding: 1px 5px;
+      border-radius: 4px;
+      color: var(--amber);
+    }
+
+    /* Webhook Logs Terminal */
+    .terminal-section {
+      background: #05070c;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.8);
+    }
+
+    .terminal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 8px;
+    }
+
+    .terminal-controls {
+      display: flex;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot-red { background: var(--red); }
+    .dot-yellow { background: var(--amber); }
+    .dot-green { background: var(--green); }
+
+    .terminal-title {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .terminal-body {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #22c55e; /* Hacker green */
+      max-height: 180px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .log-line {
+      display: flex;
+      gap: 8px;
+      line-height: 1.4;
+      animation: logFade 0.2s ease-out both;
+    }
+
+    @keyframes logFade {
+      from { opacity: 0; transform: translateX(-4px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .log-time {
+      color: #4b5563;
+      user-select: none;
+    }
+    .log-sys { color: var(--cyan); }
+    .log-webhook { color: var(--secondary); }
+    .log-ai { color: var(--amber); }
+    .log-api { color: #3b82f6; }
+    .log-msg { color: #f8fafc; }
+
+    /* Floating detail drawer / modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 500px;
+      padding: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      transform: translateY(20px);
+      transition: transform 0.2s;
+    }
+
+    .modal-overlay.active .modal {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .modal-body {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .detail-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .detail-value {
+      font-size: 0.9rem;
+      background: var(--card);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .pitch-textarea {
+      font-family: inherit;
+      width: 100%;
+      min-height: 100px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px;
+      border-radius: 8px;
+      outline: none;
+      resize: vertical;
+      font-size: 0.85rem;
+    }
+
+    .btn-copy-pitch {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+    .btn-copy-pitch:hover {
+      background: #2563eb;
+    }
+
+    /* Footer Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      transition: color 0.2s;
+    }
+    .back-link:hover {
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<div class="container">
+  <!-- Back button to return to portfolio -->
+  <a href="/" class="back-link">
+    ← Volver al Portfolio
+  </a>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <div class="logo-badge">AI</div>
+      <div class="brand-title">
+        <h1>AI LeadBot & CRM Orchestrator</h1>
+        <p>Automatización de captación, calificación e integración con CRM en tiempo real</p>
+      </div>
+    </div>
+
+    <div class="controls">
+      <select id="business-selector" class="select-style" onchange="changeBusinessContext()">
+        <option value="agency">🏢 Agencia Web Studio (Default)</option>
+        <option value="dental">🦷 Clínica Dental "Sonrisas"</option>
+        <option value="realestate">🏡 Inmobiliaria "HogarElite"</option>
+      </select>
+      <button class="btn-reset" onclick="resetDemo()">Resetear Demo</button>
+    </div>
+  </header>
+
+  <!-- Main Grid -->
+  <div class="main-grid">
+
+    <!-- Interactive Guide (Top Span) -->
+    <div class="guide-panel">
+      <h3>⚡ Guía Rápida para la Demo</h3>
+      <p>Simula que eres un cliente interesado interactuando con el bot de WhatsApp. Puedes escribir libremente en el chat, o hacer clic en estos botones de auto-completado rápido para ver el flujo de automatización inmediato:</p>
+      <div class="guide-buttons">
+        <button class="guide-btn" onclick="triggerPreset('hola')">👋 Iniciar contacto</button>
+        <button class="guide-btn" onclick="triggerPreset('datos')">✍️ Proporcionar Nombre e Email</button>
+        <button class="guide-btn" onclick="triggerPreset('presupuesto')">💰 Indicar Presupuesto</button>
+        <button class="guide-btn" onclick="triggerPreset('cita')">📅 Agendar Llamada de Consulta</button>
+      </div>
+    </div>
+
+    <!-- Left Column: Phone WhatsApp Simulator -->
+    <div class="phone-container">
+      <div class="phone-speaker"></div>
+      <div class="phone-screen">
+        <!-- Chat Header -->
+        <div class="chat-header">
+          <div class="avatar" id="avatar-circle">WS</div>
+          <div class="chat-info">
+            <div class="chat-name" id="agent-name">Asistente WebStudio</div>
+            <div class="chat-status">en línea</div>
+          </div>
+        </div>
+
+        <!-- Chat Message Area -->
+        <div class="chat-messages" id="chat-box">
+          <!-- Initial bot message will be inserted dynamically -->
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="typing-indicator" id="typing-loader" style="display: none;">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-input-area">
+          <input type="text" id="chat-input" class="chat-input" placeholder="Escribe un mensaje..." onkeypress="handleKeyPress(event)">
+          <button class="chat-send-btn" onclick="sendMessage()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: CRM & System logs -->
+    <div class="dashboard-panel">
+      <!-- KPI Stats -->
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-title">Leads Capturados</div>
+          <div class="kpi-val" id="kpi-leads">0</div>
+        </div>
+        <div class="kpi-card kpi-secondary">
+          <div class="kpi-title">Valor Estimado</div>
+          <div class="kpi-val" id="kpi-value">$0</div>
+        </div>
+        <div class="kpi-card kpi-cyan">
+          <div class="kpi-title">Calificados</div>
+          <div class="kpi-val" id="kpi-ratio">0%</div>
+        </div>
+        <div class="kpi-card kpi-green">
+          <div class="kpi-title">Automatizaciones</div>
+          <div class="kpi-val" id="kpi-events">0</div>
+        </div>
+      </div>
+
+      <!-- CRM Kanban -->
+      <div class="kanban-section">
+        <div class="section-title">
+          <span>PIPELINE CRM (SIMULADO)</span>
+          <span id="crm-lead-name">Sin Lead Activo</span>
+        </div>
+        <div class="kanban-board">
+          <div class="kanban-col">
+            <div class="col-header">
+              <span>Contacto</span>
+              <span class="col-count" id="count-col1">0</span>
+            </div>
+            <div class="kanban-cards-container" id="col-contacto"></div>
+          </div>
+          <div class="kanban-col">
+            <div class="col-header">
+              <span>Datos</span>
+              <span class="col-count" id="count-col2">0</span>
+            </div>
+            <div class="kanban-cards-container" id="col-datos"></div>
+          </div>
+          <div class="kanban-col">
+            <div class="col-header">
+              <span>Calificado</span>
+              <span class="col-count" id="count-col3">0</span>
+            </div>
+            <div class="kanban-cards-container" id="col-calificado"></div>
+          </div>
+          <div class="kanban-col">
+            <div class="col-header">
+              <span>Agendado</span>
+              <span class="col-count" id="count-col4">0</span>
+            </div>
+            <div class="kanban-cards-container" id="col-agendado"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Webhook terminal logs -->
+      <div class="terminal-section">
+        <div class="terminal-header">
+          <div class="terminal-controls">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+          </div>
+          <div class="terminal-title">Consola de Eventos y Webhooks (Real-Time)</div>
+        </div>
+        <div class="terminal-body" id="terminal-box">
+          <!-- Terminal logs will be inserted here -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Drawer / Modal details -->
+<div class="modal-overlay" id="lead-modal-overlay" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title">Ficha Detallada del Lead</div>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-item">
+        <span class="detail-label">Nombre del Lead</span>
+        <span class="detail-value" id="modal-lead-name">Carlos López</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Email de Contacto</span>
+        <span class="detail-value" id="modal-lead-email">carlos@lopez.com</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Presupuesto / Tipo de servicio</span>
+        <span class="detail-value" id="modal-lead-budget">$3,500 USD</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Análisis de Sentimiento de la IA</span>
+        <span class="detail-value" id="modal-lead-sentiment" style="color:var(--green)">Muy Positivo / Alta Intención de compra</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Mensaje personalizado generado por IA para primer contacto</span>
+        <textarea class="pitch-textarea" id="modal-lead-pitch" readonly></textarea>
+      </div>
+      <button class="btn-copy-pitch" onclick="copyAIPitch()">
+        📋 Copiar Propuesta Personalizada
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Business contexts
+  const BUSINESS_PROFILES = {
+    agency: {
+      name: "Asistente WebStudio",
+      initial: "WS",
+      intro: "¡Hola! Bienvenido a WebStudio. Soy tu asistente de IA. Nos especializamos en desarrollo web premium, apps móviles y tiendas online Shopify. ¿Qué tipo de proyecto de software tienes en mente o qué necesitas automatizar hoy?",
+      minBudget: 1500,
+      serviceName: "Desarrollo de Software",
+      presets: {
+        hola: "Hola, me gustaría desarrollar una página web e-commerce con panel de administración para mi negocio.",
+        datos: "Claro, mi nombre es Lucas Ferreyra y mi correo electrónico es lucas.dev@example.com",
+        presupuesto: "Tenemos un presupuesto aproximado de $4500 USD para esta primera fase.",
+        cita: "Excelente. Me viene bien agendar una videollamada para mañana a las 11:30 am."
+      },
+      replies: {
+        intro: "Perfecto. Para poder darte un presupuesto aproximado o coordinar con un desarrollador, ¿podrías indicarme tu nombre completo y tu dirección de email?",
+        datos: "Gracias, {name}. He registrado tu correo ({email}). Para poder calificar tu proyecto en nuestro CRM, ¿aproximadamente qué presupuesto estimado tienen destinado para esto?",
+        presupuesto: "Excelente presupuesto de {budget}. Supera nuestro mínimo establecido para proyectos premium (${minBudget}). Veo que tienes alta intención de compra. Para concluir, ¿te gustaría agendar una llamada de 15 minutos para definir la arquitectura? Dime qué día u hora te viene mejor.",
+        cita: "¡Perfecto, {name}! Agenda coordinada para el {date}. Te acabo de enviar un correo de confirmación de Calendly a {email}. ¡Hablamos pronto!"
+      }
+    },
+    dental: {
+      name: "Dental Asistente Sonrisas",
+      initial: "DS",
+      intro: "¡Hola! Bienvenido a la Clínica Dental 'Sonrisas'. Soy tu asistente virtual inteligente. ¿Estás buscando agendar un turno o estás interesado en tratamientos específicos como implantes, ortodoncia invisible o blanqueamiento?",
+      minBudget: 500,
+      serviceName: "Tratamiento Dental",
+      presets: {
+        hola: "Hola, estoy interesado en hacerme un tratamiento de ortodoncia invisible y blanqueamiento.",
+        datos: "Mi nombre es Valeria Gómez y mi correo es valeria.gomez@gmail.com",
+        presupuesto: "El presupuesto que estimo gastar en mi tratamiento es de unos $900 USD.",
+        cita: "Me gustaría agendar un turno de valoración este jueves por la tarde, a las 4:00 pm."
+      },
+      replies: {
+        intro: "¡Excelente elección! La ortodoncia invisible es uno de nuestros tratamientos estrella. Para agendar tu turno de valoración inicial, ¿me indicas tu nombre completo e email de contacto?",
+        datos: "Perfecto, {name}. Correo registrado ({email}). Para estimar el alcance del plan de ortodoncia, ¿cuentas con algún rango de presupuesto estimado o posees obra social/seguro médico?",
+        presupuesto: "Entendido, Valeria. Un presupuesto estimado de {budget} se adapta perfectamente a nuestros planes de financiación. He calificado tu perfil como paciente prioritario. ¿Cuándo te gustaría agendar tu primera cita de diagnóstico?",
+        cita: "¡Turno reservado con éxito, {name}! Te agendé para el {date}. Recibirás la confirmación de la cita y la dirección de la clínica a tu correo ({email}). ¡Que tengas un gran día!"
+      }
+    },
+    realestate: {
+      name: "Asistente HogarElite",
+      initial: "HE",
+      intro: "Hola, bienvenido a la Inmobiliaria Premium HogarElite. Soy tu asistente virtual. ¿Estás buscando comprar, vender o alquilar una propiedad en zonas exclusivas?",
+      minBudget: 80000,
+      serviceName: "Búsqueda Inmobiliaria",
+      presets: {
+        hola: "Hola, estoy buscando comprar un apartamento de 3 habitaciones en una buena zona residencial.",
+        datos: "Mi nombre es Alejandro Ruiz y mi email es alejandro.ruiz@outlook.com",
+        presupuesto: "Cuento con un presupuesto máximo de inversión de unos $180,000 USD.",
+        cita: "Perfecto, agendemos una visita presencial a alguna propiedad para el próximo sábado a las 10:00 am."
+      },
+      replies: {
+        intro: "Excelente. Tenemos un catálogo muy selecto de 3 habitaciones disponible. Para agilizar la búsqueda y enviarte los catálogos en PDF, ¿serías tan amable de brindarme tu nombre completo e email?",
+        datos: "Muchas gracias, {name}. Correo {email} verificado. Para filtrar de forma exacta nuestro inventario y mostrarte propiedades adecuadas, ¿cuál es tu presupuesto máximo de inversión?",
+        presupuesto: "Excelente. Con una capacidad de inversión de {budget}, calificas para nuestra cartera exclusiva. Ya he notificado a nuestro agente de zona. ¿Cuándo te vendría bien realizar una visita guiada o llamada de consulta?",
+        cita: "Estupendo, {name}. Agendado para el {date}. Te envié las ubicaciones de los inmuebles recomendados a tu correo {email}. ¡Un asesor inmobiliario se pondrá en contacto pronto!"
+      }
+    }
+  };
+
+  // State management
+  let currentContext = 'agency';
+  let leadState = {
+    name: null,
+    email: null,
+    budget: null,
+    date: null,
+    stage: 'contacto', // contacto, datos, calificado, agendado
+    sentiment: 'Neutro / Interés Inicial',
+    kpiLeads: 0,
+    kpiValue: 0,
+    kpiRatio: 0,
+    kpiEvents: 0
+  };
+
+  // Preset tracking
+  let conversations = [];
+
+  // Terminal logging
+  function addLog(message, type = 'sys') {
+    const terminal = document.getElementById('terminal-box');
+    const time = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const logLine = document.createElement('div');
+    logLine.className = 'log-line';
+    logLine.innerHTML = `<span class="log-time">[${time}]</span> <span class="log-${type}">${message}</span>`;
+    terminal.appendChild(logLine);
+    terminal.scrollTop = terminal.scrollHeight;
+    
+    // Increment events counter
+    leadState.kpiEvents++;
+    document.getElementById('kpi-events').innerText = leadState.kpiEvents;
+  }
+
+  // Change Business Context
+  function changeBusinessContext() {
+    currentContext = document.getElementById('business-selector').value;
+    resetDemo();
+    addLog(`[SISTEMA] Contexto del negocio cambiado a: ${BUSINESS_PROFILES[currentContext].serviceName}`, 'sys');
+  }
+
+  // Reset Demo
+  function resetDemo() {
+    leadState = {
+      name: null,
+      email: null,
+      budget: null,
+      date: null,
+      stage: 'contacto',
+      sentiment: 'Neutro / Interés Inicial',
+      kpiLeads: leadState.kpiLeads, // Keep cumulative stats
+      kpiValue: leadState.kpiValue,
+      kpiRatio: leadState.kpiRatio,
+      kpiEvents: leadState.kpiEvents
+    };
+
+    // Reset Chat Box
+    const chatBox = document.getElementById('chat-box');
+    chatBox.innerHTML = '';
+
+    const profile = BUSINESS_PROFILES[currentContext];
+    
+    // Set headers
+    document.getElementById('avatar-circle').innerText = profile.initial;
+    document.getElementById('agent-name').innerText = profile.name;
+    document.getElementById('crm-lead-name').innerText = 'Sin Lead Activo';
+
+    // Welcome Message
+    showBotMessage(profile.intro);
+    
+    // Clear Kanban DOM
+    document.getElementById('col-contacto').innerHTML = '';
+    document.getElementById('col-datos').innerHTML = '';
+    document.getElementById('col-calificado').innerHTML = '';
+    document.getElementById('col-agendado').innerHTML = '';
+    
+    updateCountBadge();
+
+    addLog(`[SISTEMA] Demo reseteada. Agente listo para recibir consultas.`, 'sys');
+  }
+
+  // Helper show chatbot messages
+  function showBotMessage(text) {
+    const chatBox = document.getElementById('chat-box');
+    const msg = document.createElement('div');
+    msg.className = 'msg msg-bot';
+    const time = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    msg.innerHTML = `${text}<span class="msg-time">${time}</span>`;
+    chatBox.appendChild(msg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+    
+    addLog(`[CHAT] Bot: "${text.substring(0, 45)}..."`, 'msg');
+  }
+
+  // Send message from input
+  function handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  }
+
+  function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text) return;
+
+    input.value = '';
+    processUserMessage(text);
+  }
+
+  // Process User input
+  function processUserMessage(text) {
+    const chatBox = document.getElementById('chat-box');
+    const msg = document.createElement('div');
+    msg.className = 'msg msg-user';
+    const time = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    msg.innerHTML = `${text}<span class="msg-time">${time}</span>`;
+    chatBox.appendChild(msg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    addLog(`[CHAT] Usuario: "${text}"`, 'msg');
+
+    // Show typing loader
+    const loader = document.getElementById('typing-loader');
+    loader.style.display = 'flex';
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // Simulate AI thinking and response
+    setTimeout(() => {
+      loader.style.display = 'none';
+      parseMessageWithSimulatedAI(text);
+    }, 1200);
+  }
+
+  // AI Intent & entity parser simulation
+  function parseMessageWithSimulatedAI(text) {
+    addLog(`[AI ENGINE] Analizando mensaje e intenciones del usuario...`, 'ai');
+    
+    let entitiesExtracted = false;
+    let extractedDetails = {};
+
+    // 1. Check for email & Name
+    const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+    const emails = text.match(emailRegex);
+    if (emails && emails.length > 0) {
+      leadState.email = emails[0];
+      extractedDetails.email = leadState.email;
+      entitiesExtracted = true;
+
+      // Extract name (simple fallback or guess)
+      // Look for "me llamo [X]" or "mi nombre es [X]"
+      const nameMatch = text.match(/(?:me llamo|mi nombre es|soy)\s+([a-zA-ZáéíóúÁÉÍÓÚñÑ]+(?:\s+[a-zA-ZáéíóúÁÉÍÓÚñÑ]+)?)/i);
+      if (nameMatch && nameMatch[1]) {
+        leadState.name = nameMatch[1];
+        extractedDetails.name = leadState.name;
+      } else if (!leadState.name) {
+        // Grab first capital words as name or mock it
+        leadState.name = text.split(" ")[0];
+        extractedDetails.name = leadState.name;
+      }
+    }
+
+    // 2. Check for budget
+    const budgetRegex = /(?:\$|usd|pesos|euros)?\s*(\d+[\d\.,]*)\s*(?:usd|\$|dolares|dólares|euros)/i;
+    const budgetMatch = text.match(budgetRegex) || text.match(/(?:presupuesto de|gastar|inversion de|inversión de)\s*(?:\$)?\s*(\d+[\d\.,]*)/i);
+    if (budgetMatch && budgetMatch[1]) {
+      // clean number
+      const cleanNum = parseInt(budgetMatch[1].replace(/[\.,\s]/g, ''));
+      if (!isNaN(cleanNum)) {
+        leadState.budget = cleanNum;
+        extractedDetails.budget = `$${cleanNum.toLocaleString('en-US')} USD`;
+        entitiesExtracted = true;
+      }
+    }
+
+    // 3. Check for dates
+    const dateKeywords = ["mañana", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "sabado", "turno", "hora", "agendar", "visita"];
+    const hasDate = dateKeywords.some(keyword => text.toLowerCase().includes(keyword));
+    if (hasDate && (leadState.stage === 'calificado' || leadState.budget)) {
+      // Mock agendado date
+      const dateMatch = text.match(/(?:a las|el|este)\s+([a-zA-Z0-9:\s]+)/i);
+      leadState.date = dateMatch ? dateMatch[1] : "Próximos días";
+      extractedDetails.date = leadState.date;
+      entitiesExtracted = true;
+    }
+
+    if (entitiesExtracted) {
+      addLog(`[AI ENGINE] Entidades extraídas: ${JSON.stringify(extractedDetails)}`, 'ai');
+    }
+
+    // Determine bot's response and state updates
+    const profile = BUSINESS_PROFILES[currentContext];
+    let botReplyText = "";
+
+    // State machine logic
+    if (leadState.stage === 'contacto') {
+      // Move to contacto initial cards if not already created
+      createOrUpdateKanbanCard();
+      
+      if (leadState.name && leadState.email) {
+        leadState.stage = 'datos';
+        leadState.sentiment = 'Muy interesado / Brindó datos';
+        botReplyText = profile.replies.datos.replace("{name}", leadState.name).replace("{email}", leadState.email);
+        
+        triggerWebhookSim('HubSpot CRM - Crear Contacto', 'POST', 'https://api.hubspot.com/v3/objects/contacts', {
+          properties: { firstname: leadState.name, email: leadState.email }
+        });
+        
+        createOrUpdateKanbanCard();
+      } else {
+        botReplyText = profile.replies.intro;
+      }
+    } else if (leadState.stage === 'datos') {
+      if (leadState.budget) {
+        // Qualify budget
+        if (leadState.budget >= profile.minBudget) {
+          leadState.stage = 'calificado';
+          leadState.sentiment = 'Altamente calificado / Presupuesto óptimo';
+          botReplyText = profile.replies.presupuesto.replace("{budget}", `$${leadState.budget.toLocaleString('en-US')} USD`).replace("{minBudget}", profile.minBudget);
+          
+          triggerWebhookSim('Airtable - Calificar Oportunidad', 'PATCH', 'https://api.airtable.com/v0/appXX/Leads', {
+            fields: { Name: leadState.name, Budget: leadState.budget, Qualified: true }
+          });
+          
+          // Update KPI value
+          leadState.kpiValue += leadState.budget;
+          document.getElementById('kpi-value').innerText = `$${leadState.kpiValue.toLocaleString('es-ES')}`;
+
+          createOrUpdateKanbanCard();
+        } else {
+          // Low budget
+          leadState.sentiment = 'Presupuesto no calificado';
+          botReplyText = `Entiendo, ${leadState.name}. Tu presupuesto estimado es de $${leadState.budget.toLocaleString('en-US')} USD. Aunque para planes premium trabajamos a partir de $${profile.minBudget} USD, podemos ofrecerte alternativas o consultoría puntual. ¿Te gustaría agendar una llamada breve de asesoramiento técnico?`;
+          leadState.stage = 'calificado'; // Still push forward in demo
+          createOrUpdateKanbanCard();
+        }
+      } else {
+        botReplyText = `Gracias por los detalles, ${leadState.name || 'estimado'}. Para registrarte correctamente en el CRM y asignarte un agente calificado, ¿qué presupuesto estimado tienen para esto?`;
+      }
+    } else if (leadState.stage === 'calificado') {
+      if (leadState.date) {
+        leadState.stage = 'agendado';
+        leadState.sentiment = 'Cita Agendada / Listo para cierre';
+        botReplyText = profile.replies.cita.replace("{name}", leadState.name).replace("{date}", leadState.date).replace("{email}", leadState.email);
+        
+        triggerWebhookSim('Calendly API - Crear Evento', 'POST', 'https://api.calendly.com/scheduled_events', {
+          invitee_email: leadState.email,
+          event_time: leadState.date
+        });
+        
+        triggerWebhookSim('SendGrid Mailer - Notificación de bienvenida', 'POST', 'https://api.sendgrid.com/v3/mail/send', {
+          to: leadState.email,
+          subject: 'Confirmación de llamada agendada'
+        });
+
+        createOrUpdateKanbanCard();
+      } else {
+        botReplyText = `Perfecto, ${leadState.name}. Para concluir, por favor dime un día y horario tentativo para agendar nuestra videollamada de valoración.`;
+      }
+    } else if (leadState.stage === 'agendado') {
+      botReplyText = `¡Tu cita para el ${leadState.date} ya está confirmada y registrada en el CRM! Si deseas cambiar algún dato, puedes usar el botón de 'Resetear Demo' arriba para probar otro escenario de negocio.`;
+    }
+
+    showBotMessage(botReplyText);
+    updateKPIs();
+  }
+
+  // Webhook Simulator Log output
+  function triggerWebhookSim(serviceName, method, url, payload) {
+    addLog(`[WEBHOOK] Activando Trigger de Automatización: ${serviceName}...`, 'webhook');
+    
+    setTimeout(() => {
+      addLog(`[API CALL] ${method} ${url}`, 'api');
+      addLog(`[API PAYLOAD] ${JSON.stringify(payload)}`, 'api');
+    }, 400);
+
+    setTimeout(() => {
+      addLog(`[API RESPONSE] ${serviceName} respondió -> 201 OK / Datos guardados`, 'sys');
+    }, 800);
+  }
+
+  // Generate Preset messaging triggers
+  function triggerPreset(presetType) {
+    const profile = BUSINESS_PROFILES[currentContext];
+    const text = profile.presets[presetType];
+    
+    // Automatically write into chat input, then process it
+    const input = document.getElementById('chat-input');
+    input.value = text;
+    
+    setTimeout(() => {
+      sendMessage();
+    }, 200);
+  }
+
+  // Update Kanban Board UI
+  function createOrUpdateKanbanCard() {
+    const name = leadState.name || 'Cliente Anónimo';
+    const email = leadState.email || '—';
+    const budgetText = leadState.budget ? `$${leadState.budget.toLocaleString('en-US')} USD` : 'Por definir';
+    const scoreText = leadState.budget ? (leadState.budget >= BUSINESS_PROFILES[currentContext].minBudget ? 'A++' : 'B') : '—';
+    const badgeText = leadState.stage.toUpperCase();
+    
+    // Remove previous card if exists
+    const oldCard = document.getElementById('active-lead-card');
+    if (oldCard) {
+      oldCard.remove();
+    }
+
+    // Create card element
+    const card = document.createElement('div');
+    card.id = 'active-lead-card';
+    card.className = 'lead-card';
+    card.onclick = openModal;
+    card.innerHTML = `
+      <div class="lead-card-header">
+        <span class="lead-name">${name}</span>
+        <span class="lead-badge ${leadState.stage === 'calificado' || leadState.stage === 'agendado' ? 'badge-qualified' : 'badge-new'}">${badgeText}</span>
+      </div>
+      <div class="lead-email">${email}</div>
+      <div class="lead-meta">
+        <span class="lead-budget">${budgetText}</span>
+        <span class="lead-score">${scoreText}</span>
+      </div>
+    `;
+
+    // Place card in corresponding column
+    let colId = 'col-contacto';
+    if (leadState.stage === 'datos') colId = 'col-datos';
+    else if (leadState.stage === 'calificado') colId = 'col-calificado';
+    else if (leadState.stage === 'agendado') colId = 'col-agendado';
+
+    document.getElementById(colId).appendChild(card);
+    document.getElementById('crm-lead-name').innerText = `Lead: ${name}`;
+
+    updateCountBadge();
+    addLog(`[CRM] Tarjeta actualizada en columna [${leadState.stage.toUpperCase()}]`, 'sys');
+  }
+
+  function updateCountBadge() {
+    const cols = ['col-contacto', 'col-datos', 'col-calificado', 'col-agendado'];
+    cols.forEach((col, idx) => {
+      const childrenCount = document.getElementById(col).children.length;
+      document.getElementById(`count-col${idx+1}`).innerText = childrenCount;
+    });
+  }
+
+  // Update KPI counters
+  function updateKPIs() {
+    // Cumulative logic simulation
+    if (leadState.name && !leadState.counted) {
+      leadState.kpiLeads++;
+      leadState.counted = true;
+    }
+    
+    document.getElementById('kpi-leads').innerText = leadState.kpiLeads || (leadState.name ? 1 : 0);
+    
+    // Qualification ratio
+    let ratio = 0;
+    if (leadState.name) {
+      ratio = leadState.budget && leadState.budget >= BUSINESS_PROFILES[currentContext].minBudget ? 100 : 0;
+      if (!leadState.budget) ratio = 50; // In process
+    }
+    document.getElementById('kpi-ratio').innerText = `${ratio}%`;
+  }
+
+  // Modal detailed card open
+  function openModal() {
+    const profile = BUSINESS_PROFILES[currentContext];
+    document.getElementById('modal-lead-name').innerText = leadState.name || 'Cliente Anónimo';
+    document.getElementById('modal-lead-email').innerText = leadState.email || 'No proporcionado';
+    document.getElementById('modal-lead-budget').innerText = leadState.budget ? `$${leadState.budget.toLocaleString('en-US')} USD` : 'Por definir';
+    document.getElementById('modal-lead-sentiment').innerText = leadState.sentiment;
+    
+    // Generate simulated AI pitch response
+    const pitch = `Hola ${leadState.name || 'Cliente'},\n\nGracias por contactar con ${profile.name}. He visto que estás interesado en un proyecto de ${profile.serviceName} con un presupuesto aproximado de $${(leadState.budget || 0).toLocaleString('en-US')} USD.\n\nHe verificado que este perfil se alinea perfectamente con nuestro estándar de proyectos de alto valor. Nos encantaría conversar contigo el ${leadState.date || 'día agendado'} para definir los entregables y plazos.\n\nUn cordial saludo,\nSistema de Automatización IA`;
+    
+    document.getElementById('modal-lead-pitch').value = pitch;
+    
+    document.getElementById('lead-modal-overlay').classList.add('active');
+    addLog(`[CRM] Abierta ficha detallada de lead: ${leadState.name}`, 'sys');
+  }
+
+  function closeModal() {
+    document.getElementById('lead-modal-overlay').classList.remove('active');
+  }
+
+  function copyAIPitch() {
+    const textarea = document.getElementById('modal-lead-pitch');
+    textarea.select();
+    document.execCommand('copy');
+    alert('¡Propuesta copiada al portapapeles!');
+    addLog(`[SISTEMA] Propuesta comercial generada por IA copiada al portapapeles.`, 'sys');
+  }
+
+  // Initialize
+  window.onload = function() {
+    resetDemo();
+    addLog(`[SISTEMA] Consola inicializada. Monitor de Webhooks a la espera.`, 'sys');
+  };
+</script>
+</body>
+</html>
