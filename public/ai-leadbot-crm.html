@@ -1277,12 +1277,13 @@
     }
 
     // 3. Check for dates
-    const dateKeywords = ["mañana", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "sabado", "turno", "hora", "agendar", "visita"];
+    const dateKeywords = ["mañana", "lunes", "martes", "miércoles", "miercoles", "jueves", "viernes", "sábado", "sabado", "turno", "hora", "horas", "hrs", "agendar", "visita", "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
     const hasDate = dateKeywords.some(keyword => text.toLowerCase().includes(keyword));
-    if (hasDate && (leadState.stage === 'calificado' || leadState.budget)) {
-      // Mock agendado date
-      const dateMatch = text.match(/(?:a las|el|este)\s+([a-zA-Z0-9:\s]+)/i);
-      leadState.date = dateMatch ? dateMatch[1] : "Próximos días";
+    const hasNumbers = /\d+/.test(text);
+    const hasDateSlash = /\d{1,2}[\/-]\d{1,2}/.test(text);
+    
+    if ((hasDate || hasNumbers || hasDateSlash) && (leadState.stage === 'calificado' || leadState.budget)) {
+      leadState.date = text;
       extractedDetails.date = leadState.date;
       entitiesExtracted = true;
     }
