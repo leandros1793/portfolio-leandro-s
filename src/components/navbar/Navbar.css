@@ -131,14 +131,8 @@
   }
 }
 
-@media screen and (max-width: 900px) {
-  .navbar-brand span {
-    display: none; /* Dejar solo el icono </> como logo de inicio */
-  }
-}
-
 /* MENÚ COLAPSABLE PARA TABLETS Y CELULARES */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 900px) {
   .mobile-menu-toggle {
     display: flex;
     align-items: center;

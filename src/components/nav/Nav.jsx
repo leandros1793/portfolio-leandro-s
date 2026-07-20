@@ -21,8 +21,15 @@ const Nav = ({ onAIToggle, isChatbotOpen }) => { // Recibe función y estado del
   <nav className="floating-nav">
     <a 
       href={isHome ? '#' : '/'} 
-      onClick={() => setActiveNav('#')} 
+      onClick={(e) => {
+        if(isHome) {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        setActiveNav('#');
+      }} 
       className={activeNav === '#' ? 'active' : '' }
+      title="Inicio"
     >
       <BiHomeAlt/>
     </a>

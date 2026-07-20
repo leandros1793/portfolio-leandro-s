@@ -13,6 +13,9 @@ import IMG9 from "../../assets/dental.png";
 import IMG10 from "../../assets/flowbar.png";
 import IMG11 from "../../assets/mantenipro.png";
 import IMG12 from "../../assets/aileadbot.png";
+import IMG13 from "../../assets/pawpetshop.png";
+import IMG14 from "../../assets/wyra.png";
+import IMG15 from "../../assets/rematesuruguay.png";
 
 const data = [
   // --- TUS PROYECTOS ESTRELLA (Los que más venden) ---
@@ -140,7 +143,38 @@ const data = [
     github: "https://github.com/leandros1793",
     demo: "https://portfolio-leandro-s.vercel.app/mantenipro-demo",
   },
+  { 
+    id: 13,
+    image: IMG13,
+    titulo: "Paw Pet Shop",
+    subtitulo: "E-commerce de Mascotas",
+    tecnologias: "Shopify / E-commerce",
+    category: "ecommerce",
+    github: "https://github.com/leandros1793", 
+    demo: "https://pawpetshopcol.myshopify.com/",
+  },
+  { 
+    id: 14,
+    image: IMG14,
+    titulo: "Tees Cashflow",
+    subtitulo: "Tienda Online de Ropa",
+    tecnologias: "Shopify / E-commerce",
+    category: "ecommerce",
+    github: "https://github.com/leandros1793", 
+    demo: "https://tees.cashflowmethodology.com/",
+  },
+  { 
+    id: 15,
+    image: IMG15,
+    titulo: "Remates del Uruguay",
+    subtitulo: "Plataforma de Subastas Live",
+    tecnologias: "Web App / Subastas en Vivo",
+    category: "interactive",
+    github: "https://github.com/leandros1793", 
+    demo: "https://remates.rematesdeluruguay.com.uy/",
+  },
 ];
+
 
 const Portfolio = () => {
   const [filter, setFilter] = useState("all");
